@@ -1,6 +1,7 @@
 #include <functional>
 
 #include "scene.hpp"
+#include "object_tree.hpp"
 #include "../kernel/topology.hpp"
 // #include "../reader/topology_reader.hpp"
 
@@ -22,7 +23,7 @@ private:
     QPushButton *button;
     QPushButton *link_button;
     QMenu *add_object_menu;
-    QListWidget *objects_list;
+    objects_tree *objects_list;
 
     reporter *rep;
 
@@ -44,7 +45,7 @@ public:
         button = new QPushButton(this);
         link_button = new QPushButton(this);
         add_object_menu = new QMenu(this);
-        objects_list = new QListWidget(this);
+        objects_list = new objects_tree(this);
 
         connect(link_button, SIGNAL(clicked()), this, SLOT(add_link_pushed()));
 
@@ -123,6 +124,9 @@ public slots: // link
     {
         topology->create_link(f->get_id(), s->get_id());
         rep->print_message("Link between " + f->get_data()->get_name_for_gui() + " and " + s->get_data()->get_name_for_gui() + " successfully created");
+
+        std::string link_name = "Link: " + f->get_data()->get_name_for_gui() + " and " + s->get_data()->get_name_for_gui();
+        objects_list->add_object(network_objects::link, link_name);
     }
 
 private:
@@ -158,16 +162,19 @@ private:
 
         items[v->get_id()] = item;
 
+        std::string object_name = v->get_data()->get_name_for_gui();
+        objects_list->add_object(string_to_type(type), object_name);
+
         gv->centerOn(item);
     }
 
     void resizeEvent(QResizeEvent *event) override
     {
         // gv->resize(9 * this->width() / 10, this->height());
-        gv->setGeometry(width() * 0.1, 0, width() * 0.8 - 1, height());
+        gv->setGeometry(width() * 0.2, 0, width() * 0.7 - 1, height());
         button->setGeometry(width() * 0.9, 0, width() * 0.1 - 1, 40);
         link_button->setGeometry(width() * 0.9, 41, width() * 0.1 - 1, 40);
-        objects_list->setGeometry(0, 0, width() * 0.1, height());
+        objects_list->setGeometry(0, 0, width() * 0.2, height());
         // scene->setSceneRect(this->width() / 10, this->width() / 10, 9 * this->width() / 10, this->height());
     }
 };

@@ -18,7 +18,9 @@ HEADERS       = manager.hpp \
                 gui/source_item.hpp \
                 gui/sink_item.hpp \
                 gui/scene.hpp \
-                gui/link_item.hpp
+                gui/link_item.hpp \
+                gui/object_tree.hpp \
+                gui/object_tree_item.hpp
                  
 
 SOURCES       = main.cpp \
@@ -29,6 +31,7 @@ SOURCES       = main.cpp \
                 kernel/objects_type.cpp \
                 kernel/objects_data/source_data.cpp \
                 kernel/objects_data/sink_data.cpp \
-                gui/graph_area.cpp
+                gui/graph_area.cpp \
+                gui/object_tree_item.cpp
                 
                 

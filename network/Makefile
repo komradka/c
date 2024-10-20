@@ -60,14 +60,17 @@ SOURCES       = main.cpp \
 		kernel/objects_type.cpp \
 		kernel/objects_data/source_data.cpp \
 		kernel/objects_data/sink_data.cpp \
-		gui/graph_area.cpp moc_manager.cpp \
+		gui/graph_area.cpp \
+		gui/object_tree_item.cpp moc_manager.cpp \
 		moc_main_window.cpp \
 		moc_reporter.cpp \
 		moc_graph_area.cpp \
 		moc_graph_item.cpp \
 		moc_source_item.cpp \
 		moc_sink_item.cpp \
-		moc_scene.cpp
+		moc_scene.cpp \
+		moc_object_tree.cpp \
+		moc_object_tree_item.cpp
 OBJECTS       = main.o \
 		reporter.o \
 		reader.o \
@@ -77,6 +80,7 @@ OBJECTS       = main.o \
 		source_data.o \
 		sink_data.o \
 		graph_area.o \
+		object_tree_item.o \
 		moc_manager.o \
 		moc_main_window.o \
 		moc_reporter.o \
@@ -84,7 +88,9 @@ OBJECTS       = main.o \
 		moc_graph_item.o \
 		moc_source_item.o \
 		moc_sink_item.o \
-		moc_scene.o
+		moc_scene.o \
+		moc_object_tree.o \
+		moc_object_tree_item.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -175,7 +181,9 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		gui/source_item.hpp \
 		gui/sink_item.hpp \
 		gui/scene.hpp \
-		gui/link_item.hpp main.cpp \
+		gui/link_item.hpp \
+		gui/object_tree.hpp \
+		gui/object_tree_item.hpp main.cpp \
 		reporter.cpp \
 		reader/reader.cpp \
 		kernel/topology.cpp \
@@ -183,7 +191,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		kernel/objects_type.cpp \
 		kernel/objects_data/source_data.cpp \
 		kernel/objects_data/sink_data.cpp \
-		gui/graph_area.cpp
+		gui/graph_area.cpp \
+		gui/object_tree_item.cpp
 QMAKE_TARGET  = graph
 DESTDIR       = 
 TARGET        = graph
@@ -361,8 +370,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents manager.hpp main_window.hpp reader/reader.hpp reporter.hpp kernel/topology.hpp error.hpp kernel/objects_data/object_data.hpp kernel/objects_data/sink_data.hpp kernel/objects_data/source_data.hpp kernel/objects_type.hpp reader/objects_data_reader.hpp gui/graph_area.hpp gui/graph_item.hpp gui/source_item.hpp gui/sink_item.hpp gui/scene.hpp gui/link_item.hpp $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp reporter.cpp reader/reader.cpp kernel/topology.cpp reader/topology_reader.cpp kernel/objects_type.cpp kernel/objects_data/source_data.cpp kernel/objects_data/sink_data.cpp gui/graph_area.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents manager.hpp main_window.hpp reader/reader.hpp reporter.hpp kernel/topology.hpp error.hpp kernel/objects_data/object_data.hpp kernel/objects_data/sink_data.hpp kernel/objects_data/source_data.hpp kernel/objects_type.hpp reader/objects_data_reader.hpp gui/graph_area.hpp gui/graph_item.hpp gui/source_item.hpp gui/sink_item.hpp gui/scene.hpp gui/link_item.hpp gui/object_tree.hpp gui/object_tree_item.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp reporter.cpp reader/reader.cpp kernel/topology.cpp reader/topology_reader.cpp kernel/objects_type.cpp kernel/objects_data/source_data.cpp kernel/objects_data/sink_data.cpp gui/graph_area.cpp gui/object_tree_item.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -394,9 +403,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -std=c++17 -O2 -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_manager.cpp moc_main_window.cpp moc_reporter.cpp moc_graph_area.cpp moc_graph_item.cpp moc_source_item.cpp moc_sink_item.cpp moc_scene.cpp
+compiler_moc_header_make_all: moc_manager.cpp moc_main_window.cpp moc_reporter.cpp moc_graph_area.cpp moc_graph_item.cpp moc_source_item.cpp moc_sink_item.cpp moc_scene.cpp moc_object_tree.cpp moc_object_tree_item.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_manager.cpp moc_main_window.cpp moc_reporter.cpp moc_graph_area.cpp moc_graph_item.cpp moc_source_item.cpp moc_sink_item.cpp moc_scene.cpp
+	-$(DEL_FILE) moc_manager.cpp moc_main_window.cpp moc_reporter.cpp moc_graph_area.cpp moc_graph_item.cpp moc_source_item.cpp moc_sink_item.cpp moc_scene.cpp moc_object_tree.cpp moc_object_tree_item.cpp
 moc_manager.cpp: manager.hpp \
 		main_window.hpp \
 		reader/reader.hpp \
@@ -410,11 +419,13 @@ moc_manager.cpp: manager.hpp \
 		kernel/objects_data/sink_data.hpp \
 		reporter.hpp \
 		gui/graph_area.hpp \
+		gui/scene.hpp \
 		gui/source_item.hpp \
 		gui/graph_item.hpp \
 		gui/sink_item.hpp \
 		gui/link_item.hpp \
-		gui/scene.hpp \
+		gui/object_tree.hpp \
+		gui/object_tree_item.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include manager.hpp -o moc_manager.cpp
@@ -430,6 +441,7 @@ moc_reporter.cpp: reporter.hpp \
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include reporter.hpp -o moc_reporter.cpp
 
 moc_graph_area.cpp: gui/graph_area.hpp \
+		gui/scene.hpp \
 		gui/source_item.hpp \
 		gui/graph_item.hpp \
 		kernel/topology.hpp \
@@ -443,12 +455,22 @@ moc_graph_area.cpp: gui/graph_area.hpp \
 		reporter.hpp \
 		gui/sink_item.hpp \
 		gui/link_item.hpp \
-		gui/scene.hpp \
+		gui/object_tree.hpp \
+		gui/object_tree_item.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/graph_area.hpp -o moc_graph_area.cpp
 
 moc_graph_item.cpp: gui/graph_item.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		reporter.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/graph_item.hpp -o moc_graph_item.cpp
@@ -484,9 +506,51 @@ moc_sink_item.cpp: gui/sink_item.hpp \
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/sink_item.hpp -o moc_sink_item.cpp
 
 moc_scene.cpp: gui/scene.hpp \
+		gui/source_item.hpp \
+		gui/graph_item.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		reporter.hpp \
+		gui/sink_item.hpp \
+		gui/link_item.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/scene.hpp -o moc_scene.cpp
+
+moc_object_tree.cpp: gui/object_tree.hpp \
+		gui/object_tree_item.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		reporter.hpp \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/object_tree.hpp -o moc_object_tree.cpp
+
+moc_object_tree_item.cpp: gui/object_tree_item.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		reporter.hpp \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/object_tree_item.hpp -o moc_object_tree_item.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -517,11 +581,13 @@ main.o: main.cpp reader/reader.hpp \
 		manager.hpp \
 		main_window.hpp \
 		gui/graph_area.hpp \
+		gui/scene.hpp \
 		gui/source_item.hpp \
 		gui/graph_item.hpp \
 		gui/sink_item.hpp \
 		gui/link_item.hpp \
-		gui/scene.hpp
+		gui/object_tree.hpp \
+		gui/object_tree_item.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 reporter.o: reporter.cpp reporter.hpp
@@ -578,6 +644,7 @@ sink_data.o: kernel/objects_data/sink_data.cpp kernel/objects_data/sink_data.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sink_data.o kernel/objects_data/sink_data.cpp
 
 graph_area.o: gui/graph_area.cpp gui/graph_area.hpp \
+		gui/scene.hpp \
 		gui/source_item.hpp \
 		gui/graph_item.hpp \
 		kernel/topology.hpp \
@@ -591,8 +658,22 @@ graph_area.o: gui/graph_area.cpp gui/graph_area.hpp \
 		reporter.hpp \
 		gui/sink_item.hpp \
 		gui/link_item.hpp \
-		gui/scene.hpp
+		gui/object_tree.hpp \
+		gui/object_tree_item.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o graph_area.o gui/graph_area.cpp
+
+object_tree_item.o: gui/object_tree_item.cpp gui/object_tree_item.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		reporter.hpp \
+		gui/object_tree.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o object_tree_item.o gui/object_tree_item.cpp
 
 moc_manager.o: moc_manager.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_manager.o moc_manager.cpp
@@ -617,6 +698,12 @@ moc_sink_item.o: moc_sink_item.cpp
 
 moc_scene.o: moc_scene.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_scene.o moc_scene.cpp
+
+moc_object_tree.o: moc_object_tree.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_object_tree.o moc_object_tree.cpp
+
+moc_object_tree_item.o: moc_object_tree_item.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_object_tree_item.o moc_object_tree_item.cpp
 
 ####### Install
 
