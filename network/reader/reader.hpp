@@ -8,6 +8,8 @@
 
 #include "../error.hpp"
 #include "../kernel/topology.hpp"
+#include "../manager_gui/result_info_storage.hpp"
+#include "../gui/graph_area.hpp"
 
 #ifndef READER
 
@@ -31,7 +33,8 @@ private:
     std::string file_name;
 
     std::map<std::string, std::function<error(const std::vector<std::string> &, const string &filename, const int)>> main_key_words;
-    std::map<std::string, std::function<error(const std::vector<std::string> &, const int, const string &filename, graph *)>> topology_key_words;
+    std::map<std::string, std::function<error(const std::vector<std::string> &, const int, const string &filename, graph_area *)>> topology_key_words;
+    std::map<std::string, std::function<error(const std::vector<std::string> &, result_info &)>> project_key_words;
 
 public:
     ~reader()
@@ -42,7 +45,7 @@ public:
         }
     }
 
-    error read_topology(std::string filename, graph *topology)
+    error read_topology(std::string filename, graph_area *gui_manager)
     {
         if (file.is_open())
             file.close();
@@ -61,7 +64,11 @@ public:
         std::string line;
         while (std::getline(file, line))
         {
-            RETURN_IF_FAIL(read_topology_string(line, line_num, topology));
+            if (line.empty())
+            {
+                continue;
+            }
+            RETURN_IF_FAIL(read_topology_string(line, line_num, gui_manager));
             line_num++;
         }
 
@@ -69,9 +76,44 @@ public:
         return error("Wrong number of fields", 0);
     }
 
+    error read_project(std::string dirname, std::vector<result_info> &results)
+    {
+        if (file.is_open())
+            file.close();
+
+        file_name = dirname + "/project.np";
+
+        file.open(file_name);
+        if (!file.is_open())
+        {
+            return error("Unable to open project file");
+        }
+
+        init_project_key_words();
+
+        std::string line;
+        result_info buf;
+        while (std::getline(file, line))
+        {
+            if (line.empty())
+            {
+                results.push_back(buf);
+                continue;
+            }
+            std::vector<std::string> words;
+            split_string(line, words);
+
+            project_key_words[words[0]](words, buf);
+        }
+        results.push_back(buf);
+
+        return error(OK);
+    }
+
 private:
-    error read_topology_string(const std::string str, const int line, graph *topology);
+    error read_topology_string(const std::string str, const int line, graph_area *gui_manager);
     void init_topology_key_words();
+    void init_project_key_words();
 };
 
 #endif

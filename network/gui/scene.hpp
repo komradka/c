@@ -14,6 +14,7 @@
 #include "source_item.hpp"
 #include "sink_item.hpp"
 #include "link_item.hpp"
+#include "pipe_item.hpp"
 
 #pragma once
 
@@ -23,8 +24,7 @@ class Scene : public QGraphicsScene
 
 private:
     std::map<object_id, it *> *items;
-
-    // std::pair<std::pair<int, int>, std::pair<int, int>> visible_area; // first pair x, second - y
+    std::map<link_id, QGraphicsLineItem *> *links;
 
 private:
     it *pressed_item = nullptr;
@@ -45,7 +45,7 @@ public:
 public:
     Scene(QObject *parent) : QGraphicsScene(parent)
     {
-        connect(this, SIGNAL(link_created(vertex *, vertex *)), parent, SLOT(add_link(vertex *, vertex *)));
+        connect(this, SIGNAL(link_created(vertex *, vertex *, QGraphicsLineItem *)), parent, SLOT(add_link(vertex *, vertex *, QGraphicsLineItem *)));
 
         marker = new it();
         marker->setData(1, "marker");
@@ -57,9 +57,10 @@ public:
         addItem(markerLine);
     }
 
-    void set_items_pointer(std::map<object_id, it *> *i)
+    void set_items_pointer(std::map<object_id, it *> *i, std::map<link_id, QGraphicsLineItem *> *l)
     {
         items = i;
+        links = l;
     }
 
     void mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -124,16 +125,7 @@ public:
 
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     {
-        // if (is_line_drawing && !target_item)
-        // {
-        //     is_pressed = false;
-        //     is_line_drawing = false;
-        //     marker->hide();
-        //     markerLine->hide();
-        //     target_item = nullptr;
-        //     pressed_item = nullptr;
-        //     link_add_flag = false;
-        // }
+        Q_UNUSED(event);
         if (is_line_drawing && target_item != nullptr && pressed_item != nullptr)
         {
             is_pressed = false;
@@ -147,14 +139,14 @@ public:
 
             QLineF ql = QLineF(f, s);
 
-            if (pressed_item->check_links(ql))
+            if (pressed_item->check_links(link_direction::outlet, ql) && target_item->check_links(link_direction::inlet, ql))
             {
                 QGraphicsLineItem *line = new QGraphicsLineItem;
                 line->setLine(ql);
                 addItem(line);
                 target_item->links.append(line);
                 pressed_item->links.append(line);
-                emit link_created(pressed_item->v, target_item->v);
+                emit link_created(pressed_item->v, target_item->v, line);
             }
         }
         is_pressed = false;
@@ -166,6 +158,18 @@ public:
         link_add_flag = false;
     }
 
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+    {
+        auto pi = static_cast<it *>(this->itemAt(event->scenePos().x(),
+                                                 event->scenePos().y(),
+                                                 QTransform()));
+
+        if (pi->data(1) == "it")
+        {
+            pi->dialog->show();
+        }
+    }
+
 signals:
-    void link_created(vertex *f, vertex *s);
+    void link_created(vertex *f, vertex *s, QGraphicsLineItem *link);
 };

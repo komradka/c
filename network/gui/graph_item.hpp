@@ -1,17 +1,7 @@
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QMainWindow>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QMenuBar>
-#include <QtWidgets/QMessageBox>
-#include <QtGui/QPainter>
-#include <QtWidgets/QtWidgets>
-#include <QtGui/QtGui>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QGraphicsScene>
-#include <iostream>
-
+#include "object_dialog.hpp"
 #include "../kernel/topology.hpp"
+#include "../kernel/objects_type.hpp"
+#include "../gui_utility/tree_dialog_by_enum.hpp"
 
 #pragma once
 
@@ -20,26 +10,36 @@ class it : public QObject, public QGraphicsItem
     Q_OBJECT
 
 public:
-    std::string name;
-
     vertex *v;
 
     QList<QGraphicsLineItem *> links;
 
+    object_dialog *dialog;
+
+    network_objects obj_type;
+
+    tree_dialog_by_enum *td;
+
+    bool is_valid = false;
+
 public:
-    it(QObject *parent = 0) : QObject(parent), QGraphicsItem()
+    it(network_objects _type = network_objects::unknown, vertex *v = 0, QObject *parent = 0, QWidget *gui_manager = 0) : QObject(parent), QGraphicsItem()
     {
+        connect(this, SIGNAL(updated()), gui_manager, SLOT(object_updated()));
+
+        dialog = new object_dialog(this);
+        dialog->setFixedSize(500, 700);
+        dialog->setWindowTitle(QString::fromStdString(get_name_for_gui(_type)));
+
+        obj_type = _type;
+
         setData(1, "it");
         setZValue(1);
+
+        this->v = v;
     }
     ~it()
     {
-    }
-
-    void set_object(vertex *v)
-    {
-        this->v = v;
-        this->name = v->get_data()->get_name_for_gui();
     }
 
     enum
@@ -86,15 +86,18 @@ public:
         QPointF dp = this->boundingRect().center();
         QPointF itemPos = this->scenePos() + dp;
 
-        for(auto link : links)
+        for (auto link : links)
         {
             QPointF linkP2 = link->line().p2();
             link->setLine(QLineF(itemPos, linkP2));
         }
     }
 
-    bool check_links(QLineF rhs)
+    bool check_links(link_direction new_link_dir, QLineF rhs)
     {
+        if (!v->add_link_verification(new_link_dir))
+            return false;
+
         for (auto link : links)
         {
             QLineF normalLine = link->line();
@@ -136,4 +139,53 @@ private:
     }
 
 public slots:
+    void need_update()
+    {
+        if (!is_valid)
+            return;
+            
+        switch (obj_type)
+        {
+        case network_objects::sink:
+        {
+            auto _sink_data = dynamic_cast<sink_data *>(v->get_data());
+            auto init_sink = [&](auto i)
+            {
+                _sink_data->params[sink_data::sink_params[i]] = td->get_widget_param<network_object_param_desc<sink_data::sink_params[i]>>(i);
+            };
+            constexpr_for<0, sink_data::sink_fields>(init_sink);
+            break;
+        }
+        case network_objects::source:
+        {
+            auto _source_data = dynamic_cast<source_data *>(v->get_data());
+            auto init_source = [&](auto i)
+            {
+                _source_data->params[source_data::source_params[i]] = td->get_widget_param<network_object_param_desc<source_data::source_params[i]>>(i);
+            };
+            constexpr_for<0, source_data::source_fields>(init_source);
+            break;
+        }
+        case network_objects::pipe:
+        {
+            auto _pipe_data = dynamic_cast<pipe_data *>(v->get_data());
+            auto init_pipe = [&](auto i)
+            {
+                _pipe_data->params[pipe_data::pipe_params[i]] = td->get_widget_param<network_object_param_desc<pipe_data::pipe_params[i]>>(i);
+            };
+            constexpr_for<0, pipe_data::pipe_fields>(init_pipe);
+            break;
+        }
+        case network_objects::COUNT:
+        case network_objects::link:
+        case network_objects::unknown:
+            return;
+        }
+
+        emit updated();
+        this->update();
+    }
+
+signals:
+    void updated();
 };

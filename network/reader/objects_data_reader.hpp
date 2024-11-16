@@ -32,6 +32,12 @@ public:
         case network_objects::sink:
             init_sink_keywords();
             break;
+        case network_objects::pipe:
+            break;
+        case network_objects::link:
+        case network_objects::unknown:
+        case network_objects::COUNT:
+            return;
         }
     }
 
@@ -51,6 +57,11 @@ public: // handlers
         std::string line;
         while (std::getline(file, line))
         {
+            if (line.empty())
+            {
+                continue;
+            }
+
             std::vector<std::string> words;
             split_string(line, words);
 
@@ -120,6 +131,7 @@ private: // init
     /*
         SOURCE DATA KEYWORDS:
         SET
+            NAME (STRING)
             PRESSURE (NUM)
             TEMPERATURE (NUM)
             WRAT (NUM)
@@ -133,6 +145,7 @@ private: // init
         source_keywords["PRESSURE"] = source_set_pressure;
         source_keywords["TEMPERATURE"] = source_set_temperature;
         source_keywords["WRAT"] = source_set_wrat;
+        source_keywords["ORAT"] = source_set_orat;
         source_keywords["GRAT"] = source_set_grat;
         source_keywords["ACTIVITY"] = source_set_activity;
         source_keywords["NAME"] = source_set_name;
@@ -141,6 +154,7 @@ private: // init
     /*
         SINK DATA KEYWORDS:
         SET
+            NAME (STRING)
             PRESSURE (NUM)
             TEMPERATURE (NUM)
             WRAT (NUM)
@@ -154,6 +168,7 @@ private: // init
         sink_keywords["PRESSURE"] = sink_set_pressure;
         sink_keywords["TEMPERATURE"] = sink_set_temperature;
         sink_keywords["WRAT"] = sink_set_wrat;
+        sink_keywords["ORAT"] = sink_set_orat;
         sink_keywords["GRAT"] = sink_set_grat;
         sink_keywords["ACTIVITY"] = sink_set_activity;
         sink_keywords["NAME"] = sink_set_name;

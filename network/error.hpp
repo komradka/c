@@ -2,11 +2,13 @@
 
 #pragma once
 
-#define RETURN_IF_FAIL(err) \
-    if (!(err).is_ok())     \
-    {                       \
-        return err;         \
-    }
+#define RETURN_IF_FAIL(FUNC) \
+    do                       \
+    {                        \
+        auto RET = (FUNC);   \
+        if (!RET.is_ok())    \
+            return RET;      \
+    } while(0)
 
 #define OK 0
 
@@ -18,6 +20,8 @@ private:
     std::string file_name;
     
 public:
+    error() = default;
+
     error(const std::string message)
     {
         this->message = message;
@@ -39,17 +43,24 @@ public:
         this->error_code = error_code;
         message = "";
     }
+
+    error(const error &rhs)
+    {
+        message = rhs.message;
+        file_name = rhs.file_name;
+        error_code = rhs.error_code;
+    }
     operator std::string () const
     {
         return message;
     }
 
-    const int get_error_code() const
+    int get_error_code() const
     {
         return error_code;
     }
 
-    const bool is_ok() const
+    bool is_ok() const
     {
         return !error_code;
     }
@@ -59,8 +70,15 @@ public:
         file_name = name;
     }
 
-    const std::string &get_filename()
+    std::string &get_filename()
     {
         return file_name;
+    }
+
+    error &operator=(error rhs)
+    {
+        message = rhs.message;
+        error_code = rhs.error_code;
+        return *this;
     }
 };  

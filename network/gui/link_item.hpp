@@ -7,7 +7,7 @@ public:
     QPoint end;
 
 public:
-    link_item(QObject *parent = 0) : it(parent)
+    link_item(QObject *parent = 0) : it(network_objects::link, 0, parent)
     {
     }
 
@@ -15,7 +15,7 @@ public:
     {
     }
 
-    void set_coords (QPoint f, QPoint s)
+    void set_coords(QPoint f, QPoint s)
     {
         start = f;
         end = s;
@@ -26,7 +26,7 @@ private:
     {
         painter->setPen(Qt::black);
         painter->setBrush(Qt::blue);
-        
+
         painter->drawLine(start, end);
 
         Q_UNUSED(option);

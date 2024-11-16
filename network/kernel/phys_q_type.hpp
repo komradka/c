@@ -12,9 +12,9 @@ enum class phys_q_type
     oil_molar_rate,
     water_molar_rate,
 
-    unknown
+    COUNT
 };
 
-std::string get_name_for_gui(phys_q_type &obj);
+std::string get_name_for_gui(phys_q_type obj);
 
 #endif 

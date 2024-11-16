@@ -16,7 +16,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -std=c++17 -g -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -std=c++17 -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
@@ -61,16 +61,38 @@ SOURCES       = main.cpp \
 		kernel/objects_data/source_data.cpp \
 		kernel/objects_data/sink_data.cpp \
 		gui/graph_area.cpp \
-		gui/object_tree_item.cpp moc_manager.cpp \
+		gui/object_tree_item.cpp \
+		writer/writer.cpp \
+		kernel/check_network.cpp \
+		manager_gui/settings/solver_settings_enum.cpp \
+		utility/utility.cpp \
+		kernel/objects_data/pipe_data.cpp \
+		kernel/objects_data/object_param_enum.cpp \
+		kernel/phys_q_type.cpp \
+		gui/result_widget.cpp \
+		kernel/network_solver/nd_solver.cpp \
+		kernel/network_solver/nd_solution.cpp \
+		kernel/network_solver/initial_approximation/pressure_initial_approximation.cpp \
+		kernel/network_solver/initial_approximation/temp_initial_approximation.cpp \
+		kernel/network_solver/initial_approximation/rate_initial_approximation.cpp moc_manager.cpp \
 		moc_main_window.cpp \
 		moc_reporter.cpp \
+		moc_topology.cpp \
 		moc_graph_area.cpp \
 		moc_graph_item.cpp \
 		moc_source_item.cpp \
+		moc_pipe_item.cpp \
 		moc_sink_item.cpp \
 		moc_scene.cpp \
 		moc_object_tree.cpp \
-		moc_object_tree_item.cpp
+		moc_save_dialog.cpp \
+		moc_load_dialog.cpp \
+		moc_settings_dialog.cpp \
+		moc_number_textEditer.cpp \
+		moc_tree_dialog_by_enum.cpp \
+		moc_object_dialog.cpp \
+		moc_result_widget.cpp \
+		moc_nd_solver.cpp
 OBJECTS       = main.o \
 		reporter.o \
 		reader.o \
@@ -81,16 +103,38 @@ OBJECTS       = main.o \
 		sink_data.o \
 		graph_area.o \
 		object_tree_item.o \
+		writer.o \
+		check_network.o \
+		solver_settings_enum.o \
+		utility.o \
+		pipe_data.o \
+		object_param_enum.o \
+		phys_q_type.o \
+		result_widget.o \
+		nd_solver.o \
+		nd_solution.o \
+		pressure_initial_approximation.o \
+		temp_initial_approximation.o \
+		rate_initial_approximation.o \
 		moc_manager.o \
 		moc_main_window.o \
 		moc_reporter.o \
+		moc_topology.o \
 		moc_graph_area.o \
 		moc_graph_item.o \
 		moc_source_item.o \
+		moc_pipe_item.o \
 		moc_sink_item.o \
 		moc_scene.o \
 		moc_object_tree.o \
-		moc_object_tree_item.o
+		moc_save_dialog.o \
+		moc_load_dialog.o \
+		moc_settings_dialog.o \
+		moc_number_textEditer.o \
+		moc_tree_dialog_by_enum.o \
+		moc_object_dialog.o \
+		moc_result_widget.o \
+		moc_nd_solver.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -179,11 +223,40 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		gui/graph_area.hpp \
 		gui/graph_item.hpp \
 		gui/source_item.hpp \
+		gui/pipe_item.hpp \
 		gui/sink_item.hpp \
 		gui/scene.hpp \
 		gui/link_item.hpp \
 		gui/object_tree.hpp \
-		gui/object_tree_item.hpp main.cpp \
+		gui/object_tree_item.hpp \
+		writer/writer.hpp \
+		kernel/objects_data/object_params.hpp \
+		utility/utility.hpp \
+		manager_gui/save_dialog.hpp \
+		manager_gui/load_dialog.hpp \
+		manager_gui/result_info_storage.hpp \
+		manager_gui/result_tree_item.hpp \
+		manager_gui/settings_dialog.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui/object_dialog.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		gui/result_widget.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/network_solver/nd_solver.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		kernel/network_solver/initial_approximation/initial_approximation_builder.hpp \
+		kernel/network_solver/nd_results.hpp \
+		kernel/phys_q.hpp \
+		kernel/network_solver/matrix_builder/jacobian_row.hpp \
+		kernel/network_solver/matrix_builder/row_element.hpp \
+		kernel/network_solver/equations/nd_abstract_equation.hpp \
+		kernel/network_solver/equations/nd_source_pressure_equation.hpp main.cpp \
 		reporter.cpp \
 		reader/reader.cpp \
 		kernel/topology.cpp \
@@ -192,7 +265,20 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		kernel/objects_data/source_data.cpp \
 		kernel/objects_data/sink_data.cpp \
 		gui/graph_area.cpp \
-		gui/object_tree_item.cpp
+		gui/object_tree_item.cpp \
+		writer/writer.cpp \
+		kernel/check_network.cpp \
+		manager_gui/settings/solver_settings_enum.cpp \
+		utility/utility.cpp \
+		kernel/objects_data/pipe_data.cpp \
+		kernel/objects_data/object_param_enum.cpp \
+		kernel/phys_q_type.cpp \
+		gui/result_widget.cpp \
+		kernel/network_solver/nd_solver.cpp \
+		kernel/network_solver/nd_solution.cpp \
+		kernel/network_solver/initial_approximation/pressure_initial_approximation.cpp \
+		kernel/network_solver/initial_approximation/temp_initial_approximation.cpp \
+		kernel/network_solver/initial_approximation/rate_initial_approximation.cpp
 QMAKE_TARGET  = graph
 DESTDIR       = 
 TARGET        = graph
@@ -370,8 +456,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents manager.hpp main_window.hpp reader/reader.hpp reporter.hpp kernel/topology.hpp error.hpp kernel/objects_data/object_data.hpp kernel/objects_data/sink_data.hpp kernel/objects_data/source_data.hpp kernel/objects_type.hpp reader/objects_data_reader.hpp gui/graph_area.hpp gui/graph_item.hpp gui/source_item.hpp gui/sink_item.hpp gui/scene.hpp gui/link_item.hpp gui/object_tree.hpp gui/object_tree_item.hpp $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp reporter.cpp reader/reader.cpp kernel/topology.cpp reader/topology_reader.cpp kernel/objects_type.cpp kernel/objects_data/source_data.cpp kernel/objects_data/sink_data.cpp gui/graph_area.cpp gui/object_tree_item.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents manager.hpp main_window.hpp reader/reader.hpp reporter.hpp kernel/topology.hpp error.hpp kernel/objects_data/object_data.hpp kernel/objects_data/sink_data.hpp kernel/objects_data/source_data.hpp kernel/objects_type.hpp reader/objects_data_reader.hpp gui/graph_area.hpp gui/graph_item.hpp gui/source_item.hpp gui/pipe_item.hpp gui/sink_item.hpp gui/scene.hpp gui/link_item.hpp gui/object_tree.hpp gui/object_tree_item.hpp writer/writer.hpp kernel/objects_data/object_params.hpp utility/utility.hpp manager_gui/save_dialog.hpp manager_gui/load_dialog.hpp manager_gui/result_info_storage.hpp manager_gui/result_tree_item.hpp manager_gui/settings_dialog.hpp utility/network_statistic.hpp kernel/check_network.hpp manager_gui/settings/solver_settings_desc.hpp manager_gui/settings/solver_settings_enum.hpp gui_utility/number_textEditer.hpp gui_utility/tree_dialog_by_enum.hpp gui/object_dialog.hpp kernel/objects_data/pipe_data.hpp kernel/objects_data/object_param_enum.hpp gui/result_widget.hpp kernel/phys_q_type.hpp kernel/network_solver/nd_solver.hpp kernel/network_solver/nd_solution.hpp kernel/network_solver/initial_approximation/initial_approximation_builder.hpp kernel/network_solver/nd_results.hpp kernel/phys_q.hpp kernel/network_solver/matrix_builder/jacobian_row.hpp kernel/network_solver/matrix_builder/row_element.hpp kernel/network_solver/equations/nd_abstract_equation.hpp kernel/network_solver/equations/nd_source_pressure_equation.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp reporter.cpp reader/reader.cpp kernel/topology.cpp reader/topology_reader.cpp kernel/objects_type.cpp kernel/objects_data/source_data.cpp kernel/objects_data/sink_data.cpp gui/graph_area.cpp gui/object_tree_item.cpp writer/writer.cpp kernel/check_network.cpp manager_gui/settings/solver_settings_enum.cpp utility/utility.cpp kernel/objects_data/pipe_data.cpp kernel/objects_data/object_param_enum.cpp kernel/phys_q_type.cpp gui/result_widget.cpp kernel/network_solver/nd_solver.cpp kernel/network_solver/nd_solution.cpp kernel/network_solver/initial_approximation/pressure_initial_approximation.cpp kernel/network_solver/initial_approximation/temp_initial_approximation.cpp kernel/network_solver/initial_approximation/rate_initial_approximation.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -403,29 +489,52 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -std=c++17 -O2 -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_manager.cpp moc_main_window.cpp moc_reporter.cpp moc_graph_area.cpp moc_graph_item.cpp moc_source_item.cpp moc_sink_item.cpp moc_scene.cpp moc_object_tree.cpp moc_object_tree_item.cpp
+compiler_moc_header_make_all: moc_manager.cpp moc_main_window.cpp moc_reporter.cpp moc_topology.cpp moc_graph_area.cpp moc_graph_item.cpp moc_source_item.cpp moc_pipe_item.cpp moc_sink_item.cpp moc_scene.cpp moc_object_tree.cpp moc_save_dialog.cpp moc_load_dialog.cpp moc_settings_dialog.cpp moc_number_textEditer.cpp moc_tree_dialog_by_enum.cpp moc_object_dialog.cpp moc_result_widget.cpp moc_nd_solver.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_manager.cpp moc_main_window.cpp moc_reporter.cpp moc_graph_area.cpp moc_graph_item.cpp moc_source_item.cpp moc_sink_item.cpp moc_scene.cpp moc_object_tree.cpp moc_object_tree_item.cpp
+	-$(DEL_FILE) moc_manager.cpp moc_main_window.cpp moc_reporter.cpp moc_topology.cpp moc_graph_area.cpp moc_graph_item.cpp moc_source_item.cpp moc_pipe_item.cpp moc_sink_item.cpp moc_scene.cpp moc_object_tree.cpp moc_save_dialog.cpp moc_load_dialog.cpp moc_settings_dialog.cpp moc_number_textEditer.cpp moc_tree_dialog_by_enum.cpp moc_object_dialog.cpp moc_result_widget.cpp moc_nd_solver.cpp
 moc_manager.cpp: manager.hpp \
 		main_window.hpp \
 		reader/reader.hpp \
 		error.hpp \
 		kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
 		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		manager_gui/result_info_storage.hpp \
 		gui/graph_area.hpp \
 		gui/scene.hpp \
 		gui/source_item.hpp \
 		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
 		gui/sink_item.hpp \
 		gui/link_item.hpp \
+		gui/pipe_item.hpp \
+		writer/writer.hpp \
+		gui/result_widget.hpp \
 		gui/object_tree.hpp \
 		gui/object_tree_item.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp \
+		manager_gui/save_dialog.hpp \
+		manager_gui/load_dialog.hpp \
+		manager_gui/result_tree_item.hpp \
+		kernel/network_solver/nd_solver.hpp \
+		kernel/network_solver/initial_approximation/initial_approximation_builder.hpp \
+		kernel/network_solver/nd_results.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include manager.hpp -o moc_manager.cpp
@@ -436,71 +545,148 @@ moc_main_window.cpp: main_window.hpp \
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include main_window.hpp -o moc_main_window.cpp
 
 moc_reporter.cpp: reporter.hpp \
+		utility/network_statistic.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include reporter.hpp -o moc_reporter.cpp
+
+moc_topology.cpp: kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include kernel/topology.hpp -o moc_topology.cpp
 
 moc_graph_area.cpp: gui/graph_area.hpp \
 		gui/scene.hpp \
 		gui/source_item.hpp \
 		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
 		kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		error.hpp \
 		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
 		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
 		gui/sink_item.hpp \
 		gui/link_item.hpp \
+		gui/pipe_item.hpp \
+		writer/writer.hpp \
+		gui/result_widget.hpp \
 		gui/object_tree.hpp \
 		gui/object_tree_item.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/graph_area.hpp -o moc_graph_area.cpp
 
 moc_graph_item.cpp: gui/graph_item.hpp \
+		gui/object_dialog.hpp \
 		kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		error.hpp \
 		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
 		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/graph_item.hpp -o moc_graph_item.cpp
 
 moc_source_item.cpp: gui/source_item.hpp \
 		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
 		kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		error.hpp \
 		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
 		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/source_item.hpp -o moc_source_item.cpp
 
-moc_sink_item.cpp: gui/sink_item.hpp \
+moc_pipe_item.cpp: gui/pipe_item.hpp \
 		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
 		kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		error.hpp \
 		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
 		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/pipe_item.hpp -o moc_pipe_item.cpp
+
+moc_sink_item.cpp: gui/sink_item.hpp \
+		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/sink_item.hpp -o moc_sink_item.cpp
@@ -508,17 +694,25 @@ moc_sink_item.cpp: gui/sink_item.hpp \
 moc_scene.cpp: gui/scene.hpp \
 		gui/source_item.hpp \
 		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
 		kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		error.hpp \
 		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
 		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
 		gui/sink_item.hpp \
 		gui/link_item.hpp \
+		gui/pipe_item.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/scene.hpp -o moc_scene.cpp
@@ -527,30 +721,121 @@ moc_object_tree.cpp: gui/object_tree.hpp \
 		gui/object_tree_item.hpp \
 		kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		error.hpp \
 		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
 		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/object_tree.hpp -o moc_object_tree.cpp
 
-moc_object_tree_item.cpp: gui/object_tree_item.hpp \
-		kernel/topology.hpp \
-		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
-		kernel/objects_data/source_data.hpp \
-		kernel/objects_data/object_data.hpp \
-		error.hpp \
-		kernel/objects_data/sink_data.hpp \
-		reporter.hpp \
+moc_save_dialog.cpp: manager_gui/save_dialog.hpp \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/object_tree_item.hpp -o moc_object_tree_item.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include manager_gui/save_dialog.hpp -o moc_save_dialog.cpp
+
+moc_load_dialog.cpp: manager_gui/load_dialog.hpp \
+		manager_gui/result_tree_item.hpp \
+		manager_gui/result_info_storage.hpp \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include manager_gui/load_dialog.hpp -o moc_load_dialog.cpp
+
+moc_settings_dialog.cpp: manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		utility/utility.hpp \
+		gui_utility/number_textEditer.hpp \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include manager_gui/settings_dialog.hpp -o moc_settings_dialog.cpp
+
+moc_number_textEditer.cpp: gui_utility/number_textEditer.hpp \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui_utility/number_textEditer.hpp -o moc_number_textEditer.cpp
+
+moc_tree_dialog_by_enum.cpp: gui_utility/tree_dialog_by_enum.hpp \
+		utility/utility.hpp \
+		gui_utility/number_textEditer.hpp \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui_utility/tree_dialog_by_enum.hpp -o moc_tree_dialog_by_enum.cpp
+
+moc_object_dialog.cpp: gui/object_dialog.hpp \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/object_dialog.hpp -o moc_object_dialog.cpp
+
+moc_result_widget.cpp: gui/result_widget.hpp \
+		gui/object_tree.hpp \
+		gui/object_tree_item.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include gui/result_widget.hpp -o moc_result_widget.cpp
+
+moc_nd_solver.cpp: kernel/network_solver/nd_solver.hpp \
+		kernel/network_solver/initial_approximation/initial_approximation_builder.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		kernel/network_solver/nd_results.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /mnt/d/c/network/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/mnt/d/c/network -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include kernel/network_solver/nd_solver.hpp -o moc_nd_solver.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -572,62 +857,161 @@ main.o: main.cpp reader/reader.hpp \
 		error.hpp \
 		kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
 		reporter.hpp \
-		manager.hpp \
-		main_window.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		manager_gui/result_info_storage.hpp \
 		gui/graph_area.hpp \
 		gui/scene.hpp \
 		gui/source_item.hpp \
 		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
 		gui/sink_item.hpp \
 		gui/link_item.hpp \
+		gui/pipe_item.hpp \
+		writer/writer.hpp \
+		gui/result_widget.hpp \
 		gui/object_tree.hpp \
-		gui/object_tree_item.hpp
+		gui/object_tree_item.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp \
+		manager.hpp \
+		main_window.hpp \
+		manager_gui/save_dialog.hpp \
+		manager_gui/load_dialog.hpp \
+		manager_gui/result_tree_item.hpp \
+		kernel/network_solver/nd_solver.hpp \
+		kernel/network_solver/initial_approximation/initial_approximation_builder.hpp \
+		kernel/network_solver/nd_results.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
-reporter.o: reporter.cpp reporter.hpp
+reporter.o: reporter.cpp reporter.hpp \
+		utility/network_statistic.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o reporter.o reporter.cpp
 
 reader.o: reader/reader.cpp reader/reader.hpp \
 		error.hpp \
 		kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		kernel/objects_data/sink_data.hpp \
-		reporter.hpp
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		manager_gui/result_info_storage.hpp \
+		gui/graph_area.hpp \
+		gui/scene.hpp \
+		gui/source_item.hpp \
+		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		gui/sink_item.hpp \
+		gui/link_item.hpp \
+		gui/pipe_item.hpp \
+		writer/writer.hpp \
+		gui/result_widget.hpp \
+		gui/object_tree.hpp \
+		gui/object_tree_item.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o reader.o reader/reader.cpp
 
 topology.o: kernel/topology.cpp kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		error.hpp \
 		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
 		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
 		reader/objects_data_reader.hpp \
-		reader/reader.hpp
+		reader/reader.hpp \
+		manager_gui/result_info_storage.hpp \
+		gui/graph_area.hpp \
+		gui/scene.hpp \
+		gui/source_item.hpp \
+		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		gui/sink_item.hpp \
+		gui/link_item.hpp \
+		gui/pipe_item.hpp \
+		writer/writer.hpp \
+		gui/result_widget.hpp \
+		gui/object_tree.hpp \
+		gui/object_tree_item.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o topology.o kernel/topology.cpp
 
 topology_reader.o: reader/topology_reader.cpp reader/reader.hpp \
 		error.hpp \
 		kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		kernel/objects_data/sink_data.hpp \
-		reporter.hpp
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		manager_gui/result_info_storage.hpp \
+		gui/graph_area.hpp \
+		gui/scene.hpp \
+		gui/source_item.hpp \
+		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		gui/sink_item.hpp \
+		gui/link_item.hpp \
+		gui/pipe_item.hpp \
+		writer/writer.hpp \
+		gui/result_widget.hpp \
+		gui/object_tree.hpp \
+		gui/object_tree_item.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o topology_reader.o reader/topology_reader.cpp
 
 objects_type.o: kernel/objects_type.cpp kernel/objects_type.hpp
@@ -635,11 +1019,17 @@ objects_type.o: kernel/objects_type.cpp kernel/objects_type.hpp
 
 source_data.o: kernel/objects_data/source_data.cpp kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		error.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o source_data.o kernel/objects_data/source_data.cpp
 
 sink_data.o: kernel/objects_data/sink_data.cpp kernel/objects_data/sink_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		error.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sink_data.o kernel/objects_data/sink_data.cpp
 
@@ -647,33 +1037,268 @@ graph_area.o: gui/graph_area.cpp gui/graph_area.hpp \
 		gui/scene.hpp \
 		gui/source_item.hpp \
 		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
 		kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		error.hpp \
 		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
 		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
 		gui/sink_item.hpp \
 		gui/link_item.hpp \
+		gui/pipe_item.hpp \
+		writer/writer.hpp \
+		gui/result_widget.hpp \
 		gui/object_tree.hpp \
-		gui/object_tree_item.hpp
+		gui/object_tree_item.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o graph_area.o gui/graph_area.cpp
 
 object_tree_item.o: gui/object_tree_item.cpp gui/object_tree_item.hpp \
 		kernel/topology.hpp \
 		kernel/objects_type.hpp \
-		kernel/phys_q.hpp \
-		kernel/phys_q_type.hpp \
 		kernel/objects_data/source_data.hpp \
 		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
 		error.hpp \
 		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
 		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
 		gui/object_tree.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o object_tree_item.o gui/object_tree_item.cpp
+
+writer.o: writer/writer.cpp writer/writer.hpp \
+		error.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		gui/graph_area.hpp \
+		gui/scene.hpp \
+		gui/source_item.hpp \
+		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		kernel/check_network.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		gui/sink_item.hpp \
+		gui/link_item.hpp \
+		gui/pipe_item.hpp \
+		gui/result_widget.hpp \
+		gui/object_tree.hpp \
+		gui/object_tree_item.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o writer.o writer/writer.cpp
+
+check_network.o: kernel/check_network.cpp kernel/check_network.hpp \
+		error.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o check_network.o kernel/check_network.cpp
+
+solver_settings_enum.o: manager_gui/settings/solver_settings_enum.cpp manager_gui/settings/solver_settings_enum.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o solver_settings_enum.o manager_gui/settings/solver_settings_enum.cpp
+
+utility.o: utility/utility.cpp utility/utility.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o utility.o utility/utility.cpp
+
+pipe_data.o: kernel/objects_data/pipe_data.cpp kernel/objects_data/pipe_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		error.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pipe_data.o kernel/objects_data/pipe_data.cpp
+
+object_param_enum.o: kernel/objects_data/object_param_enum.cpp kernel/objects_data/object_param_enum.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o object_param_enum.o kernel/objects_data/object_param_enum.cpp
+
+phys_q_type.o: kernel/phys_q_type.cpp kernel/phys_q_type.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o phys_q_type.o kernel/phys_q_type.cpp
+
+result_widget.o: gui/result_widget.cpp gui/result_widget.hpp \
+		gui/object_tree.hpp \
+		gui/object_tree_item.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		gui/graph_item.hpp \
+		gui/object_dialog.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o result_widget.o gui/result_widget.cpp
+
+nd_solver.o: kernel/network_solver/nd_solver.cpp kernel/network_solver/nd_solver.hpp \
+		kernel/network_solver/initial_approximation/initial_approximation_builder.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		kernel/network_solver/nd_solution.hpp \
+		kernel/network_solver/nd_results.hpp \
+		kernel/phys_q.hpp \
+		kernel/phys_q_type.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o nd_solver.o kernel/network_solver/nd_solver.cpp
+
+nd_solution.o: kernel/network_solver/nd_solution.cpp kernel/network_solver/nd_solution.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o nd_solution.o kernel/network_solver/nd_solution.cpp
+
+pressure_initial_approximation.o: kernel/network_solver/initial_approximation/pressure_initial_approximation.cpp kernel/network_solver/initial_approximation/initial_approximation_builder.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		kernel/network_solver/nd_solution.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o pressure_initial_approximation.o kernel/network_solver/initial_approximation/pressure_initial_approximation.cpp
+
+temp_initial_approximation.o: kernel/network_solver/initial_approximation/temp_initial_approximation.cpp kernel/network_solver/initial_approximation/initial_approximation_builder.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		kernel/network_solver/nd_solution.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o temp_initial_approximation.o kernel/network_solver/initial_approximation/temp_initial_approximation.cpp
+
+rate_initial_approximation.o: kernel/network_solver/initial_approximation/rate_initial_approximation.cpp kernel/network_solver/initial_approximation/initial_approximation_builder.hpp \
+		kernel/topology.hpp \
+		kernel/objects_type.hpp \
+		kernel/objects_data/source_data.hpp \
+		kernel/objects_data/object_data.hpp \
+		kernel/objects_data/object_params.hpp \
+		kernel/objects_data/object_param_enum.hpp \
+		utility/utility.hpp \
+		error.hpp \
+		kernel/objects_data/sink_data.hpp \
+		kernel/objects_data/pipe_data.hpp \
+		reporter.hpp \
+		utility/network_statistic.hpp \
+		kernel/check_network.hpp \
+		manager_gui/settings_dialog.hpp \
+		manager_gui/settings/solver_settings_desc.hpp \
+		manager_gui/settings/solver_settings_enum.hpp \
+		gui_utility/tree_dialog_by_enum.hpp \
+		gui_utility/number_textEditer.hpp \
+		kernel/network_solver/nd_solution.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o rate_initial_approximation.o kernel/network_solver/initial_approximation/rate_initial_approximation.cpp
 
 moc_manager.o: moc_manager.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_manager.o moc_manager.cpp
@@ -684,6 +1309,9 @@ moc_main_window.o: moc_main_window.cpp
 moc_reporter.o: moc_reporter.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_reporter.o moc_reporter.cpp
 
+moc_topology.o: moc_topology.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_topology.o moc_topology.cpp
+
 moc_graph_area.o: moc_graph_area.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_graph_area.o moc_graph_area.cpp
 
@@ -692,6 +1320,9 @@ moc_graph_item.o: moc_graph_item.cpp
 
 moc_source_item.o: moc_source_item.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_source_item.o moc_source_item.cpp
+
+moc_pipe_item.o: moc_pipe_item.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_pipe_item.o moc_pipe_item.cpp
 
 moc_sink_item.o: moc_sink_item.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_sink_item.o moc_sink_item.cpp
@@ -702,8 +1333,29 @@ moc_scene.o: moc_scene.cpp
 moc_object_tree.o: moc_object_tree.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_object_tree.o moc_object_tree.cpp
 
-moc_object_tree_item.o: moc_object_tree_item.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_object_tree_item.o moc_object_tree_item.cpp
+moc_save_dialog.o: moc_save_dialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_save_dialog.o moc_save_dialog.cpp
+
+moc_load_dialog.o: moc_load_dialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_load_dialog.o moc_load_dialog.cpp
+
+moc_settings_dialog.o: moc_settings_dialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_settings_dialog.o moc_settings_dialog.cpp
+
+moc_number_textEditer.o: moc_number_textEditer.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_number_textEditer.o moc_number_textEditer.cpp
+
+moc_tree_dialog_by_enum.o: moc_tree_dialog_by_enum.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_tree_dialog_by_enum.o moc_tree_dialog_by_enum.cpp
+
+moc_object_dialog.o: moc_object_dialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_object_dialog.o moc_object_dialog.cpp
+
+moc_result_widget.o: moc_result_widget.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_result_widget.o moc_result_widget.cpp
+
+moc_nd_solver.o: moc_nd_solver.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_nd_solver.o moc_nd_solver.cpp
 
 ####### Install
 

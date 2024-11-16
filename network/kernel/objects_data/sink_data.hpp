@@ -6,34 +6,37 @@
 class sink_data : public object_data
 {
 public:
-    std::optional<double> pressure;
-    std::optional<double> temperature;
-    std::optional<double> water_rate;
-    std::optional<double> oil_rate;
-    std::optional<double> gas_rate;
+    static constexpr int sink_fields = 7;
+    static constexpr std::array<network_object_param, sink_fields> sink_params = {network_object_param::name,
+                                                                                  network_object_param::activity,
+                                                                                  network_object_param::pressure,
+                                                                                  network_object_param::temperature,
+                                                                                  network_object_param::wrat,
+                                                                                  network_object_param::orat,
+                                                                                  network_object_param::grat};
 
-    sink_data() = default;
+    static constexpr unsigned int inlet_links_count = 1;
+    static constexpr unsigned int outlet_links_count = 0;
 
-    sink_data(std::optional<double> p,
-              std::optional<double> t,
-              std::optional<double> wrat,
-              std::optional<double> orat,
-              std::optional<double> grat,
-              bool _activity,
-              std::string _name)
+public:
+    sink_data()
     {
-        pressure = p;
-        temperature = t;
-        water_rate = wrat;
-        oil_rate = orat;
-        gas_rate = grat;
-        activity = _activity;
-        name = _name;
+        params[network_object_param::name] = std::nullopt;
+        params[network_object_param::activity] = std::make_optional<bool>(true);
+        params[network_object_param::pressure] = std::nullopt;
+        params[network_object_param::temperature] = std::nullopt;
+        params[network_object_param::wrat] = std::nullopt;
+        params[network_object_param::orat] = std::nullopt;
+        params[network_object_param::grat] = std::nullopt;
     }
 
     sink_data(sink_data &rhs) = default;
 
     sink_data &operator=(sink_data &rhs) = default;
+
+    void write_data(std::ofstream &stream) override;
+
+    bool add_link_verification(const unsigned int inlet_links_count, const unsigned int outlet_links_count) override;
 };
 
 std::string make_sink_error(const std::string &err_message, const int line);

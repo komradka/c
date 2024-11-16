@@ -8,12 +8,15 @@ enum class network_objects
 {
     sink,
     source,
+    pipe,
 
     unknown,
     link,
 
     COUNT
 };
+
+std::string get_name(network_objects obj);
 
 std::string get_name_for_gui(network_objects obj);
 
