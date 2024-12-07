@@ -16,7 +16,7 @@ error make_object_handler(const std::vector<std::string> &words, const int line,
 {
     if (words.size() != 5)
     {
-        for (int i = 0; i < words.size(); i++)
+        for (int i = 0; i < isize (words); i++)
         {
             cout << words[i] << endl;
         }

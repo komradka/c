@@ -101,10 +101,10 @@ error set_name(const std::vector<std::string> &words, const int line, object_dat
         return error(make_object_error("Wrong number of fields", line));
 
     std::string name = "";
-    for (int i = 3; i < words.size(); i++)
+    for (int i = 3; i < isize (words); i++)
     {
         name += words[i];
-        if (i != words.size() - 1)
+        if (i != isize (words) - 1)
         {
             name += "_";
         }
