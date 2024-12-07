@@ -5,6 +5,9 @@ QMAKE_CXXFLAGS -= -W -Wall
 
 HEADERS       = manager.hpp \
                 main_window.hpp \
+                parallel/nd_pthread.h \
+                parallel/thread_class.h \
+                parallel/waitable_request.h \
                 reader/reader.hpp \
                 reporter.hpp \
                 kernel/topology.hpp \
@@ -73,12 +76,17 @@ HEADERS       = manager.hpp \
                 kernel/pipe_holder/pipe_calculator.hpp \
                 kernel/objects_data/joint_data.hpp \
                 gui/joint_item.hpp \
-                manager_gui/create_project_dialog.hpp
+                manager_gui/create_project_dialog.hpp \
+                parallel/thread_info.h \
+                gui/gui_feedback/events.h
                 
 
                  
 
 SOURCES       = main.cpp \
+                parallel/thread_class.cpp \
+                parallel/thread_info.cpp \
+                parallel/waitable_request.cpp \
                 reporter.cpp \
                 reader/reader.cpp \
                 kernel/topology.cpp \
@@ -114,4 +122,5 @@ SOURCES       = main.cpp \
                 kernel/pipe_holder/pipe_calculator.cpp \
                 kernel/objects_data/joint_data.cpp \
                 kernel/objects_data/object_data.cpp \
-                reader/settings_reader.cpp
+                reader/settings_reader.cpp \
+                gui/gui_feedback/events.h
