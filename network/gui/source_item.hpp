@@ -44,7 +44,7 @@ private:
         }
 
         QRectF el = QRectF(-30, -30, 60, 60);
-        QImage image("gui/resource/source.jpg", "jpg");
+        QImage image("gui/resource/source.png", "png");
 
         painter->drawImage(el, image);
         painter->drawText(QRect(-50, -60, 50, 50), Qt::AlignCenter, QString::fromStdString(v->get_data()->get_name()));
