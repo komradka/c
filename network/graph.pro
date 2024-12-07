@@ -79,13 +79,15 @@ HEADERS       = manager.hpp \
                 manager_gui/create_project_dialog.hpp \
                 parallel/thread_info.h \
                 gui/gui_feedback/events.h
-                con/async_reporter.h
+                con/async_reporter.h \
+                con/tasks/task.h \
                 
 
                  
 
 SOURCES       = main.cpp \
                 con/async_reporter.cpp \
+                con/tasks/task.cpp \
                 parallel/thread_class.cpp \
                 parallel/thread_info.cpp \
                 parallel/waitable_request.cpp \
