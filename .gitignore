@@ -1419,3 +1419,4 @@ network/graph
 *.stash
 network/Makefile
 *.o
+moc*
