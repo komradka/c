@@ -1,13 +1,29 @@
 #include <iostream>
-#include "reader/reader.hpp"
+
+#include "argsparser.h"
+
+#include "nd_manager.h"
 #include "manager.hpp"
 
 using namespace std;
 
 int main(int argc, char *argv[]) 
 {
+    argsparser parser (argc, argv);
+
+    error err = parser.parse ();
+    if (!err.is_ok ())
+      {
+        printf ("%s\n", err.description_cstr ());
+        return -1;
+      }
+
+    nd_manager project;
+    project.create_kernel_threads (parser.total_threads ());
+
     QApplication app(argc, argv);
     manager window_manager;
+    project.set_manager (&window_manager);
 
     // if (argc != 2)
     // {
