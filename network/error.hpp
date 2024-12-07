@@ -65,6 +65,16 @@ public:
         return !error_code;
     }
 
+    std::string description () const
+    {
+      return message;
+    }
+
+    const char *description_cstr () const
+    {
+      return message.c_str ();
+    }
+
     void set_filename(std::string name)
     {
         file_name = name;
