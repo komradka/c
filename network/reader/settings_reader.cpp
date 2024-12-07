@@ -52,7 +52,6 @@ error reader::read_settings(std::string filename, settings_dialog *settings)
     }
 
     file.close();
-    return error("Wrong number of fields", 0);
 
     auto write_to_settings = [&](auto i)
     {
@@ -112,6 +111,7 @@ error reader::read_settings_string(const std::string str, const int line, std::v
     {
         int index = settings_key_words.at(main_word);
         RETURN_IF_FAIL(settings_func.at(index)(words, line, readed_settings));
+        return error(OK);
     }
 
     return error(make_error("Unknown word: " + main_word, line), file_name);

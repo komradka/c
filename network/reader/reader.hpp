@@ -49,9 +49,8 @@ public:
 
     error read_data(result_info &res, graph_area *gui_manager, settings_dialog *settings)
     {
-        (void)res;
-        (void)gui_manager;
-        (void)settings;
+        RETURN_IF_FAIL(read_topology(res.gui_dir + "/GUI.data", gui_manager));
+        RETURN_IF_FAIL(read_settings(res.settings, settings));
         return error(OK);
     }
 

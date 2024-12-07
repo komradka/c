@@ -174,7 +174,7 @@ public slots:
 
         rep->print_message("Loading - " + res.res_name);
         error ret = file_reader.read_data(res, window, d_setting);
-        // error ret = file_reader.read_topology(res.gui_dir + "/GUI.data", window);
+        // 
         if (!ret.is_ok())
         {
             rep->print_error(ret);
