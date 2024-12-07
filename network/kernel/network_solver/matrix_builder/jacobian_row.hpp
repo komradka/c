@@ -1,6 +1,8 @@
 #include <vector>
 #include "row_element.hpp"
 
+#pragma once
+
 struct jacobian_row
 {
     static constexpr unsigned int pressure_pos = 0;
@@ -12,13 +14,34 @@ public:
     std::vector<row_element> row;
 
     unsigned int pos;
-    unsigned int main_value_count;
+    unsigned int main_var_count;
 
 public:
-    jacobian_row(unsigned int pos, unsigned int main_value_count)
+    jacobian_row(unsigned int pos, unsigned int var_count)
     {
         this->pos = pos;
-        this->main_value_count = main_value_count;
+        this->main_var_count = var_count;
+    }
+
+    void fill_row(unsigned int link,
+                  double *p,
+                  double *rate,
+                  double *t)
+    {
+        unsigned int pos = link * main_var_count;
+        auto add_element = [&](double value, unsigned int shift)
+        {
+            size++;
+            row_element element(value, pos + shift);
+            row.push_back(element);
+        };
+
+        if (p)
+            add_element(*p, pressure_pos);
+        if (rate)
+            add_element(*rate, rate_pos);
+        if (t)
+            add_element(*t, temp_pos);
     }
 
     void fill_row(unsigned int link_in,
@@ -30,45 +53,28 @@ public:
                   double *t_in,
                   double *t_out)
     {
-        unsigned int in_pos_start = link_in * main_value_count;
-        unsigned int out_pos_start = link_out * main_value_count;
+        fill_row(link_in, p_in, rate_in, t_in);
+        fill_row(link_out, p_out, rate_out, t_out);
+    }
 
-        auto add_element = [&](double value, bool in, unsigned int shift)
+    void fill_row_for_joint(std::vector<unsigned int> links, unsigned int link_in_count, unsigned int link_out_count)
+    {
+        auto get_pos = [&](unsigned int link) -> unsigned int
         {
-            size++;
-            row_element element(value, (in ? in_pos_start : out_pos_start) + shift);
-            row.push_back(element);
+            return link * main_var_count + rate_pos;
         };
 
-        if (p_in)
+        for (unsigned int i = 0; i < link_in_count; i++)
         {
-            add_element(*p_in, true, pressure_pos);
+            size++;
+            row_element element(1., get_pos(links[i]));
+            row.push_back(element);
         }
-
-        if (p_out)
+        for (unsigned int i = link_in_count; i < link_in_count + link_out_count; i++)
         {
-            add_element(*p_out, false, pressure_pos);
+            size++;
+            row_element element(-1., get_pos(links[i]));
+            row.push_back(element);
         }
-
-        if (rate_in)
-        {
-            add_element(*rate_in, true, rate_pos);
-        }
-
-        if (rate_out)
-        {
-            add_element(*rate_out, false, rate_pos);
-        }
-
-        if (t_in)
-        {
-            add_element(*t_in, true, temp_pos);
-        }
-
-        if (t_out)
-        {
-            add_element(*t_out, false, temp_pos);
-        }
-
     }
 };

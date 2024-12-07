@@ -9,4 +9,5 @@ struct result_info
     std::string res_name;
     std::string gui_dir;
     std::string result_dir;
+    std::string settings;
 };

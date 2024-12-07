@@ -20,3 +20,10 @@ it *pipe_creator(vertex *v, QWidget *gui_manager)
 
     return item;
 }
+
+it *joint_creator(vertex *v, QWidget *gui_manager)
+{
+    joint_item *item = new joint_item(v, 0, gui_manager);
+
+    return item;
+}

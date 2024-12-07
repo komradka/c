@@ -1,35 +1,26 @@
-#include "graph_item.hpp"
-
-class link_item : public it
+class link_item : public QGraphicsLineItem
 {
 public:
-    QPoint start;
-    QPoint end;
+    bool is_clicked = false;
 
 public:
-    link_item(QObject *parent = 0) : it(network_objects::link, 0, parent)
+    link_item(QLineF &line)
     {
+        this->setLine(line);
+    }
+
+    void redrow(QLineF &line)
+    {
+        QPen clicked_drow = QPen(Qt::darkYellow, 3);
+        QPen default_drow = QPen(Qt::black);
+        
+        setPen(is_clicked ? clicked_drow : default_drow);
+
+        setLine(line);
     }
 
     ~link_item()
     {
     }
 
-    void set_coords(QPoint f, QPoint s)
-    {
-        start = f;
-        end = s;
-    }
-
-private:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override
-    {
-        painter->setPen(Qt::black);
-        painter->setBrush(Qt::blue);
-
-        painter->drawLine(start, end);
-
-        Q_UNUSED(option);
-        Q_UNUSED(widget);
-    }
 };

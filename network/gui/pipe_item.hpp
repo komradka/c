@@ -37,6 +37,12 @@ public:
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override
     {
+        if (is_clicked)
+        {
+            painter->setPen(Qt::darkYellow);
+            painter->drawRect(-30, -30, 60, 50);
+        }
+
         painter->setPen(Qt::black);
         painter->setBrush(Qt::white);
 

@@ -1,15 +1,21 @@
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QMainWindow>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QMenuBar>
-#include <QtWidgets/QMessageBox>
-#include <QtGui/QPainter>
-#include <QtWidgets/QtWidgets>
-#include <QtGui/QtGui>
-
 #include "writer.hpp"
 #include "../gui/graph_area.hpp"
+#include "../manager_gui/settings_dialog.hpp"
+
+error writer::write_settings()
+{
+    ofstream settings_writer;
+    settings_writer.open(dir + "/settings.data");
+    if (!settings_writer.is_open())
+    {
+        return error("Cannot open file", (int)file_errors::open);
+    }
+    out << "SETTINGS " << dir + "/settings.data" << endl;
+    settings->write_settings(settings_writer);
+
+    settings_writer.close();
+    return error(OK);
+}
 
 error writer::write_gui()
 {
@@ -45,7 +51,7 @@ error writer::write_gui()
     graph *topology = storage->topology;
 
     std::map<object_id, it *> &objects = storage->items;
-    std::map<link_id, QGraphicsLineItem *> &links = storage->links;
+    std::map<link_id, link_item *> &links = storage->links;
 
     for (auto &object : objects)
     {
@@ -59,7 +65,10 @@ error writer::write_gui()
 
         gui_writer << object.second->scenePos().x() << " " << object.second->scenePos().y() << " ";
 
-        string data_file = dir_name + "/" + v->get_data()->get_name() + "_" + to_string(res_num) + ".data";
+        string obj_name = v->get_data()->get_name();
+        std::replace(obj_name.begin(), obj_name.end(), ' ', '_');
+
+        string data_file = dir_name + "/" + obj_name + "_" + to_string(res_num) + ".data";
 
         gui_writer << data_file << endl;
 
@@ -76,7 +85,12 @@ error writer::write_gui()
 
             gui_writer << "MAKE_LINK ";
 
-            gui_writer << topology->get_object_name(connected_objs.first) << " " << topology->get_object_name(connected_objs.second) << endl;
+            string obj_name_first = topology->get_object_name(connected_objs.first);
+            string obj_name_second = topology->get_object_name(connected_objs.second);
+            std::replace(obj_name_first.begin(), obj_name_first.end(), ' ', '_');
+            std::replace(obj_name_second.begin(), obj_name_second.end(), ' ', '_');
+
+            gui_writer << obj_name_first << " " << obj_name_second << endl;
         }
 
     gui_writer.close();

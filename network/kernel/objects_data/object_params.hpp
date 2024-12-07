@@ -18,6 +18,14 @@ enum class network_object_param
     pipe_len,
     pipe_pressure_drop_coef,
     pipe_temp_drop_coef,
+    pipe_height_diff,
+    pipe_inner_diameter,
+    pipe_roughness,
+    pipe_wall_thickness,
+    pipe_wall_cond,
+    pipe_burial_depth,
+    ambient_temperature,
+    htc,
 
     COUNT,
 };
@@ -122,4 +130,76 @@ struct network_object_param_desc<network_object_param::pipe_temp_drop_coef>
     static constexpr auto default_type = std::make_optional(0.1);
     static constexpr auto name = "PIPE_T_COEF";
     static constexpr auto name_for_gui = "Pipe temperature drop coefficient";
+};
+
+template <>
+struct network_object_param_desc<network_object_param::pipe_height_diff>
+{
+    using data_type_t = std::optional<double>;
+    static constexpr auto default_type = std::make_optional(0.);
+    static constexpr auto name = "PIPE_H_DIFF";
+    static constexpr auto name_for_gui = "Height difference";
+};
+
+template <>
+struct network_object_param_desc<network_object_param::pipe_inner_diameter>
+{
+    using data_type_t = std::optional<double>;
+    static constexpr auto default_type = std::make_optional(0.2);
+    static constexpr auto name = "PIPE_D_IN";
+    static constexpr auto name_for_gui = "Inner Diameter";
+};
+
+template <>
+struct network_object_param_desc<network_object_param::pipe_roughness>
+{
+    using data_type_t = std::optional<double>;
+    static constexpr auto default_type = std::make_optional(0.01);
+    static constexpr auto name = "PIPE_ROUGH";
+    static constexpr auto name_for_gui = "Roughness";
+};
+
+template <>
+struct network_object_param_desc<network_object_param::pipe_burial_depth>
+{
+    using data_type_t = std::optional<double>;
+    static constexpr auto default_type = std::make_optional(0.);
+    static constexpr auto name = "PIPE_DEPTH";
+    static constexpr auto name_for_gui = "Burial Depth";
+};
+
+template <>
+struct network_object_param_desc<network_object_param::pipe_wall_cond>
+{
+    using data_type_t = std::optional<double>;
+    static constexpr auto default_type = std::make_optional(40.);
+    static constexpr auto name = "PIPE_COND";
+    static constexpr auto name_for_gui = "Wall Conductivity";
+};
+
+template <>
+struct network_object_param_desc<network_object_param::pipe_wall_thickness>
+{
+    using data_type_t = std::optional<double>;
+    static constexpr auto default_type = std::make_optional(0.015);
+    static constexpr auto name = "PIPE_THK";
+    static constexpr auto name_for_gui = "Wall Thickness";
+};
+
+template <>
+struct network_object_param_desc<network_object_param::ambient_temperature>
+{
+    using data_type_t = std::optional<double>;
+    static constexpr auto default_type = std::make_optional(15.56);
+    static constexpr auto name = "PIPE_TA";
+    static constexpr auto name_for_gui = "Ambient Temperature";
+};
+
+template <>
+struct network_object_param_desc<network_object_param::htc>
+{
+    using data_type_t = std::optional<double>;
+    static constexpr auto default_type = std::nullopt;
+    static constexpr auto name = "PIPE_HTC";
+    static constexpr auto name_for_gui = "Heat Transfer Coefficient";
 };

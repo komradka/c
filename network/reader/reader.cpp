@@ -38,9 +38,16 @@ error res_gui_dir_handler(const std::vector<std::string> &words, result_info &re
     return error(OK);
 }
 
+error res_settings_handler(const std::vector<std::string> &words, result_info &res)
+{
+    res.settings = words[1];
+    return error(OK);
+}
+
 void reader::init_project_key_words()
 {
     project_key_words["RES_NUM"] = res_num_handler;
     project_key_words["RES_NAME"] = res_name_handler;
     project_key_words["GUI_DIR"] = res_gui_dir_handler;
+    project_key_words["SETTINGS"] = res_settings_handler;
 }

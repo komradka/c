@@ -9,6 +9,7 @@
 
 #include "object_params.hpp"
 #include "../../utility/utility.hpp"
+#include "../../error.hpp"
 
 #pragma once
 
@@ -111,3 +112,24 @@ public:
         return opt.value();
     }
 };
+
+std::string make_object_error(const std::string &err_message, const int line);
+error set_pressure(const std::vector<std::string> &words, const int line, object_data *data);
+error set_temperature(const std::vector<std::string> &words, const int line, object_data *data);
+error set_wrat(const std::vector<std::string> &words, const int line, object_data *data);
+error set_orat(const std::vector<std::string> &words, const int line, object_data *data);
+error set_grat(const std::vector<std::string> &words, const int line, object_data *data);
+error set_activity(const std::vector<std::string> &words, const int line, object_data *data);
+error set_name(const std::vector<std::string> &words, const int line, object_data *data);
+error set_pipe_type(const std::vector<std::string> &words, const int line, object_data *data);
+error set_pipe_len(const std::vector<std::string> &words, const int line, object_data *data);
+error set_pipe_pressure_drop_coef(const std::vector<std::string> &words, const int line, object_data *data);
+error set_pipe_temp_drop_coef(const std::vector<std::string> &words, const int line, object_data *data);
+error set_pipe_height_diff(const std::vector<std::string> &words, const int line, object_data *data);
+error set_pipe_inner_diameter(const std::vector<std::string> &words, const int line, object_data *data);
+error set_pipe_roughness(const std::vector<std::string> &words, const int line, object_data *data);
+error set_pipe_wall_thickness(const std::vector<std::string> &words, const int line, object_data *data);
+error set_pipe_wall_cond(const std::vector<std::string> &words, const int line, object_data *data);
+error set_pipe_burial_depth(const std::vector<std::string> &words, const int line, object_data *data);
+error set_ambient_temperature(const std::vector<std::string> &words, const int line, object_data *data);
+error set_htc(const std::vector<std::string> &words, const int line, object_data *data);

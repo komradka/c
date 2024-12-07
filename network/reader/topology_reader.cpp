@@ -33,12 +33,10 @@ error make_object_handler(const std::vector<std::string> &words, const int line,
     sscanf(x_str.c_str(), "%d", &x);
     sscanf(y_str.c_str(), "%d", &y);
 
-    gui_manager->add_object(type, QPoint(x, y), data_file_name);
+    error ret(OK);
 
-    // error ret = topology->make_object(type, data_file_name);
-
-    // ret.set_filename(data_file_name);
-    return error(OK);
+    ret = gui_manager->add_object(type, QPoint(x, y), data_file_name);
+    return ret;
 }
 
 error make_link_handler(const std::vector<std::string> &words, const int line, const string &filename, graph_area *gui_manager)
@@ -49,6 +47,8 @@ error make_link_handler(const std::vector<std::string> &words, const int line, c
 
     auto first = words[1];
     auto second = words[2];
+
+    gui_manager->add_link(first, second);
 
     // error ret = topology->make_link(first, second);
 

@@ -16,6 +16,9 @@ std::string get_name_for_gui(network_objects obj)
     case network_objects::pipe:
         return "Pipe";
         break;
+    case network_objects::joint:
+        return "Joint";
+        break;
     case network_objects::unknown:
     case network_objects::COUNT:
         return "error";
@@ -41,6 +44,9 @@ std::string get_name(network_objects obj)
     case network_objects::pipe:
         return "PIPE";
         break;
+    case network_objects::joint:
+        return "JOINT";
+        break;
     case network_objects::unknown:
     case network_objects::COUNT:
         return "ERROR";
@@ -58,6 +64,8 @@ network_objects string_to_type(const std::string &str)
         return network_objects::link;
     if (str == "PIPE")
         return network_objects::pipe;
+    if (str == "JOINT")
+        return network_objects::joint;
 
     return network_objects::unknown;
 }

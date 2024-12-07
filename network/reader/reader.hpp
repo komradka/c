@@ -35,6 +35,8 @@ private:
     std::map<std::string, std::function<error(const std::vector<std::string> &, const string &filename, const int)>> main_key_words;
     std::map<std::string, std::function<error(const std::vector<std::string> &, const int, const string &filename, graph_area *)>> topology_key_words;
     std::map<std::string, std::function<error(const std::vector<std::string> &, result_info &)>> project_key_words;
+    std::map<std::string, int> settings_key_words;
+    std::map<int, std::function<error(const std::vector<std::string> &, const int, std::vector<std::any> &)>> settings_func;
 
 public:
     ~reader()
@@ -44,6 +46,17 @@ public:
             file.close();
         }
     }
+
+    error read_data(result_info &res, graph_area *gui_manager, settings_dialog *settings)
+    {
+        (void)res;
+        (void)gui_manager;
+        (void)settings;
+        return error(OK);
+    }
+
+private:
+    error read_settings(std::string filename, settings_dialog *settings);
 
     error read_topology(std::string filename, graph_area *gui_manager)
     {
@@ -76,6 +89,7 @@ public:
         return error("Wrong number of fields", 0);
     }
 
+public:
     error read_project(std::string dirname, std::vector<result_info> &results)
     {
         if (file.is_open())
@@ -112,8 +126,11 @@ public:
 
 private:
     error read_topology_string(const std::string str, const int line, graph_area *gui_manager);
+    error read_settings_string(const std::string str, const int line, std::vector<std::any> &readed_settings);
     void init_topology_key_words();
     void init_project_key_words();
+    void init_settings_key_words();
+    void init_settings_func();
 };
 
 #endif

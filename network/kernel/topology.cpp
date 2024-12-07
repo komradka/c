@@ -85,9 +85,9 @@ error graph::make_pipe(vertex *v, const std::string &file)
 
     if (!file.empty())
     {
-        // data_reader r(rep, network_objects::sink);
+        data_reader r(rep, network_objects::pipe);
 
-        // RETURN_IF_FAIL(r.sink_handler(file, data));
+        RETURN_IF_FAIL(r.pipe_handler(file, data));
 
         // if (!add_object_verification(data))
         // {
@@ -102,6 +102,33 @@ error graph::make_pipe(vertex *v, const std::string &file)
     pipes_data[v->get_id()] = data;
 
     v->set_data(&pipes_data[v->get_id()]);
+
+    return error(OK);
+}
+
+error graph::make_joint(vertex *v, const std::string &file)
+{
+    joint_data data;
+
+    if (!file.empty())
+    {
+        data_reader r(rep, network_objects::joint);
+
+        RETURN_IF_FAIL(r.joint_handler(file, data));
+
+        // if (!add_object_verification(data))
+        // {
+        //     delete v;
+        //     return error("Cannot create object. Object with this name already existing.");
+        // }
+    }
+    if (data.get_name().empty())
+    {
+        data.set_name(gen_name(network_objects::joint));
+    }
+    joints_data[v->get_id()] = data;
+
+    v->set_data(&joints_data[v->get_id()]);
 
     return error(OK);
 }

@@ -9,6 +9,7 @@ enum class network_objects
     sink,
     source,
     pipe,
+    joint,
 
     unknown,
     link,

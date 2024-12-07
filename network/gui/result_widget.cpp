@@ -3,13 +3,15 @@
 void result_widget::reprint_table()
 {
     std::vector<int> checked_q = get_checked_items();
-    QList<QTreeWidgetItem *> checked_objs = objects_list->selectedItems();
+    std::vector<QTreeWidgetItem *> checked_objs = get_checked_objects();
 
     int objs_count = checked_objs.size();
     int q_count = checked_q.size();
 
     table->setColumnCount(q_count);
     table->setRowCount(objs_count);
+
+    table->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     QStringList horizontal_headers;
     QStringList vertical_headers;
@@ -58,5 +60,21 @@ std::vector<int> result_widget::get_checked_items()
             res.push_back(i);
         }
     }
+    return res;
+}
+
+std::vector<QTreeWidgetItem *> result_widget::get_checked_objects()
+{
+    QList<QTreeWidgetItem *> checked_objs = objects_list->selectedItems();
+
+    std::vector<QTreeWidgetItem *> res;
+
+    for (QTreeWidgetItem *it : checked_objs)
+    {
+        object_tree_item *si = dynamic_cast<object_tree_item *>(it);
+        if (!si->is_link())
+            res.push_back(it);
+    }
+
     return res;
 }

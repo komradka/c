@@ -1,5 +1,7 @@
 #include "initial_approximation/initial_approximation_builder.hpp"
 #include "nd_results.hpp"
+#include "main_equations.hpp"
+#include "matrix_builder/matrix_builder.hpp"
 
 #include <QtWidgets/QtWidgets>
 
@@ -16,6 +18,8 @@ private:
     nd_solution *solution;
     initial_approximation_builder *initial_approximation;
     nd_results *results;
+    main_equations *equations;
+    matrix_builder *jacobian_builder;
 
 public:
     error calculation_ret;
@@ -32,6 +36,15 @@ public:
         settings = _settings;
     }
 
+    ~nd_solver()
+    {
+        delete solution;
+        delete initial_approximation;
+        delete results;
+        delete equations;
+        delete jacobian_builder;
+    }
+
     error prepare_network_and_try_start_calculation();
     std::map<object_id, phys_q> &get_object_results();
 
@@ -41,6 +54,8 @@ private:
     error write_results();
     error write_results_on_links();
     error write_results_on_object();
+
+    void print_equations();
 
 signals:
     void calculation_end();

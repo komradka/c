@@ -49,6 +49,7 @@ public:
 
     void reprint_table();
     std::vector<int> get_checked_items();
+    std::vector<QTreeWidgetItem *> get_checked_objects();
 
 public slots:
     void list_item_clicked(QListWidgetItem *item)

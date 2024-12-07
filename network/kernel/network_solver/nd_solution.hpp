@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <map>
+#include <vector>
 #include <memory>
 
 #pragma once
@@ -16,6 +17,10 @@ private:
     settings_dialog *settings;
 
     std::map<link_id, unsigned int> link_continuous_numeration;
+
+    std::vector<unsigned int> pressure_eq_pos;
+    std::vector<unsigned int> rate_eq_pos;
+    std::vector<unsigned int> temp_eq_pos;
 
     unsigned int link_variables_count;
 
@@ -36,6 +41,15 @@ public:
     void set_pressure(unsigned int link_num, double p);
     void set_wrat(unsigned int link_num, double wrat);
     void set_temperature(unsigned int link_num, double t);
+
+    unsigned int get_pressure_eq_pos(unsigned int link);
+    unsigned int get_rate_eq_pos(unsigned int link);
+    unsigned int get_temp_eq_pos(unsigned int link);
+
+    unsigned int get_main_vars_count()
+    {
+        return link_variables_count * link_continuous_numeration.size();
+    }
 
 private:
     int get_pressure_pos()

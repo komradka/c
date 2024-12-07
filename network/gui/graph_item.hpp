@@ -2,6 +2,7 @@
 #include "../kernel/topology.hpp"
 #include "../kernel/objects_type.hpp"
 #include "../gui_utility/tree_dialog_by_enum.hpp"
+#include "link_item.hpp"
 
 #pragma once
 
@@ -12,7 +13,7 @@ class it : public QObject, public QGraphicsItem
 public:
     vertex *v;
 
-    QList<QGraphicsLineItem *> links;
+    QList<link_item *> links;
 
     object_dialog *dialog;
 
@@ -21,6 +22,7 @@ public:
     tree_dialog_by_enum *td;
 
     bool is_valid = false;
+    bool is_clicked = false;
 
 public:
     it(network_objects _type = network_objects::unknown, vertex *v = 0, QObject *parent = 0, QWidget *gui_manager = 0) : QObject(parent), QGraphicsItem()
@@ -50,6 +52,15 @@ public:
     int type() const
     {
         return Type;
+    }
+
+    void delete_link(QGraphicsLineItem *link)
+    {
+        auto iter = std::find(links.begin(), links.end(), link);
+        if (iter != links.end())
+        {
+            links.erase(iter);
+        }
     }
 
 signals:
@@ -89,7 +100,8 @@ public:
         for (auto link : links)
         {
             QPointF linkP2 = link->line().p2();
-            link->setLine(QLineF(itemPos, linkP2));
+            QLineF new_line = QLineF(itemPos, linkP2);
+            link->redrow(new_line);
         }
     }
 
@@ -143,7 +155,7 @@ public slots:
     {
         if (!is_valid)
             return;
-            
+
         switch (obj_type)
         {
         case network_objects::sink:
@@ -176,10 +188,25 @@ public slots:
             constexpr_for<0, pipe_data::pipe_fields>(init_pipe);
             break;
         }
+        case network_objects::joint:
+        {
+            auto _joint_data = dynamic_cast<joint_data *>(v->get_data());
+            auto init_joint = [&](auto i)
+            {
+                _joint_data->params[joint_data::joint_params[i]] = td->get_widget_param<network_object_param_desc<joint_data::joint_params[i]>>(i);
+            };
+            constexpr_for<0, joint_data::joint_fields>(init_joint);
+            break;
+        }
         case network_objects::COUNT:
         case network_objects::link:
         case network_objects::unknown:
             return;
+        }
+
+        if (!v->get_data()->get_name().empty())
+        {
+            std::replace(v->get_data()->get_name().begin(), v->get_data()->get_name().end(), ' ', '_');
         }
 
         emit updated();

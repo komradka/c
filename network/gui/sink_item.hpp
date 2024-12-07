@@ -36,14 +36,18 @@ public:
 
 private:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override
-    {    
-        painter->setPen(Qt::black);
-        painter->setBrush(Qt::blue);
+    {
+        if (is_clicked)
+        {
+            painter->setPen(Qt::darkYellow);
+            painter->drawRect(-30, -30, 60, 60);
+        }
 
-        painter->drawEllipse(-30, -30, 60, 60);
+        QRectF el = QRectF(-30, -30, 60, 60);
+        QImage image("gui/resource/sink.png", "png");
 
-        painter->drawText(QRect(-25, -25, 50, 50), Qt::AlignCenter, QString::fromStdString(v->get_data()->get_name()));
-
+        painter->drawImage(el, image);
+        painter->drawText(QRect(-50, -60, 50, 50), Qt::AlignCenter, QString::fromStdString(v->get_data()->get_name()));
         Q_UNUSED(option);
         Q_UNUSED(widget);
     }

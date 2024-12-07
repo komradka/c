@@ -1,4 +1,5 @@
 QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 QMAKE_CXXFLAGS += -std=c++17
 QMAKE_CXXFLAGS -= -W -Wall
 
@@ -48,8 +49,31 @@ HEADERS       = manager.hpp \
                 kernel/phys_q.hpp \
                 kernel/network_solver/matrix_builder/jacobian_row.hpp \
                 kernel/network_solver/matrix_builder/row_element.hpp \
+                kernel/network_solver/matrix_builder/matrix_builder.hpp \
                 kernel/network_solver/equations/nd_abstract_equation.hpp \
-                kernel/network_solver/equations/nd_source_pressure_equation.hpp
+                kernel/network_solver/equations/nd_source_pressure_equation.hpp \
+                kernel/network_solver/equations/nd_source_rate_equation.hpp \
+                kernel/network_solver/equations/nd_pipe_pressure_equation.hpp \
+                kernel/network_solver/main_equations.hpp \
+                kernel/network_solver/equations/nd_equality_pressure_equation.hpp \
+                kernel/network_solver/equations/nd_equality_rate_equation.hpp \
+                kernel/fluid/water_props_desc.hpp \
+                kernel/fluid/water_props.hpp \
+                gui/fluid_widget.hpp \
+                gui_utility/enum_widget.hpp \
+                gui/fluid_experiment_dialog.hpp \
+                kernel/fluid/experiment/fluid_experiment.hpp \
+                kernel/fluid/calculators/water_calculator.hpp \
+                gui/fluid_graph/fluid_graph.hpp \
+                gui_utility/plot/qcustomplot.h \
+                gui/pipe_project/pipe_project.hpp \
+                gui/pipe_project/pipe_graph.hpp \
+                gui_utility/check_list_widget.hpp \
+                kernel/pipe_holder/pipe_params.hpp \
+                kernel/pipe_holder/pipe_calculator.hpp \
+                kernel/objects_data/joint_data.hpp \
+                gui/joint_item.hpp \
+                manager_gui/create_project_dialog.hpp
                 
 
                  
@@ -76,6 +100,18 @@ SOURCES       = main.cpp \
                 kernel/network_solver/nd_solution.cpp \
                 kernel/network_solver/initial_approximation/pressure_initial_approximation.cpp \
                 kernel/network_solver/initial_approximation/temp_initial_approximation.cpp \
-                kernel/network_solver/initial_approximation/rate_initial_approximation.cpp
-                
-                
+                kernel/network_solver/initial_approximation/rate_initial_approximation.cpp \
+                kernel/network_solver/equations/nd_pipe_pressure_equation.cpp \
+                kernel/network_solver/main_equations.cpp \
+                kernel/fluid/water_props.cpp \
+                kernel/internal_constant.hpp \
+                kernel/fluid/experiment/fluid_experiment.cpp \
+                kernel/fluid/calculators/water_calculator.cpp \
+                gui/fluid_experiment_dialog.cpp \
+                gui_utility/plot/qcustomplot.cpp \
+                gui/fluid_graph/fluid_graph.cpp \
+                kernel/pipe_holder/pipe_params.cpp \
+                kernel/pipe_holder/pipe_calculator.cpp \
+                kernel/objects_data/joint_data.cpp \
+                kernel/objects_data/object_data.cpp \
+                reader/settings_reader.cpp

@@ -24,15 +24,21 @@ class object_tree_item : public QTreeWidgetItem
 
 private:
     bool is_root_item = false;
+    bool is_item_link = false;
+    int id;
     std::string name;
     QGraphicsItem *graph_item;
 
 public:
     object_tree_item(network_objects type, objects_tree *parent);
 
-    object_tree_item(std::string name, network_objects type, QGraphicsItem *graph_item, objects_tree *parent);
+    object_tree_item(std::string name, network_objects type, QGraphicsItem *graph_item, int id, objects_tree *parent);
 
     std::string get_name();
 
     vertex *get_object();
+
+    bool is_link() { return is_item_link; }
+    int get_id() { return id; }
+    bool is_root() { return is_root_item; }
 };

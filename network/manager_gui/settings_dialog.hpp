@@ -1,5 +1,6 @@
 #include "settings/solver_settings_desc.hpp"
 #include "../gui_utility/tree_dialog_by_enum.hpp"
+#include <fstream>
 
 #include <iostream>
 
@@ -8,12 +9,11 @@
 template <solver_settings Settings>
 struct network_solver_setting_desc;
 
-
 class settings_dialog : public QDialog
 {
     Q_OBJECT
 
-private:
+public:
     static constexpr unsigned int setting_count = (unsigned int)(solver_settings::COUNT);
 
     static constexpr std::array<solver_settings, int(solver_settings::COUNT)> all_settings = {solver_settings::use_temperature_equation,
@@ -72,6 +72,23 @@ public:
         }
 
         return std::any_cast<data_type_t>(value);
+    }
+
+    void write_settings(std::ofstream &stream)
+    {
+        auto write = [&](auto i)
+        {
+            stream << network_solver_setting_desc<all_settings[i]>::name << " ";
+            stream << get_name(get_param<all_settings[i]>()) << std::endl;
+        };
+
+        constexpr_for<0, setting_count>(write);
+    }
+
+    template <solver_settings Settings>
+    void set_param(typename network_solver_setting_desc<Settings>::data_type_t value, int i)
+    {
+        td->set_widget_param<network_solver_setting_desc<Settings>>(i, value);
     }
 
 public slots:

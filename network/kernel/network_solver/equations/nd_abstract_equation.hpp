@@ -1,4 +1,4 @@
-#include "../../error.hpp"
+#include "../../../error.hpp"
 #include "../nd_solution.hpp"
 #include "../matrix_builder/jacobian_row.hpp"
 
@@ -15,7 +15,7 @@ public:
                            double &rhs) = 0;
 
     virtual error fill_jacobian(nd_solution *solution,
-                                jacobian_row &row) = 0;
+                                jacobian_row *row) = 0;
 
     virtual std::string get_equation_name() = 0;
 };

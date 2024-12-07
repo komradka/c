@@ -18,7 +18,7 @@ public:
     QObject *pm;
 
 public:
-    MWindow(QObject *parent)
+    MWindow(QWidget *parent)
     {
         pm = parent;
     }

@@ -1,14 +1,4 @@
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QMainWindow>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QMenuBar>
-#include <QtWidgets/QMessageBox>
-#include <QtGui/QPainter>
 #include <QtWidgets/QtWidgets>
-#include <QtGui/QtGui>
-#include <QtWidgets/QFileDialog>
-#include <QtWidgets/QGraphicsScene>
 
 #include "../utility/utility.hpp"
 #include "number_textEditer.hpp"

@@ -40,6 +40,7 @@ error initial_approximation_builder::simple_rate_initial_approximation()
             calc_rate(network_topology->get_source_data(obj));
             break;
         }
+        case network_objects::joint:
         case network_objects::link:
         case network_objects::pipe:
         case network_objects::unknown:

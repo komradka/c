@@ -9,6 +9,7 @@
 #include "objects_data/source_data.hpp"
 #include "objects_data/sink_data.hpp"
 #include "objects_data/pipe_data.hpp"
+#include "objects_data/joint_data.hpp"
 #include "../reporter.hpp"
 #include "../error.hpp"
 #include "check_network.hpp"
@@ -46,7 +47,24 @@ public:
         connected_objects.push_back(obj);
         dir == link_direction::inlet ? inlet_links.push_back(link) : outlet_links.push_back(link);
     }
-    std::vector<object_id> &get_neighbour_objects()
+
+    void delete_in_link(link_id l)
+    {
+        auto it = std::find(inlet_links.begin(), inlet_links.end(), l);
+
+        if (it != inlet_links.end())
+            inlet_links.erase(it);
+    }
+
+    void delete_out_link(link_id l)
+    {
+        auto it = std::find(outlet_links.begin(), outlet_links.end(), l);
+
+        if (it != outlet_links.end())
+            outlet_links.erase(it);
+    }
+
+    std::vector<object_id> get_neighbour_objects()
     {
         return connected_objects;
     }
@@ -153,6 +171,7 @@ private: // dates
     std::map<object_id, source_data> sources_data;
     std::map<object_id, sink_data> sinks_data;
     std::map<object_id, pipe_data> pipes_data;
+    std::map<object_id, joint_data> joints_data;
 
 public:
     graph(reporter *rep)
@@ -193,6 +212,21 @@ public:
             result.push_back(l.first);
         }
         return result;
+    }
+
+    std::optional<link_id> get_link_between_object(object_id f, object_id s)
+    {
+        std::vector<link_id> links = get_links();
+
+        for (auto l : links)
+        {
+            std::pair<object_id, object_id> co = get_connected_object(l);
+            if ((co.first == f && co.second == s) ||
+                (co.first == s && co.second == f))
+                return make_optional(l);
+        }
+
+        return nullopt;
     }
 
     std::vector<object_id> &get_active_objects()
@@ -252,6 +286,9 @@ public:
         case network_objects::pipe:
             RETURN_IF_FAIL(make_pipe(v, file));
             break;
+        case network_objects::joint:
+            RETURN_IF_FAIL(make_joint(v, file));
+            break;
         case network_objects::link:
         case network_objects::unknown:
         case network_objects::COUNT:
@@ -263,6 +300,7 @@ public:
         if (v_ret)
             *v_ret = v;
 
+        update_active_objects();
         return error(OK);
     }
 
@@ -327,6 +365,16 @@ public:
         auto data = get_object_data(sink);
 
         return dynamic_cast<sink_data *>(data);
+    }
+
+    pipe_data *get_pipe_data(object_id pipe)
+    {
+        if (get_type(pipe) != network_objects::pipe)
+            return nullptr;
+
+        auto data = get_object_data(pipe);
+
+        return dynamic_cast<pipe_data *>(data);
     }
 
 public:
@@ -412,10 +460,111 @@ public:
         return res;
     }
 
+    void remove_link_at_object(object_id obj, link_id link)
+    {
+        vertex *v = get_object(obj);
+
+        v->delete_in_link(link);
+        v->delete_out_link(link);
+    }
+
+    void delete_object(object_id obj)
+    {
+        vertex *v = vertices.at(obj);
+
+        network_objects type = get_type(obj);
+
+        std::vector<link_id> in_links = v->get_inlet_links();
+        std::vector<link_id> out_links = v->get_outlet_links();
+
+        for (link_id l : in_links)
+        {
+            object_id rhs;
+            std::tie(rhs, std::ignore) = get_connected_object(l);
+
+            remove_link_at_object(rhs, l);
+
+            link *_l = links[l];
+
+            links.erase(l);
+
+            delete _l;
+        }
+
+        for (link_id l : out_links)
+        {
+            object_id rhs;
+            std::tie(std::ignore, rhs) = get_connected_object(l);
+
+            remove_link_at_object(rhs, l);
+
+            link *_l = links[l];
+
+            links.erase(l);
+
+            delete _l;
+        }
+
+        vertices.erase(obj);
+        delete v;
+
+        switch (type)
+        {
+        case network_objects::source:
+        {
+            sources_data.erase(obj);
+            break;
+        }
+        case network_objects::sink:
+        {
+            sinks_data.erase(obj);
+            break;
+        }
+        case network_objects::pipe:
+        {
+            pipes_data.erase(obj);
+            break;
+        }
+        case network_objects::joint:
+        {
+            joints_data.erase(obj);
+            break;
+        }
+        case network_objects::link:
+        case network_objects::unknown:
+        case network_objects::COUNT:
+            break;
+        }
+
+        update_active_objects();
+    }
+
+    void delete_link(link_id l)
+    {
+        std::pair<object_id, object_id> co = get_connected_object(l);
+
+        remove_link_at_object(co.first, l);
+        remove_link_at_object(co.second, l);
+
+        link *_l = links.at(l);
+
+        links.erase(l);
+
+        delete _l;
+    }
+
+    std::vector<object_id> get_neighbors(object_id obj)
+    {
+        vertex *v = get_object(obj);
+
+        return v->get_neighbour_objects();
+    }
+
 private:
     error make_source(vertex *v, const std::string &file);
     error make_sink(vertex *v, const std::string &file);
     error make_pipe(vertex *v, const std::string &file);
+    error make_joint(vertex *v, const std::string &file);
 
     link *get_link(const link_id link)
     {
@@ -430,11 +579,13 @@ private:
         switch (type)
         {
         case network_objects::source:
-            return get_name_for_gui(type) + " " + to_string(sources_data.size() + 1);
+            return get_name_for_gui(type) + "_" + to_string(sources_data.size() + 1);
         case network_objects::sink:
-            return get_name_for_gui(type) + " " + to_string(sinks_data.size() + 1);
+            return get_name_for_gui(type) + "_" + to_string(sinks_data.size() + 1);
         case network_objects::pipe:
-            return get_name_for_gui(type) + " " + to_string(pipes_data.size() + 1);
+            return get_name_for_gui(type) + "_" + to_string(pipes_data.size() + 1);
+        case network_objects::joint:
+            return get_name_for_gui(type) + "_" + to_string(joints_data.size() + 1);
         case network_objects::link:
         case network_objects::unknown:
         case network_objects::COUNT:

@@ -38,13 +38,3 @@ public:
 
     bool add_link_verification(const unsigned int inlet_links_count, const unsigned int outlet_links_count) override;
 };
-
-std::string make_sink_error(const std::string &err_message, const int line);
-
-error sink_set_pressure(const std::vector<std::string> &words, const int line, sink_data &data);
-error sink_set_temperature(const std::vector<std::string> &words, const int line, sink_data &data);
-error sink_set_wrat(const std::vector<std::string> &words, const int line, sink_data &data);
-error sink_set_orat(const std::vector<std::string> &words, const int line, sink_data &data);
-error sink_set_grat(const std::vector<std::string> &words, const int line, sink_data &data);
-error sink_set_activity(const std::vector<std::string> &words, const int line, sink_data &data);
-error sink_set_name(const std::vector<std::string> &words, const int line, sink_data &data);
