@@ -1,6 +1,6 @@
 #include "events.h"
 
-#include "project_manager.h"
+#include "nd_manager.h"
 
 events_queue::events_queue ()
 {
@@ -41,7 +41,7 @@ std::unique_ptr<event_t> events_queue::pop ()
   return std::move (event);
 }
 
-waker::waker (project_manager &project)
+waker::waker (nd_manager &project)
   : m_project (project)
 {
 }

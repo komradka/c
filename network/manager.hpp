@@ -13,6 +13,8 @@
 #include "kernel/network_solver/nd_solver.hpp"
 // #include "network_solver/nd_solver.hpp"
 
+#include "con/async_reporter.h"
+
 #define IS_DEBUG 1
 
 class manager : public QWidget
@@ -106,6 +108,24 @@ public:
 
         show_window();
         add_action();
+    }
+
+    void print_log (message_t to_print)
+    {
+      switch (to_print.type)
+        {
+        case msg_types::error:
+          rep->print_error (to_print.message);
+          break;
+        case msg_types::message:
+          rep->print_message (to_print.message);
+          break;
+        case msg_types::warning:
+          rep->print_warning (to_print.message);
+          break;
+        case msg_types::EMPTY:
+          break;
+        }
     }
 
     bool eventFilter(QObject *object, QEvent *event)

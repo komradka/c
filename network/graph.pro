@@ -5,9 +5,11 @@ QMAKE_CXXFLAGS -= -W -Wall
 
 HEADERS       = manager.hpp \
                 main_window.hpp \
+                nd_manager.h \
                 parallel/nd_pthread.h \
                 parallel/thread_class.h \
                 parallel/waitable_request.h \
+                project_manager.h \
                 reader/reader.hpp \
                 reporter.hpp \
                 kernel/topology.hpp \
@@ -81,16 +83,18 @@ HEADERS       = manager.hpp \
                 gui/gui_feedback/events.h
                 con/async_reporter.h \
                 con/tasks/task.h \
-                
+                argsparser.h \
 
                  
 
 SOURCES       = main.cpp \
                 con/async_reporter.cpp \
                 con/tasks/task.cpp \
+                nd_manager.cpp \
                 parallel/thread_class.cpp \
                 parallel/thread_info.cpp \
                 parallel/waitable_request.cpp \
+                project_manager.cpp \
                 reporter.cpp \
                 reader/reader.cpp \
                 kernel/topology.cpp \
@@ -128,3 +132,5 @@ SOURCES       = main.cpp \
                 kernel/objects_data/object_data.cpp \
                 reader/settings_reader.cpp \
                 gui/gui_feedback/events.h
+                gui/gui_feedback/events.cpp \
+                argsparser.cpp

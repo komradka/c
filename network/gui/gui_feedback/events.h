@@ -36,14 +36,14 @@ public:
 
 };
 
-class project_manager;
+class nd_manager;
 class waker : public QObject
 {
 private:
-  project_manager &m_project;
+  nd_manager &m_project;
 
 public:
-  waker (project_manager &projec);
+  waker (nd_manager &projec);
   ~waker () = default;
 
   void wake_up ();

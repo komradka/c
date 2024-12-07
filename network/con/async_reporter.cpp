@@ -1,6 +1,6 @@
 #include "async_reporter.h"
 
-#include "project_manager.h"
+#include "nd_manager.h"
 #include "parallel/nd_pthread.h"
 
 std::string rep_sprintf (const char *format, va_list va)
@@ -17,7 +17,7 @@ std::string rep_sprintf (const char *format, va_list va)
   return result;
 }
 
-print_log_event::print_log_event (project_manager &project, message_t message)
+print_log_event::print_log_event (nd_manager &project, message_t message)
   : m_project (project), m_message (message)
 {
 }
@@ -27,7 +27,7 @@ void print_log_event::process ()
   m_project.process_print_log (m_message);
 }
 
-async_reporter_t::async_reporter_t (project_manager &project)
+async_reporter_t::async_reporter_t (nd_manager &project)
   : m_project (project)
 {
 }

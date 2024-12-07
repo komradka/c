@@ -42,25 +42,25 @@ struct message_t
   std::string message = "";
 };
 
-class project_manager;
+class nd_manager;
 class print_log_event : public event_t
 {
 private:
-  project_manager &m_project;
+  nd_manager &m_project;
   message_t m_message;
 
 public:
-  print_log_event (project_manager &project, message_t message);
+  print_log_event (nd_manager &project, message_t message);
   void process () override;
 };
 
 class async_reporter_t
 {
 private:
-  project_manager &m_project;
+  nd_manager &m_project;
 
 public:
-  async_reporter_t (project_manager &project);
+  async_reporter_t (nd_manager &project);
   ~async_reporter_t () = default;
 
   void add_prefixes (message_t &msg) const;
