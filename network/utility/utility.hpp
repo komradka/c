@@ -25,6 +25,12 @@ struct is_optional<std::optional<T>> : public std::true_type
 {
 };
 
+template<typename T>
+int isize (const T &something)
+{
+  return static_cast<int> (something.size ());
+}
+
 std::string get_name_for_gui(int e);
 
 std::string get_name_for_gui(double e);
