@@ -1,7 +1,7 @@
 #include "waitable_request.h"
 #include "nd_pthread.h"
 
-#include "con/tasks/task.h"
+#include "nd_con/tasks/task.h"
 
 waitable_request::waitable_request ()
 {

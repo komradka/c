@@ -1,7 +1,7 @@
 #include "task.h"
 
 #include "parallel/thread_info.h"
-#include "con/async_reporter.h"
+#include "nd_con/async_reporter.h"
 
 void task::set_reporter (async_reporter_t *reporter)
 {
