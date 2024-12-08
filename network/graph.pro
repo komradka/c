@@ -4,8 +4,12 @@ QMAKE_CXXFLAGS += -std=c++17
 QMAKE_CXXFLAGS -= -W -Wall
 
 HEADERS       = manager.hpp \
+                kernel/vertex.h \
                 main_window.hpp \
+                nd_abstract_data.h \
                 nd_manager.h \
+                nd_mixin.h \
+                nd_namespace_interface.h \
                 parallel/pthread_utils.h \
                 parallel/thread_class.h \
                 parallel/thread_shared_ptr.h \
@@ -92,6 +96,7 @@ SOURCES       = main.cpp \
                 nd_con/tasks/task.cpp \
                 gui/gui_feedback/events.cpp \
                 nd_manager.cpp \
+                nd_namespace_interface.cpp \
                 parallel/thread_class.cpp \
                 parallel/thread_info.cpp \
                 parallel/thread_shared_ptr.cpp \

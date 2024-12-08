@@ -4,6 +4,8 @@
 #include <memory>
 #include <vector>
 
+#include "nd_namespace_interface.h"
+
 class waitable_request;
 class thread_group_class;
 class task;
@@ -14,7 +16,7 @@ class message_t;
 
 class manager;
 
-class nd_manager
+class nd_manager : public nd_namespace_interface
 {
 private:
   int m_total_threads = 0;

@@ -1,6 +1,9 @@
 #include "object_data.hpp"
 #include "../../error.hpp"
 
+#include "nd_mixin.h"
+#include "kernel/vertex.h"
+
 #pragma once
 
 class pipe_data : public object_data
@@ -53,4 +56,10 @@ public:
     void write_data(std::ofstream &stream) override;
 
     bool add_link_verification(const unsigned int inlet_links_count, const unsigned int outlet_links_count) override;
+};
+
+class nd_pipe_data : public nd_mixin<pipe_data, vertex>
+{
+public:
+  network_objects get_object_type () const override { return network_objects::pipe; }
 };

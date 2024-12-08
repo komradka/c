@@ -1,6 +1,9 @@
 #include "object_data.hpp"
 #include "../../error.hpp"
 
+#include "nd_mixin.h"
+#include "kernel/vertex.h"
+
 #pragma once
 
 class joint_data : public object_data
@@ -31,4 +34,10 @@ public:
         (void)outlet_links_count;
         return true;
     };
+};
+
+class nd_joint_data : public nd_mixin<joint_data, vertex>
+{
+public:
+  network_objects get_object_type () const override { return network_objects::joint; }
 };
