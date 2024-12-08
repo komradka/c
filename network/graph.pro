@@ -80,15 +80,15 @@ HEADERS       = manager.hpp \
                 manager_gui/create_project_dialog.hpp \
                 parallel/thread_info.h \
                 gui/gui_feedback/events.h \
-                con/async_reporter.h \
-                con/tasks/task.h \
+                nd_con/async_reporter.h \
+                nd_con/tasks/task.h \
                 argsparser.h
 
 
 SOURCES       = main.cpp \
                 argsparser.cpp \
-                con/async_reporter.cpp \
-                con/tasks/task.cpp \
+                nd_con/async_reporter.cpp \
+                nd_con/tasks/task.cpp \
                 gui/gui_feedback/events.cpp \
                 nd_manager.cpp \
                 parallel/thread_class.cpp \

@@ -13,7 +13,7 @@
 #include "kernel/network_solver/nd_solver.hpp"
 // #include "network_solver/nd_solver.hpp"
 
-#include "con/async_reporter.h"
+#include "nd_con/async_reporter.h"
 
 #define IS_DEBUG 1
 
