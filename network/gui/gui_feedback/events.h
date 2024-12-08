@@ -6,7 +6,7 @@
 
 #include "parallel/nd_pthread.h"
 
-#include <QObject>
+#include <QtWidgets/QtWidgets>
 
 class event_t
 {

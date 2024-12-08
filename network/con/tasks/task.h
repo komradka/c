@@ -1,9 +1,7 @@
-#ifndef TASK_H
-#define TASK_H
-
+#pragma once
 #include <memory>
 
-#include "error.hpp"
+#include "../../error.hpp"
 
 class async_reporter_t;
 class thread_info;
@@ -21,4 +19,3 @@ public:
   virtual error multithread_run (const thread_info &thr_info) = 0;
 };
 
-#endif // TASK_H
