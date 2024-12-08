@@ -3,16 +3,16 @@
 
 #include <memory>
 
-class nd_mutex_t;
-class nd_cond_var_t;
+class mutex_t;
+class cond_var_t;
 
 class task;
 
 class waitable_request
 {
 private:
-  std::unique_ptr<nd_mutex_t> m_mutex;
-  std::unique_ptr<nd_cond_var_t> m_cond_var;
+  std::unique_ptr<mutex_t> m_mutex;
+  std::unique_ptr<cond_var_t> m_cond_var;
 
   task *m_value = nullptr;
   bool m_exit = false;

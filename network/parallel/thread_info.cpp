@@ -14,8 +14,8 @@ bool thread_info::is_main_thread () const
 
 void thread_info::barrier () const
 {
-  static nd_mutex_t mutex;
-  static nd_cond_var_t cond_in, cond_out;
+  static mutex_t mutex;
+  static cond_var_t cond_in, cond_out;
   static int in = 0, out = 0;
 
   mutex.lock ();
@@ -49,8 +49,8 @@ void thread_info::barrier () const
 
 void thread_info::reduce_sum (double *a, size_t len) const
 {
-  static nd_mutex_t mutex;
-  static nd_cond_var_t cond_in, cond_out;
+  static mutex_t mutex;
+  static cond_var_t cond_in, cond_out;
   static int in = 0, out = 0;
   static double *res = nullptr;
 
@@ -102,8 +102,8 @@ void thread_info::reduce_sum (double *a, size_t len) const
 
 void thread_info::reduce_max (double *a) const
 {
-  static nd_mutex_t mutex;
-  static nd_cond_var_t cond_in, cond_out;
+  static mutex_t mutex;
+  static cond_var_t cond_in, cond_out;
   static int in = 0, out = 0;
   static double res = 0;
 

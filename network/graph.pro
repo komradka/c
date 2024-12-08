@@ -6,7 +6,7 @@ QMAKE_CXXFLAGS -= -W -Wall
 HEADERS       = manager.hpp \
                 main_window.hpp \
                 nd_manager.h \
-                parallel/nd_pthread.h \
+                parallel/pthread_utils.h \
                 parallel/thread_class.h \
                 parallel/thread_shared_ptr.h \
                 parallel/waitable_request.h \

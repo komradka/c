@@ -4,7 +4,7 @@
 
 events_queue::events_queue ()
 {
-  m_mutex = std::make_unique<nd_mutex_t> ();
+  m_mutex = std::make_unique<mutex_t> ();
 }
 
 bool events_queue::queue_empty () const
