@@ -1,7 +1,7 @@
 #include "async_reporter.h"
 
 #include "nd_manager.h"
-#include "parallel/nd_pthread.h"
+#include "parallel/pthread_utils.h"
 
 std::string rep_sprintf (const char *format, va_list va)
 {

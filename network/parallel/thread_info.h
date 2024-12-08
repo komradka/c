@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "nd_pthread.h"
+#include "pthread_utils.h"
 
 class thread_info
 {
@@ -27,8 +27,8 @@ public:
   template<class Type>
   void bcast (Type **a) const
   {
-    static nd_mutex_t mutex;
-    static nd_cond_var_t cond_in, cond_out;
+    static mutex_t mutex;
+    static cond_var_t cond_in, cond_out;
     static int in = 0, out = 0;
     static Type *res = nullptr;
 

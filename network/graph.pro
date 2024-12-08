@@ -6,8 +6,9 @@ QMAKE_CXXFLAGS -= -W -Wall
 HEADERS       = manager.hpp \
                 main_window.hpp \
                 nd_manager.h \
-                parallel/nd_pthread.h \
+                parallel/pthread_utils.h \
                 parallel/thread_class.h \
+                parallel/thread_shared_ptr.h \
                 parallel/waitable_request.h \
                 reader/reader.hpp \
                 reporter.hpp \
@@ -93,6 +94,7 @@ SOURCES       = main.cpp \
                 nd_manager.cpp \
                 parallel/thread_class.cpp \
                 parallel/thread_info.cpp \
+                parallel/thread_shared_ptr.cpp \
                 parallel/waitable_request.cpp \
                 reporter.cpp \
                 reader/reader.cpp \

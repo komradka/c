@@ -1,12 +1,12 @@
 #include "waitable_request.h"
-#include "nd_pthread.h"
+#include "pthread_utils.h"
 
 #include "nd_con/tasks/task.h"
 
 waitable_request::waitable_request ()
 {
-  m_mutex = std::make_unique<nd_mutex_t> ();
-  m_cond_var = std::make_unique<nd_cond_var_t> ();
+  m_mutex = std::make_unique<mutex_t> ();
+  m_cond_var = std::make_unique<cond_var_t> ();
 }
 
 waitable_request::~waitable_request ()

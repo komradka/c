@@ -4,7 +4,7 @@
 #include <list>
 #include <memory>
 
-#include "parallel/nd_pthread.h"
+#include "parallel/pthread_utils.h"
 
 #include <QtWidgets/QtWidgets>
 
@@ -22,7 +22,7 @@ class events_queue : public QObject
 private:
   std::list<std::unique_ptr<event_t>> m_events;
 
-  std::unique_ptr<nd_mutex_t> m_mutex;
+  std::unique_ptr<mutex_t> m_mutex;
 
 public:
   events_queue ();
