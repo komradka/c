@@ -1,8 +1,5 @@
-#ifndef PTHREAD_UTILS_H
-#define PTHREAD_UTILS_H
-
 #include <pthread.h>
-
+#pragma once
 class mutex_t
 {
 private:
@@ -31,6 +28,3 @@ public:
   int wake_all () { return pthread_cond_broadcast (&m_cond_var); }
   int wake_one () { return pthread_cond_signal (&m_cond_var); }
 };
-
-#endif // PTHREAD_UTILS_H
-

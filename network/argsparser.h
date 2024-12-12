@@ -1,8 +1,6 @@
-#ifndef ARGSPARSER_H
-#define ARGSPARSER_H
-
 #include "error.hpp"
 
+#pragma once
 struct cmd_args
 {
   int m_total_threads = 0;
@@ -24,5 +22,3 @@ private:
 
   cmd_args m_args;
 };
-
-#endif // ARGSPARSER_H

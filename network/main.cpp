@@ -1,41 +1,26 @@
 #include <iostream>
 
-#include "argsparser.h"
-
-#include "nd_manager.h"
-#include "manager.hpp"
+// #include "manager.hpp"
+#include "project_window/project_main_window.hpp"
 
 using namespace std;
 
-int main(int argc, char *argv[]) 
+int main(int argc, char *argv[])
 {
-    argsparser parser (argc, argv);
+  // nd_manager project;
+  // project.create_kernel_threads (parser.total_threads ());
 
-    error err = parser.parse ();
-    if (!err.is_ok ())
-      {
-        printf ("%s\n", err.description_cstr ());
-        return -1;
-      }
+  project_manager pm;
 
-    nd_manager project;
-    project.create_kernel_threads (parser.total_threads ());
+  QApplication app(argc, argv);
 
-    QApplication app(argc, argv);
-    manager window_manager;
-    project.set_manager (&window_manager);
+  Project_Window w(&pm);
+  w.show();
+  // manager window_manager;
+  // project.set_manager (&window_manager);
 
-    // if (argc != 2)
-    // {
-    //     cout << "Usage: " << argv[0] << " input_param" << endl;
-    //     app.exec();
-    //     return 0;
-    // }
-    
-    // char *file = argv[1];
+  // window_manager.make_window();
 
-    window_manager.make_window();
-
-    app.exec();
-    return 0;
+  app.exec();
+  return 0;
 }

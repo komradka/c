@@ -1,13 +1,10 @@
-#ifndef WAITABLE_REQUEST_H
-#define WAITABLE_REQUEST_H
-
 #include <memory>
 
 class mutex_t;
 class cond_var_t;
 
 class task;
-
+#pragma once
 class waitable_request
 {
 private:
@@ -27,5 +24,3 @@ public:
   void request_exit ();
   task *wait ();
 };
-
-#endif // WAITABLE_REQUEST_H

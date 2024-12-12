@@ -1,14 +1,14 @@
 #include "nd_manager.h"
 
-#include "nd_con/tasks/task.h"
-#include "parallel/thread_class.h"
-#include "parallel/waitable_request.h"
+#include "../nd_con/tasks/task.h"
+#include "../parallel/thread_class.h"
+#include "../parallel/waitable_request.h"
 
-#include "gui/gui_feedback/events.h"
+#include "../gui/gui_feedback/events.h"
 
-#include "nd_con/async_reporter.h"
+#include "../nd_con/async_reporter.h"
 
-#include "manager.hpp"
+#include "../manager.hpp"
 
 nd_manager::nd_manager ()
 {

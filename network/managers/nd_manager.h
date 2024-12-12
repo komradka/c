@@ -1,6 +1,3 @@
-#ifndef ND_PROJECT_H
-#define ND_PROJECT_H
-
 #include <memory>
 #include <vector>
 
@@ -13,6 +10,8 @@ class waker;
 class message_t;
 
 class manager;
+
+#pragma once
 
 class nd_manager
 {
@@ -43,5 +42,3 @@ public:
 
   void process_print_log (message_t to_print);
 };
-
-#endif // ND_PROJECT_H

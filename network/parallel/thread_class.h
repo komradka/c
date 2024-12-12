@@ -1,12 +1,11 @@
-#ifndef THREAD_CLASS_H
-#define THREAD_CLASS_H
-
 #include <pthread.h>
 #include <string>
 #include <vector>
 #include <memory>
 
 #include "thread_info.h"
+
+#pragma once
 
 class waitable_request;
 class task;
@@ -52,5 +51,3 @@ public:
   void join ();
   void run (const thread_info &thr_info);
 };
-
-#endif // THREAD_CLASS_H

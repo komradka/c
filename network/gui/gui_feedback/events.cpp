@@ -1,6 +1,6 @@
 #include "events.h"
 
-#include "nd_manager.h"
+#include "../../managers/nd_manager.h"
 
 events_queue::events_queue ()
 {

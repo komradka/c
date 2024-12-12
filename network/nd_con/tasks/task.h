@@ -1,7 +1,8 @@
-#pragma once
 #include <memory>
 
 #include "../../error.hpp"
+
+#pragma once
 
 class async_reporter_t;
 class thread_info;

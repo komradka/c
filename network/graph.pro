@@ -5,7 +5,6 @@ QMAKE_CXXFLAGS -= -W -Wall
 
 HEADERS       = manager.hpp \
                 main_window.hpp \
-                nd_manager.h \
                 parallel/pthread_utils.h \
                 parallel/thread_class.h \
                 parallel/thread_shared_ptr.h \
@@ -83,7 +82,11 @@ HEADERS       = manager.hpp \
                 gui/gui_feedback/events.h \
                 nd_con/async_reporter.h \
                 nd_con/tasks/task.h \
-                argsparser.h
+                argsparser.h \
+                project_window/project_main_window.hpp \
+                project_window/project_button.hpp \
+                managers/project_manager.hpp \
+                managers/nd_manager.h
 
 
 SOURCES       = main.cpp \
@@ -91,7 +94,6 @@ SOURCES       = main.cpp \
                 nd_con/async_reporter.cpp \
                 nd_con/tasks/task.cpp \
                 gui/gui_feedback/events.cpp \
-                nd_manager.cpp \
                 parallel/thread_class.cpp \
                 parallel/thread_info.cpp \
                 parallel/thread_shared_ptr.cpp \
@@ -132,5 +134,6 @@ SOURCES       = main.cpp \
                 kernel/objects_data/joint_data.cpp \
                 kernel/objects_data/object_data.cpp \
                 reader/settings_reader.cpp \
-                gui/gui_feedback/events.h
-                gui/gui_feedback/events.cpp \
+                managers/project_manager.cpp \
+                managers/nd_manager.cpp \
+                

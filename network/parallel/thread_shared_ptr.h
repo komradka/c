@@ -1,9 +1,8 @@
-#ifndef THREAD_SHARED_PTR_H
-#define THREAD_SHARED_PTR_H
-
 #include <utility>
 
 #include "thread_info.h"
+
+#pragma once
 
 template<class Type>
 class thread_shared_ptr
@@ -173,5 +172,3 @@ private:
   }
 
 };
-
-#endif // THREAD_SHARED_PTR_H

@@ -1,12 +1,11 @@
-#ifndef REPORTER_H
-#define REPORTER_H
-
 #include <string>
 #include <vector>
 #include <memory>
 #include <cstdarg>
 
 #include "gui/gui_feedback/events.h"
+
+#pragma once
 
 std::string rep_sprintf (const char *format, va_list va);
 
@@ -69,5 +68,3 @@ public:
 private:
   void print_message (message_t message);
 };
-
-#endif // REPORTER_H

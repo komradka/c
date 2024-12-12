@@ -1,6 +1,6 @@
 #include "async_reporter.h"
 
-#include "nd_manager.h"
+#include "../managers/nd_manager.h"
 #include "parallel/pthread_utils.h"
 
 std::string rep_sprintf (const char *format, va_list va)
