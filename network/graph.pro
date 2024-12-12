@@ -137,4 +137,5 @@ SOURCES       = main.cpp \
                 reader/settings_reader.cpp \
                 managers/project_manager.cpp \
                 managers/nd_manager.cpp \
+                project_window/nd_window.cpp
                 

@@ -234,7 +234,7 @@ public slots:
 
             rep->print_message("Network successfully created");
 
-            window->set_network(network_topology);
+            // window->set_network(network_topology);
             main_window->setWindowTitle(project_name);
             window->update();
         }
@@ -250,7 +250,7 @@ public slots:
 
         rep->print_message("Network successfully created");
         main_window->setWindowTitle(project_name);
-        window->set_network(network_topology);
+        // window->set_network(network_topology);
         window->update();
     }
 

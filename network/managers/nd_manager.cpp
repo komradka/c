@@ -14,7 +14,10 @@ nd_manager::nd_manager(std::string name)
 {
   this->name = name;
   nd_window = new nd_main_window(name);
+  nd_window->set_pm(this);
   nd_window->show();
+  rep = nd_window->get_reporter();
+  create_topology();
 
   m_events_queue = std::make_unique<events_queue>();
   m_waker = std::make_unique<waker>(*this);
@@ -67,4 +70,68 @@ void nd_manager::create_kernel_threads(int total_threads)
 void nd_manager::process_print_log(message_t to_print)
 {
   m_manager->print_log(to_print);
+}
+
+void nd_manager::create_topology()
+{
+  network_topology = new graph(rep);
+}
+
+error nd_manager::create_network_object(const std::string type, std::string data_file, vertex **v)
+{
+  error ret = network_topology->make_object(type, data_file, v);
+  if (!ret.is_ok())
+  {
+    rep->print_error(string(ret) + " in file " + data_file);
+    return ret;
+  }
+
+  return error(OK);
+}
+
+error nd_manager::add_link(object_id f, object_id s, link **l)
+{
+  *l = network_topology->create_link(f, s);
+
+  rep->print_message("Link between " + network_topology->get_object_name(f) + " and " + network_topology->get_object_name(s) + " successfully created");
+
+  return error(OK);
+}
+
+object_id nd_manager::get_object_by_name(std::string name)
+{
+  std::optional<object_id> obj = network_topology->get_object_by_name(name);
+
+  if (!obj)
+  {
+    rep->print_error("Cannot find object " + name);
+    return {};
+  }
+
+  return obj.value();
+}
+
+std::pair<object_id, object_id> nd_manager::get_connected_object(link_id id)
+{
+  return network_topology->get_connected_object(id);
+}
+
+void nd_manager::delete_link(link_id id)
+{
+  std::pair<object_id, object_id> connected_objs = network_topology->get_connected_object(id);
+
+  rep->print_message("Link between " + network_topology->get_object_name(connected_objs.first) + " and " + network_topology->get_object_name(connected_objs.second) + " deleted");
+
+  network_topology->delete_link(id);
+}
+
+void nd_manager::delete_object(object_id id, std::vector<object_id> *connected_objects, std::vector<link_id> *object_links)
+{
+  std::string name = network_topology->get_object_name(id);
+  rep->print_message("Object " + name + " deleted");
+
+  *object_links = network_topology->get_object_links(id);
+  *connected_objects = network_topology->get_neighbors(id);
+
+  network_topology->delete_object(id);
 }

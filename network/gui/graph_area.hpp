@@ -10,6 +10,8 @@
 #include "pipe_project/pipe_project.hpp"
 // #include "../reader/topology_reader.hpp"
 
+class nd_manager;
+
 #pragma once
 
 it *source_creator(vertex *, QWidget *);
@@ -25,7 +27,7 @@ class graph_area : public QWidget
     Q_OBJECT
 
 private:
-    graph *topology = nullptr;
+    nd_manager *pm;
 
     Scene *scene;
     QGraphicsView *gv;
@@ -122,10 +124,9 @@ public:
         // }
     }
 
-    void set_network(graph *topology)
+    void set_manager(nd_manager *pm)
     {
-        this->topology = topology;
-        connect(this, SIGNAL(update_active_objects()), topology, SLOT(update_active_objects()));
+        this->pm = pm;
     }
 
     void disable_calc_button()
@@ -254,131 +255,30 @@ public slots: // link
         scene->link_add_flag = true;
     }
 
-    void add_link(vertex *f, vertex *s, link_item *link_line)
-    {
-        link *l = topology->create_link(f->get_id(), s->get_id());
-        rep->print_message("Link between " + f->get_data()->get_name() + " and " + s->get_data()->get_name() + " successfully created");
-
-        std::string link_name = "Link: " + f->get_data()->get_name() + " and " + s->get_data()->get_name();
-        objects_list->add_object(network_objects::link, link_name, l->get_id(), link_line);
-        links[l->get_id()] = link_line;
-    }
+    void add_link(vertex *f, vertex *s, link_item *link_line);
 
     void object_updated()
     {
         emit update_active_objects();
     }
 
-    void delete_object(int id)
-    {
-        std::string name = topology->get_object_name(id);
-        rep->print_message("Object " + name + " deleted");
+    void delete_object(int id);
 
-        std::vector<object_id> connected_objects = topology->get_neighbors(id);
-
-        for (auto obj : connected_objects)
-        {
-            links.erase(topology->get_link_between_object(id, obj).value());
-            objects_list->delete_link_item(obj);
-        }
-
-        topology->delete_object(id);
-
-        std::vector<it *> connected_items;
-        connected_items.resize(connected_objects.size());
-
-        for (unsigned int i = 0; i < connected_objects.size(); i++)
-        {
-            connected_items[i] = items.at(connected_objects[i]);
-        }
-
-        scene->delete_object(items.at(id), connected_items);
-        items.erase(id);
-    }
-
-    void delete_link(int id)
-    {
-        std::pair<object_id, object_id> connected_objs = topology->get_connected_object(id);
-        rep->print_message("Link between " + topology->get_object_name(connected_objs.first) + " and " + topology->get_object_name(connected_objs.second) + " deleted");
-
-        topology->delete_link(id);
-
-        QGraphicsLineItem *link_item = links.at(id);
-
-        scene->delete_link(link_item, {items.at(connected_objs.first), items.at(connected_objs.second)});
-
-        links.erase(id);
-    }
+    void delete_link(int id);
 
 public:
-    error add_object(const std::string type, QPoint coords = QPoint(default_coord.first, default_coord.second), std::string data_file = "")
-    {
-        if (topology == nullptr)
-        {
-            rep->print_error("Cannot create " + type + ". Make network topology first");
-            return error("Cannot create " + type + ". Make network topology first");
-        }
+    error add_object(const std::string type, QPoint coords = QPoint(default_coord.first, default_coord.second), std::string data_file = "");
 
-        vertex *v;
-
-        error ret = topology->make_object(type, data_file, &v);
-
-        if (!ret.is_ok())
-        {
-            rep->print_error(string(ret) + " in file " + data_file);
-            return error(string(ret) + " in file " + data_file);
-        }
-
-        it *item = item_creators.at(type)(v, this);
-
-        item->setPos(coords.x(), coords.y());
-        scene->addItem(item);
-
-        items[v->get_id()] = item;
-
-        std::string object_name = v->get_data()->get_name();
-        objects_list->add_object(string_to_type(type), object_name, v->get_id(), item);
-
-        gv->centerOn(item);
-
-        return error(OK);
-    }
-
-    void add_link(std::string name1, std::string name2)
-    {
-        auto obj1 = topology->get_object_by_name(name1);
-        auto obj2 = topology->get_object_by_name(name2);
-
-        if (!obj1.has_value() || !obj2.has_value())
-        {
-            return;
-        }
-
-        // link *l = topology->create_link(obj1.value(), obj2.value());
-
-        // links[l->get_id()] = l;
-
-        // rep->print_message("Link between " + f->get_data()->get_name() + " and " + s->get_data()->get_name() + " successfully created");
-
-        it *item1 = items.at(obj1.value());
-        it *item2 = items.at(obj2.value());
-
-        scene->draw_link(item1, item2);
-    }
+    void add_link(std::string name1, std::string name2);
 
 private:
     void resizeEvent(QResizeEvent *event) override
     {
         Q_UNUSED(event);
-        // gv->resize(9 * this->width() / 10, this->height());
         splitter->setGeometry(0, 0, width() * 0.9, height());
-        // gv->setGeometry(width() * 0.2, 0, width() * 0.7 - 1, height());
-        // results_view->setGeometry(width() * 0.2, 0, width() * 0.7 - 1, height());
         start_button->setGeometry(width() * 0.9, 0, width() * 0.1 - 1, 40);
         button->setGeometry(width() * 0.9, 41, width() * 0.1 - 1, 40);
         link_button->setGeometry(width() * 0.9, 82, width() * 0.1 - 1, 40);
-        // objects_list->setGeometry(0, 0, width() * 0.2, height());
-        // tabs->setGeometry(width() * 0.2, 5, width() * 0.7 - 10, height());
     }
 
 signals:

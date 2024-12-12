@@ -48,7 +48,7 @@ error writer::write_gui()
         return error("Cannot open file", (int)file_errors::open);
     }
 
-    graph *topology = storage->topology;
+    graph *topology = nullptr;// storage->topology;
 
     std::map<object_id, it *> &objects = storage->items;
     std::map<link_id, link_item *> &links = storage->links;

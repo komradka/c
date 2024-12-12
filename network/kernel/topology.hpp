@@ -30,7 +30,6 @@ class vertex
 private:
     network_objects type;
     object_data *data;
-    std::vector<object_id> connected_objects;
 
     std::vector<link_id> inlet_links;
     std::vector<link_id> outlet_links;
@@ -44,7 +43,6 @@ public:
     }
     void connect(object_id obj, link_id link, link_direction dir)
     {
-        connected_objects.push_back(obj);
         dir == link_direction::inlet ? inlet_links.push_back(link) : outlet_links.push_back(link);
     }
 
@@ -63,11 +61,6 @@ public:
         if (it != outlet_links.end())
             outlet_links.erase(it);
     }
-
-    std::vector<object_id> get_neighbour_objects()
-    {
-        return connected_objects;
-    }
     std::vector<link_id> &get_inlet_links()
     {
         return inlet_links;
@@ -79,10 +72,6 @@ public:
     network_objects get_type()
     {
         return type;
-    }
-    int get_count_connected_vertex()
-    {
-        return connected_objects.size();
     }
     bool get_activity()
     {
@@ -227,6 +216,26 @@ public:
         }
 
         return nullopt;
+    }
+
+    std::vector<link_id> get_object_links(object_id obj)
+    {
+        auto inlet = get_inlet_links(obj);
+        auto outlet = get_outlet_links(obj);
+
+        std::vector<link_id> res;
+
+        for (link_id l : inlet)
+        {
+            res.push_back(l);
+        }
+
+        for (link_id l : outlet)
+        {
+            res.push_back(l);
+        }
+
+        return res;
     }
 
     std::vector<object_id> &get_active_objects()
@@ -555,9 +564,26 @@ public:
 
     std::vector<object_id> get_neighbors(object_id obj)
     {
-        vertex *v = get_object(obj);
+        std::vector<object_id> res;
 
-        return v->get_neighbour_objects();
+        std::vector<link_id> in = get_inlet_links(obj);
+
+        for (link_id l : in)
+        {
+            object_id rhs;
+            std::tie(rhs, std::ignore) = get_connected_object(l);
+            res.push_back(rhs);
+        }
+
+        std::vector<link_id> out = get_outlet_links(obj);
+
+         for (link_id l : out)
+        {
+            object_id rhs;
+            std::tie(std::ignore, rhs) = get_connected_object(l);
+            res.push_back(rhs);
+        }
+        return res;
     }
 
 private:

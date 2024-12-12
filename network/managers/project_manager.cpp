@@ -30,8 +30,6 @@ error project_manager::create_nd_project(int thread_num)
     nd_project->create_kernel_threads(thread_num);
     is_project_exist = true;
 
-
-
     return error(OK);
 }
 

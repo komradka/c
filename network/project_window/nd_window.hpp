@@ -4,8 +4,9 @@
 #include "../reporter.hpp"
 #include "../gui/graph_area.hpp"
 
-#pragma once
+class nd_manager;
 
+#pragma once
 
 class nd_main_window : public QMainWindow
 {
@@ -73,6 +74,16 @@ public:
     {
         Q_UNUSED(event)
         splitter->setGeometry(0, 0, width(), height());
+    }
+
+    reporter *get_reporter()
+    {
+        return rep;
+    }
+
+    void set_pm(nd_manager *pm)
+    {
+        window->set_manager(pm);
     }
 
 public slots: // actions
