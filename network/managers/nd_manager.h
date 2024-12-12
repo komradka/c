@@ -1,6 +1,8 @@
 #include <memory>
 #include <vector>
 
+#include "../project_window/nd_window.hpp"
+
 class waitable_request;
 class thread_group_class;
 class task;
@@ -26,8 +28,12 @@ private:
 
   manager *m_manager = nullptr;
 
+  nd_main_window *nd_window;
+
+  std::string name;
+
 public:
-  nd_manager ();
+  nd_manager(std::string name);
   ~nd_manager ();
 
   int get_total_threads () const;

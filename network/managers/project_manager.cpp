@@ -9,7 +9,7 @@ error project_manager::create_project(project_type type, int thread_num, std::st
         return error("Project already exist.\nOnly single process mode.");
     }
 
-    this->project_directory = project_directory;
+    this->project_directory = project_directory + ".np";
 
     switch (type)
     {
@@ -26,11 +26,11 @@ error project_manager::create_project(project_type type, int thread_num, std::st
 
 error project_manager::create_nd_project(int thread_num)
 {
-    nd_project = new nd_manager;
+    nd_project = new nd_manager(project_directory);
     nd_project->create_kernel_threads(thread_num);
     is_project_exist = true;
 
-    
+
 
     return error(OK);
 }

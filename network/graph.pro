@@ -86,7 +86,8 @@ HEADERS       = manager.hpp \
                 project_window/project_main_window.hpp \
                 project_window/project_button.hpp \
                 managers/project_manager.hpp \
-                managers/nd_manager.h
+                managers/nd_manager.h \
+                project_window/nd_window.hpp
 
 
 SOURCES       = main.cpp \
