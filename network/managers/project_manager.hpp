@@ -1,6 +1,7 @@
 #include "nd_manager.h"
 #include "sim_manager.hpp"
 #include "../error.hpp"
+#include "../utility/signal_slots/slot.hpp"
 
 #include <string>
 
@@ -22,6 +23,9 @@ private:
     bool is_project_exist = false;
 
     std::string project_directory;
+
+private:
+    Slots m_slots;
 
 public:
     error create_project(project_type type, int thread_num, std::string project_directory);

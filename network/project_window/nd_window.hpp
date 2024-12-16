@@ -21,6 +21,8 @@ private:
     QMenuBar *tool_bar = nullptr;
     QAction *action = nullptr;
 
+    nd_manager *pm;
+
 public:
     QSize minimumSizeHint() const
     {
@@ -83,8 +85,11 @@ public:
 
     void set_pm(nd_manager *pm)
     {
+        this->pm = pm;
         window->set_manager(pm);
     }
+
+    void closeEvent(QCloseEvent *event);
 
 public slots: // actions
     error save_project()

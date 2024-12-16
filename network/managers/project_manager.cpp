@@ -30,6 +30,9 @@ error project_manager::create_nd_project(int thread_num)
     nd_project->create_kernel_threads(thread_num);
     is_project_exist = true;
 
+    m_slots.connect_to(nd_project->project_closed, [&]()
+                       { is_project_exist = false; });
+
     return error(OK);
 }
 

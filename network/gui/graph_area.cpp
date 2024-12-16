@@ -109,3 +109,8 @@ void graph_area::delete_object(int id)
     scene->delete_object(items.at(id), connected_items);
     items.erase(id);
 }
+
+void graph_area::add_link_pushed()
+{
+    scene->link_add_flag = true;
+}

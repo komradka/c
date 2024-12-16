@@ -41,7 +41,7 @@ public:
     vertex(network_objects type, object_id id) : type(type), id(id)
     {
     }
-    void connect(object_id obj, link_id link, link_direction dir)
+    void connect(link_id link, link_direction dir)
     {
         dir == link_direction::inlet ? inlet_links.push_back(link) : outlet_links.push_back(link);
     }

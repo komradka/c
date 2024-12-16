@@ -250,10 +250,7 @@ public slots: // link
         }
     }
 
-    void add_link_pushed()
-    {
-        scene->link_add_flag = true;
-    }
+    void add_link_pushed();
 
     void add_link(vertex *f, vertex *s, link_item *link_line);
 

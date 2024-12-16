@@ -2,7 +2,7 @@
 #include "thread_class.h"
 #include "waitable_request.h"
 
-#include "nd_con/tasks/task.h"
+#include "../nd_con/tasks/task.h"
 
 void *start_thread_function (void *Args)
 {

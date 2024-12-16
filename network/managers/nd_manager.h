@@ -3,6 +3,7 @@
 
 #include "../project_window/nd_window.hpp"
 #include "../kernel/topology.hpp"
+#include "../utility/signal_slots/signal.hpp"
 
 class waitable_request;
 class thread_group_class;
@@ -59,4 +60,6 @@ public:
   std::pair<object_id, object_id> get_connected_object(link_id id);
   void delete_link(link_id id);
   void delete_object(object_id id, std::vector<object_id> *connected_objects = nullptr, std::vector<link_id> *object_links = nullptr);
+
+  Signal<> project_closed;
 };

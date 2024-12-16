@@ -87,7 +87,9 @@ HEADERS       = manager.hpp \
                 project_window/project_button.hpp \
                 managers/project_manager.hpp \
                 managers/nd_manager.h \
-                project_window/nd_window.hpp
+                project_window/nd_window.hpp \
+                utility/signal_slots/signal.hpp \
+                utility/signal_slots/slot.hpp
 
 
 SOURCES       = main.cpp \

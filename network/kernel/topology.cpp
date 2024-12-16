@@ -18,8 +18,8 @@ link *graph::create_link(object_id first, object_id second)
     vertex *v1 = get_object(first);
     vertex *v2 = get_object(second);
 
-    v1->connect(second, new_l->get_id(), link_direction::outlet);
-    v2->connect(first, new_l->get_id(), link_direction::inlet);
+    v1->connect(new_l->get_id(), link_direction::outlet);
+    v2->connect(new_l->get_id(), link_direction::inlet);
 
     return new_l;
 }
