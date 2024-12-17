@@ -110,6 +110,7 @@ SOURCES       = main.cpp \
                 kernel/objects_data/sink_data.cpp \
                 gui/graph_area.cpp \
                 gui/object_tree_item.cpp \
+                utility/signal_slots/signal.cpp \
                 writer/writer.cpp \
                 kernel/check_network.cpp \
                 manager_gui/settings/solver_settings_enum.cpp \
