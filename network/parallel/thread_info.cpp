@@ -147,11 +147,19 @@ void thread_info::reduce_max (double *a) const
   mutex.unlock ();
 }
 
-void get_uniform_range (int count, int &begin, int &end, const thread_info &thr_info)
+void uniform_range_begin_end (int count, int &begin, int &end, const thread_info &thr_info)
 {
   int thr_id = thr_info.get_thread_id ();
   int thr_total = thr_info.get_threads_total ();
 
   begin = thr_id * count / thr_total;
   end = (thr_id + 1) * count / thr_total;
+}
+
+counting_range_t<int> uniform_range_begin_end (int count, const thread_info &thr_info)
+{
+  int begin, end;
+  uniform_range_begin_end (count, begin, end, thr_info);
+
+  return range (begin, end);
 }

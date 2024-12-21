@@ -75,7 +75,8 @@ public:
         results_view = new result_widget(objects_list);
 
         connect(link_button, SIGNAL(clicked()), this, SLOT(add_link_pushed()));
-        connect(start_button, SIGNAL(clicked()), manager, SLOT(try_start_calculation()));
+        //connect(start_button, SIGNAL(clicked()), manager, SLOT(try_start_calculation()));
+        connect(start_button, SIGNAL(clicked()), this, SLOT(try_start_calculation()));
 
         scene->setItemIndexMethod(QGraphicsScene::NoIndex);
         scene->set_items_pointer(&items, &links);
@@ -139,7 +140,7 @@ public:
         start_button->setEnabled(true);
     }
 
-    void copy_results(std::map<object_id, phys_q> &object_res)
+    void copy_results(const std::map<object_id, phys_q> &object_res)
     {
         results_view->object_results = object_res;
     }
@@ -249,6 +250,8 @@ public slots: // link
             iterator++;
         }
     }
+
+    void try_start_calculation ();
 
     void add_link_pushed();
 

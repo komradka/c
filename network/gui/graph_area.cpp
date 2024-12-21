@@ -1,5 +1,7 @@
 #include "graph_area.hpp"
 #include "../managers/nd_manager.h"
+#include "nd_con/async_reporter.h"
+#include "nd_con/tasks/CALCULATE_task.h"
 
 it *source_creator(vertex *v, QWidget *gui_manager)
 {
@@ -113,4 +115,9 @@ void graph_area::delete_object(int id)
 void graph_area::add_link_pushed()
 {
     scene->link_add_flag = true;
+}
+
+void graph_area::try_start_calculation ()
+{
+  pm->add_task (new CALCULATE_task (*pm));
 }

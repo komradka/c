@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include "utility/utility.hpp"
 #include "pthread_utils.h"
 
 #pragma once
@@ -67,5 +68,6 @@ public:
   }
 };
 
-void get_uniform_range (int count, int &begin, int &end, const thread_info &thr_info);
+void uniform_range_begin_end (int count, int &begin, int &end, const thread_info &thr_info);
+counting_range_t<int> uniform_range_begin_end (int count, const thread_info &thr_info);
 

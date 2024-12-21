@@ -110,6 +110,16 @@ public:
         add_action();
     }
 
+    settings_dialog *get_settings ()
+    {
+      return d_setting;
+    }
+
+    void set_settings (settings_dialog *settings)
+    {
+      d_setting = settings;
+    }
+
     void print_log (message_t to_print)
     {
       switch (to_print.type)
@@ -148,33 +158,9 @@ public slots:
         d_setting->show();
     }
 
-    void try_start_calculation()
+    void copy_results (const std::map<object_id, phys_q> &object_res)
     {
-        if (network_topology == nullptr)
-        {
-            rep->print_error("Make network topology first");
-            return;
-        }
-        solver = new nd_solver(this, rep, network_topology, d_setting);
-
-        window->disable_calc_button();
-
-        solver->prepare_network_and_try_start_calculation();
-    }
-
-    void calculation_end()
-    {
-        if (solver->calculation_ret.is_ok())
-        {
-            window->copy_results(solver->get_object_results());
-
-            window->update_results();
-        }
-        else
-        {
-            rep->print_error(solver->calculation_ret);
-        }
-
+        window->copy_results(object_res);
         window->enable_calc_button();
     }
 

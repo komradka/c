@@ -53,7 +53,18 @@ void nd_manager::process_events()
 
 bool nd_manager::add_task(task *f)
 {
-  f->set_reporter(new async_reporter_t(*this));
+  async_reporter_t *reporter = new async_reporter_t (*this);
+
+  f->from_manager (*this);
+
+  error err = f->verify_before_run ();
+  if (!err.is_ok ())
+    {
+      reporter->print (ERROR, TOP_SECTION, "Calulation \"%s\" cannot be started.\nError: %s", f->get_task_name (), err.description_cstr ());
+      return false;
+    }
+
+  f->set_reporter(reporter);
   return m_task_queue->request_value(f);
 }
 
@@ -69,7 +80,20 @@ void nd_manager::create_kernel_threads(int total_threads)
 
 void nd_manager::process_print_log(message_t to_print)
 {
-  m_manager->print_log(to_print);
+  switch (to_print.type)
+    {
+    case msg_types::error:
+      rep->print_error (to_print.message);
+      break;
+    case msg_types::message:
+      rep->print_message (to_print.message);
+      break;
+    case msg_types::warning:
+      rep->print_warning (to_print.message);
+      break;
+    case msg_types::EMPTY:
+      break;
+    }
 }
 
 void nd_manager::create_topology()
@@ -98,6 +122,11 @@ error nd_manager::add_link(object_id f, object_id s, link **l)
   return error(OK);
 }
 
+void nd_manager::copy_results(const std::map<object_id, phys_q> &object_res)
+{
+  m_manager->copy_results (object_res);
+}
+
 object_id nd_manager::get_object_by_name(std::string name)
 {
   std::optional<object_id> obj = network_topology->get_object_by_name(name);
@@ -114,6 +143,26 @@ object_id nd_manager::get_object_by_name(std::string name)
 std::pair<object_id, object_id> nd_manager::get_connected_object(link_id id)
 {
   return network_topology->get_connected_object(id);
+}
+
+graph *nd_manager::get_network_topology ()
+{
+  return network_topology;
+}
+
+settings_dialog *nd_manager::get_settings ()
+{
+  return m_manager ? m_manager->get_settings () : nullptr;
+}
+
+void nd_manager::set_network_topology (graph *topology)
+{
+  network_topology = topology;
+}
+
+void nd_manager::set_settings (settings_dialog *settings)
+{
+  m_manager->set_settings (settings);
 }
 
 void nd_manager::delete_link(link_id id)

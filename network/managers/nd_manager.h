@@ -31,12 +31,13 @@ private:
   manager *m_manager = nullptr;
 
   nd_main_window *nd_window;
-  graph *network_topology;
+  graph *network_topology = nullptr;
   reporter *rep;
 
   std::string name;
 
 public:
+  nd_manager () = default;
   nd_manager(std::string name);
   ~nd_manager();
 
@@ -56,8 +57,13 @@ public:
 
   error create_network_object(const std::string type, std::string data_file = "", vertex **v = nullptr);
   error add_link(object_id f, object_id s, link **l = nullptr);
+  void copy_results(const std::map<object_id, phys_q> &object_res);
   object_id get_object_by_name(std::string name);
   std::pair<object_id, object_id> get_connected_object(link_id id);
+  graph *get_network_topology ();
+  settings_dialog *get_settings ();
+  void set_network_topology (graph *topology);
+  void set_settings (settings_dialog *settings);
   void delete_link(link_id id);
   void delete_object(object_id id, std::vector<object_id> *connected_objects = nullptr, std::vector<link_id> *object_links = nullptr);
 

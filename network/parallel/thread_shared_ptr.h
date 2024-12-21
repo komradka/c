@@ -19,7 +19,7 @@ public:
   thread_shared_ptr (const thread_info &thr_info, Args&& ...args)
   {
     m_thr_info = &thr_info;
-    allocate (thr_info, std::forward<Args> (args)...);
+    allocate (std::forward<Args> (args)...);
   }
 
   thread_shared_ptr (const thread_info &thr_info, Type *ptr)
