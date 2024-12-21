@@ -140,7 +140,7 @@ public:
         start_button->setEnabled(true);
     }
 
-    void copy_results(std::map<object_id, phys_q> &object_res)
+    void copy_results(const std::map<object_id, phys_q> &object_res)
     {
         results_view->object_results = object_res;
     }

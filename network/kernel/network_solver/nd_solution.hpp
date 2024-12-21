@@ -1,5 +1,5 @@
 #include "../topology.hpp"
-#include "../../reporter.hpp"
+#include "nd_con/async_reporter.h"
 #include "../../manager_gui/settings_dialog.hpp"
 
 #include <iostream>
@@ -12,7 +12,7 @@
 class nd_solution
 {
 private:
-    reporter *rep;
+    async_reporter_t *m_rep;
     graph *network_topology;
     settings_dialog *settings;
 
@@ -30,7 +30,7 @@ public:
     bool use_temperature = false;
 
 public:
-    nd_solution(reporter *_rep, graph *_network_topology, settings_dialog *_settings);
+    nd_solution(async_reporter_t *rep, graph *_network_topology, settings_dialog *_settings);
 
     unsigned int get_link_num(link_id);
 

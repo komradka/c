@@ -3,16 +3,15 @@
 #include "main_equations.hpp"
 #include "matrix_builder/matrix_builder.hpp"
 
-#include <QtWidgets/QtWidgets>
+#include "nd_con/async_reporter.h"
+#include "parallel/thread_info.h"
 
 #pragma once
 
-class nd_solver : public QObject
+class nd_solver
 {
-    Q_OBJECT
-
 private:
-    reporter *rep;
+    async_reporter_t *m_rep;
     graph *network_topology;
     settings_dialog *settings;
     nd_solution *solution;
@@ -21,17 +20,13 @@ private:
     main_equations *equations;
     matrix_builder *jacobian_builder;
 
-public:
-    error calculation_ret;
-
 private:
     unsigned int dim;
 
 public:
-    nd_solver(QObject *parent, reporter *_rep, graph *nd_data, settings_dialog *_settings)
+    nd_solver(async_reporter_t *rep, graph *nd_data, settings_dialog *_settings)
     {
-        QObject::connect(this, SIGNAL(calculation_end()), parent, SLOT(calculation_end()));
-        rep = _rep;
+        m_rep = rep;
         network_topology = nd_data;
         settings = _settings;
     }
@@ -45,18 +40,15 @@ public:
         delete jacobian_builder;
     }
 
-    error prepare_network_and_try_start_calculation();
-    std::map<object_id, phys_q> &get_object_results();
+    error run (const thread_info &thr_info);
+    const std::map<object_id, phys_q> &get_object_results();
 
 private:
-    error construct_main_equation();
+    error construct_main_equation(const thread_info &thr_info);
 
-    error write_results();
-    error write_results_on_links();
-    error write_results_on_object();
+    error write_results(const thread_info &thr_info);
+    error write_results_on_links(const thread_info &thr_info);
+    error write_results_on_object(const thread_info &thr_info);
 
     void print_equations();
-
-signals:
-    void calculation_end();
 };

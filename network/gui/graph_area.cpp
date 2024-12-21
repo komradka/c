@@ -119,5 +119,5 @@ void graph_area::add_link_pushed()
 
 void graph_area::try_start_calculation ()
 {
-  pm->add_task (new CALCULATE_task);
+  pm->add_task (new CALCULATE_task (*pm));
 }

@@ -122,6 +122,11 @@ error nd_manager::add_link(object_id f, object_id s, link **l)
   return error(OK);
 }
 
+void nd_manager::copy_results(const std::map<object_id, phys_q> &object_res)
+{
+  m_manager->copy_results (object_res);
+}
+
 object_id nd_manager::get_object_by_name(std::string name)
 {
   std::optional<object_id> obj = network_topology->get_object_by_name(name);

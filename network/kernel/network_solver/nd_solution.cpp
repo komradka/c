@@ -1,8 +1,8 @@
 #include "nd_solution.hpp"
 
-nd_solution::nd_solution(reporter *_rep, graph *_network_topology, settings_dialog *_settings)
+nd_solution::nd_solution(async_reporter_t *rep, graph *_network_topology, settings_dialog *_settings)
 {
-    rep = _rep;
+    m_rep = rep;
     network_topology = _network_topology;
     settings = _settings;
 
