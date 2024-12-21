@@ -110,6 +110,16 @@ public:
         add_action();
     }
 
+    settings_dialog *get_settings ()
+    {
+      return d_setting;
+    }
+
+    void set_settings (settings_dialog *settings)
+    {
+      d_setting = settings;
+    }
+
     void print_log (message_t to_print)
     {
       switch (to_print.type)

@@ -5,6 +5,7 @@ QMAKE_CXXFLAGS -= -W -Wall
 
 HEADERS       = manager.hpp \
                 main_window.hpp \
+                nd_con/tasks/CALCULATE_task.h \
                 parallel/pthread_utils.h \
                 parallel/thread_class.h \
                 parallel/thread_shared_ptr.h \
@@ -95,6 +96,7 @@ HEADERS       = manager.hpp \
 SOURCES       = main.cpp \
                 argsparser.cpp \
                 nd_con/async_reporter.cpp \
+                nd_con/tasks/CALCULATE_task.cpp \
                 nd_con/tasks/task.cpp \
                 gui/gui_feedback/events.cpp \
                 parallel/thread_class.cpp \

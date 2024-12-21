@@ -163,6 +163,8 @@ private: // dates
     std::map<object_id, joint_data> joints_data;
 
 public:
+    graph () = default;
+
     graph(reporter *rep)
     {
         this->rep = rep;
@@ -180,6 +182,24 @@ public:
                 delete l.second;
         }
     }
+
+    void copy_from (const graph *topology)
+    {
+      vertex_count = topology->vertex_count;
+      links_count = topology->links_count;
+
+      vertices = topology->vertices;
+      links = topology->links;
+
+      active_objects = topology->active_objects;
+      inactive_objects = topology->inactive_objects;
+
+      //sources_data = topology->sources_data;
+      //sinks_data = topology->sinks_data;
+      //pipes_data = topology->pipes_data;
+      //joints_data = topology->joints_data;
+    }
+
     vertex *create_vertex(network_objects type);
     link *create_link(object_id first, object_id second);
 

@@ -37,7 +37,7 @@ public:
     tree_dialog_by_enum *td;
 
 public:
-    settings_dialog(QObject *parent)
+    settings_dialog(QObject *parent = nullptr)
     {
         Q_UNUSED(parent);
         if (all_settings.size() != setting_count)
@@ -58,6 +58,11 @@ public:
         };
 
         constexpr_for<0, setting_count>(create);
+    }
+
+    void copy_from (const settings_dialog *other)
+    {
+      settings = other->settings;
     }
 
     template <solver_settings Settings>
