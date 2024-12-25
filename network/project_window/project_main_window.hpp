@@ -122,6 +122,16 @@ public slots:
 
     void load_project(int type)
     {
-        (void)type;
+        QString file = QFileDialog::getOpenFileName(this,
+                                                    "Load Project",
+                                                    QDir::currentPath(),
+                                                    "Project (*.np)");
+
+        error ret = pm->load_project((project_type)type, get_selected_thread_num(), file.toStdString());
+
+        if (!ret.is_ok())
+        {
+            QMessageBox::warning(nullptr, "Load project error", QString::fromStdString(ret.description()));
+        }
     }
 };

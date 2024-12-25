@@ -29,6 +29,7 @@ private:
 
 public:
     error create_project(project_type type, int thread_num, std::string project_directory);
+    error load_project(project_type type, int thread_num, std::string path);
     ~project_manager()
     {
         if (nd_project)
@@ -40,4 +41,7 @@ public:
 private:
     error create_nd_project(int thread_num);
     error create_sim_project(int thread_num);
+
+    error load_nd_project(int thread_num);
+    error load_sim_project(int thread_num);
 };

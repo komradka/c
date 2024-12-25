@@ -4,6 +4,7 @@
 #include "../reporter.hpp"
 #include "../gui/graph_area.hpp"
 #include "../manager_gui/save_dialog.hpp"
+#include "../manager_gui/load_dialog.hpp"
 
 class nd_manager;
 
@@ -24,6 +25,7 @@ private:
 
     nd_manager *pm;
     save_dialog *d_save;
+    load_dialog *d_load;
 
 public:
     QSize minimumSizeHint() const
@@ -98,6 +100,8 @@ public:
         return window;
     }
 
+    void load_project(std::vector<result_info> &results);
+
 public slots: // actions
     error save_project();
 
@@ -106,6 +110,8 @@ public slots: // actions
     void make_fluid();
 
     void save_project_click();
+
+    void change_results();
 
 private:
     void add_action()

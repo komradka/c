@@ -6,6 +6,7 @@
 #include "../utility/signal_slots/signal.hpp"
 #include "../manager_gui/settings_dialog.hpp"
 #include "../gui/fluid_widget.hpp"
+#include "../reader/reader.hpp"
 
 class waitable_request;
 class thread_group_class;
@@ -40,6 +41,9 @@ private:
 
   std::string name;
   unsigned int results_count = 0;
+
+  reader file_reader;
+
 
 public:
   nd_manager() = default;
@@ -76,6 +80,8 @@ public:
 
   void save_project(std::string res_name);
   unsigned int get_results_count() { return results_count; }
+  void load_project_handler();
+  void load_project(result_info &res);
 
   // Signals
   Signal<> project_closed;

@@ -217,3 +217,29 @@ void nd_manager::save_project(std::string res_name)
 
   return;
 }
+
+void nd_manager::load_project_handler()
+{
+  std::vector<result_info> results;
+  file_reader.read_project(name, results);
+
+  results_count = results.size();
+  nd_window->load_project(results);
+}
+
+void nd_manager::load_project(result_info &res)
+{
+  auto project_name = QString::fromStdString(res.res_name);
+  rep->print_message("Loading - " + res.res_name);
+
+  error ret = file_reader.read_data(res, nd_window->get_gui_manager(), settings);
+
+  if (!ret.is_ok())
+  {
+    rep->print_error(ret);
+  }
+  else
+  {
+    network_topology->update_active_objects();
+  }
+}

@@ -35,3 +35,20 @@ void nd_main_window::save_project_click()
 
     pm->save_project(res_name.toStdString());
 }
+
+void nd_main_window::load_project(std::vector<result_info> &results)
+{
+    d_load = new load_dialog(results, this);
+    d_load->show();
+}
+
+void nd_main_window::change_results()
+{
+    result_item *res_item = dynamic_cast<result_item *>(d_load->result_tree->selectedItems()[0]);
+    result_info res = res_item->result;
+    d_load->close();
+    delete d_load;
+    d_load = nullptr;
+
+    pm->load_project(res);
+}

@@ -84,6 +84,9 @@ public:
         connect(make_project_button, SIGNAL(clicked()), this, SLOT(make_clicked()));
         connect(this, SIGNAL(create_project(int)), parent, SLOT(new_project(int)));
 
+        connect(load_project_button, SIGNAL(clicked()), this, SLOT(load_clicked()));
+        connect(this, SIGNAL(load_project(int)), parent, SLOT(load_project(int)));
+
         project_icon_label = new QLabel(this);
         if (sett.type == project_type::network)
         {
@@ -153,8 +156,14 @@ public slots:
         emit create_project((int)settings.type);
     }
 
+    void load_clicked()
+    {
+        emit load_project((int)settings.type);
+    }
+
 signals:
     void MouseLeaveSignal();
     void MouseEnterSignal();
     void create_project(int type);
+    void load_project(int type);
 };
