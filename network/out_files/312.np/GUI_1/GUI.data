@@ -1,0 +1,3 @@
+MAKE_OBJECT SOURCE -518 -308 /mnt/d/c/network/out_files/312.np/GUI_1/Source_1_1.data
+MAKE_OBJECT SINK -207 -309 /mnt/d/c/network/out_files/312.np/GUI_1/Sink_1_1.data
+MAKE_LINK Source_1 Sink_1

@@ -1,0 +1,13 @@
+use_temperature_equation False
+use_heat_balance_equation False
+visualize_initial_approximation False
+solver_type IT
+linear_solver_type IT
+initial_approximation_type ADV
+preconditioner_type NON
+rate_type WAT
+max_linear_iter 150
+max_newton_iter 50
+linear_solver_eps 0.001000
+rhs_eps 0.000000
+root_dif_eps 0.000000

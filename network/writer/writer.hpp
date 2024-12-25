@@ -43,7 +43,7 @@ public:
         auto found = project_name.find_last_of("/\\");
         dir = project_name.substr(0, found);
         project = project_name.substr(found + 1);
-        
+
         std::replace(project.begin(), project.end(), ' ', '_');
         storage = window;
         this->settings = settings;
@@ -62,20 +62,23 @@ public:
 
         QDir dir_manager;
         dir = dir + "/" + project;
-        if (dir_manager.exists(QString::fromStdString(dir)))
-        {
-            return error("Directory exists", (int)file_errors::exist);
-        }
-        if (dir_manager.mkdir(QString::fromStdString(dir)) == false)
-        {
-            return error("Cannot make directory", (int)file_errors::make_dir);
-        }
-
         string main_file = dir + "/project.np";
         bool exist = std::filesystem::exists(main_file);
 
-        if (exist && res_num == 0)
-            return error("File already exists", (int)file_errors::exist);
+        if (res_num == 0)
+        {
+            if (dir_manager.exists(QString::fromStdString(dir)))
+            {
+                return error("Directory exists", (int)file_errors::exist);
+            }
+            if (dir_manager.mkdir(QString::fromStdString(dir)) == false)
+            {
+                return error("Cannot make directory", (int)file_errors::make_dir);
+            }
+
+            if (exist && res_num == 0)
+                return error("File already exists", (int)file_errors::exist);
+        }
 
         out.open(main_file, std::ios::app);
 
