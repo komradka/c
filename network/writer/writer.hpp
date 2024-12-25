@@ -21,6 +21,7 @@ enum class file_errors
 
 class graph_area;
 class vertex;
+class graph;
 
 class writer
 {
@@ -29,19 +30,24 @@ private:
     string dir;
     string project;
     ofstream out;
+    graph *topology = nullptr;
     graph_area *storage = nullptr;
     settings_dialog *settings = nullptr;
     reporter *rep;
 
 public:
-    writer(string dir, string project_name, reporter *r, graph_area *window, settings_dialog *settings)
+    writer(string project_name, reporter *r, graph *topology, graph_area *window, settings_dialog *settings)
     {
         rep = r;
-        this->dir = dir;
-        project = project_name;
+
+        auto found = project_name.find_last_of("/\\");
+        dir = project_name.substr(0, found);
+        project = project_name.substr(found + 1);
+        
         std::replace(project.begin(), project.end(), ' ', '_');
         storage = window;
         this->settings = settings;
+        this->topology = topology;
     }
 
     ~writer()

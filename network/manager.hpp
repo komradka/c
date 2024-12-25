@@ -193,7 +193,7 @@ public slots:
 
     void make_fluid()
     {
-        window->make_fluid();
+        // window->make_fluid();
     }
 
     void make_pipe_project()
@@ -274,18 +274,18 @@ public slots:
         project_name = res_name;
         main_window->setWindowTitle(project_name);
 
-        writer *w = new writer(directory.toStdString(), project_name.toStdString(), rep, window, d_setting);
-        error ret = save_project_holder(w, res_name);
-        if (!ret.is_ok())
-        {
-            rep->print_error(ret);
-            delete w;
-            return;
-        }
+        // writer *w = new writer(directory.toStdString(), project_name.toStdString(), rep, window, d_setting);
+        // error ret = save_project_holder(w, res_name);
+        // if (!ret.is_ok())
+        // {
+        //     rep->print_error(ret);
+        //     delete w;
+        //     return;
+        // }
 
-        rep->print_message("Project saved in directory: " + directory.toStdString());
-        results_count++;
-        delete w;
+        // rep->print_message("Project saved in directory: " + directory.toStdString());
+        // results_count++;
+        // delete w;
     }
 
     void import_project()

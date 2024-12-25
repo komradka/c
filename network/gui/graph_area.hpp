@@ -54,7 +54,6 @@ public:
     QTabWidget *tabs;
     int tabs_cout = 2;
     result_widget *results_view;
-    fluid_widget *fluid_view = nullptr;
     pipe_project *pipes = nullptr;
 
 public:
@@ -150,35 +149,27 @@ public:
         results_view->reprint_table();
     }
 
-    void make_fluid()
+    void make_fluid(fluid_widget *fluid)
     {
-        if (fluid_view != nullptr)
-        {
-            rep->print_warning("Fluid already exist");
-            return;
-        }
-
-        fluid_view = new fluid_widget();
-
-        tabs->insertTab(tabs_cout, fluid_view, "Water Props");
+        tabs->insertTab(tabs_cout, fluid, "Water Props");
         tabs_cout++;
     }
 
     void make_pipe_project()
     {
-        if (pipes != nullptr)
-        {
-            rep->print_warning("Pipe project already exist");
-            return;
-        }
-        if (fluid_view == nullptr)
-        {
-            return;
-        }
+        // if (pipes != nullptr)
+        // {
+        //     rep->print_warning("Pipe project already exist");
+        //     return;
+        // }
+        // if (fluid_view == nullptr)
+        // {
+        //     return;
+        // }
 
-        pipes = new pipe_project(fluid_view);
-        tabs->insertTab(tabs_cout, pipes, "Pipe Project");
-        tabs_cout++;
+        // pipes = new pipe_project(fluid_view);
+        // tabs->insertTab(tabs_cout, pipes, "Pipe Project");
+        // tabs_cout++;
     }
 
     QSize minimumSizeHint() const

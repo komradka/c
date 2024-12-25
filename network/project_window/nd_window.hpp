@@ -3,6 +3,7 @@
 
 #include "../reporter.hpp"
 #include "../gui/graph_area.hpp"
+#include "../manager_gui/save_dialog.hpp"
 
 class nd_manager;
 
@@ -22,6 +23,7 @@ private:
     QAction *action = nullptr;
 
     nd_manager *pm;
+    save_dialog *d_save;
 
 public:
     QSize minimumSizeHint() const
@@ -91,19 +93,19 @@ public:
 
     void closeEvent(QCloseEvent *event);
 
+    graph_area *get_gui_manager()
+    {
+        return window;
+    }
+
 public slots: // actions
-    error save_project()
-    {
-        return error(OK);
-    }
-    void open_settings_dialog()
-    {
-        // d_setting->show();
-    }
-    void make_fluid()
-    {
-        // window->make_fluid();
-    }
+    error save_project();
+
+    void open_settings_dialog();
+
+    void make_fluid();
+
+    void save_project_click();
 
 private:
     void add_action()
