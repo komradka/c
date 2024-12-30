@@ -90,7 +90,17 @@ HEADERS       = manager.hpp \
                 managers/nd_manager.h \
                 project_window/nd_window.hpp \
                 utility/signal_slots/signal.hpp \
-                utility/signal_slots/slot.hpp
+                utility/signal_slots/slot.hpp \
+                gui/workflow/workflow_dialog.hpp \
+                gui/workflow/work_area_tree.hpp \
+                gui/workflow/wf_action_tree.hpp \
+                workflow/wf_action.hpp \
+                workflow/wf_enums.hpp \
+                gui/workflow/wf_action_treeitem.hpp \
+                workflow/workflow.hpp \
+                workflow/workflow_basic_action/basic_action.hpp \
+                workflow/workflow_basic_action/basic_action_storage.hpp \
+                gui/workflow/wf_action_areaitem.hpp \
 
 
 SOURCES       = main.cpp \
@@ -142,5 +152,13 @@ SOURCES       = main.cpp \
                 reader/settings_reader.cpp \
                 managers/project_manager.cpp \
                 managers/nd_manager.cpp \
-                project_window/nd_window.cpp
+                project_window/nd_window.cpp \
+                gui/workflow/workflow_dialog.cpp \
+                gui/workflow/work_area_tree.cpp \
+                gui/workflow/wf_action_tree.cpp \
+                workflow/wf_action.cpp \
+                workflow/wf_enums.cpp \
+                gui/workflow/wf_action_treeitem.cpp \
+                workflow/workflow.cpp
+            
                 

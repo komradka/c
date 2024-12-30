@@ -1,6 +1,36 @@
 #include "nd_window.hpp"
 #include "../managers/nd_manager.h"
 
+nd_main_window::nd_main_window(std::string name)
+{
+    setWindowTitle(QString::fromStdString(name));
+
+    statusbar = new QStatusBar(this);
+
+    statistic = new network_statistic;
+    rep = new reporter(statistic, 1, statusbar);
+    rep->setMinimumHeight(100);
+    window = new graph_area(rep, this, this);
+    tool_bar = new QMenuBar(this);
+    tool_bar->setMaximumHeight(17);
+    tool_bar->setMinimumHeight(17);
+
+    setMenuBar(tool_bar);
+    setCentralWidget(window);
+    setStatusBar(statusbar);
+
+    splitter = new QSplitter(Qt::Vertical, this);
+    splitter->addWidget(tool_bar);
+    splitter->addWidget(window);
+    splitter->addWidget(statusbar);
+
+    statusbar->installEventFilter(this);
+
+    add_action();
+
+    rep->print_message("Project " + name + " created");
+}
+
 void nd_main_window::closeEvent(QCloseEvent *event)
 {
     pm->project_closed();
@@ -52,3 +82,14 @@ void nd_main_window::change_results()
 
     pm->load_project(res);
 }
+
+void nd_main_window::set_workflow()
+{
+    wf = new workflow_dialog(pm->get_workflow());
+}
+
+void nd_main_window::open_workflow()
+{
+    wf->show();
+}
+

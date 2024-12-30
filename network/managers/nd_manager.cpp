@@ -12,9 +12,11 @@
 
 nd_manager::nd_manager(std::string name)
 {
+  wf = new workflow();
   this->name = name;
   nd_window = new nd_main_window(name);
   nd_window->set_pm(this);
+  nd_window->set_workflow();
   nd_window->show();
   rep = nd_window->get_reporter();
   create_topology();
@@ -154,6 +156,11 @@ graph *nd_manager::get_network_topology()
 settings_dialog *nd_manager::get_settings()
 {
   return settings;
+}
+
+workflow *nd_manager::get_workflow()
+{
+  return wf;
 }
 
 void nd_manager::set_network_topology(graph *topology)

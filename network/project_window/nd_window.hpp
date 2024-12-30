@@ -5,6 +5,7 @@
 #include "../gui/graph_area.hpp"
 #include "../manager_gui/save_dialog.hpp"
 #include "../manager_gui/load_dialog.hpp"
+#include "../gui/workflow/workflow_dialog.hpp"
 
 class nd_manager;
 
@@ -23,9 +24,11 @@ private:
     QMenuBar *tool_bar = nullptr;
     QAction *action = nullptr;
 
-    nd_manager *pm;
+    nd_manager *pm = nullptr;
     save_dialog *d_save;
     load_dialog *d_load;
+
+    workflow_dialog *wf;
 
 public:
     QSize minimumSizeHint() const
@@ -37,35 +40,7 @@ public:
         return QSize(1000, 1000);
     }
 
-    nd_main_window(std::string name)
-    {
-        setWindowTitle(QString::fromStdString(name));
-
-        statusbar = new QStatusBar(this);
-
-        statistic = new network_statistic;
-        rep = new reporter(statistic, 1, statusbar);
-        rep->setMinimumHeight(100);
-        window = new graph_area(rep, this, this);
-        tool_bar = new QMenuBar(this);
-        tool_bar->setMaximumHeight(17);
-        tool_bar->setMinimumHeight(17);
-
-        setMenuBar(tool_bar);
-        setCentralWidget(window);
-        setStatusBar(statusbar);
-
-        splitter = new QSplitter(Qt::Vertical, this);
-        splitter->addWidget(tool_bar);
-        splitter->addWidget(window);
-        splitter->addWidget(statusbar);
-
-        statusbar->installEventFilter(this);
-
-        add_action();
-
-        rep->print_message("Project " + name + " created");
-    }
+    nd_main_window(std::string name);
 
     bool eventFilter(QObject *object, QEvent *event)
     {
@@ -93,6 +68,8 @@ public:
         window->set_manager(pm);
     }
 
+    void set_workflow();
+
     void closeEvent(QCloseEvent *event);
 
     graph_area *get_gui_manager()
@@ -113,6 +90,8 @@ public slots: // actions
 
     void change_results();
 
+    void open_workflow();
+
 private:
     void add_action()
     {
@@ -124,6 +103,9 @@ private:
 
         action = tool_bar->addAction("&Make fluid", this, SLOT(make_fluid()));
         action->setShortcut(QString("Ctrl+1"));
+
+        action = tool_bar->addAction("&Workflow", this, SLOT(open_workflow()));
+        action->setShortcut(QString("Ctrl+W"));
 
         action = tool_bar->addAction("&Save project", this, SLOT(save_project()));
         action->setShortcut(QString("Ctrl+S"));

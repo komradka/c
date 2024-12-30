@@ -7,6 +7,7 @@
 #include "../manager_gui/settings_dialog.hpp"
 #include "../gui/fluid_widget.hpp"
 #include "../reader/reader.hpp"
+#include "../workflow/workflow.hpp"
 
 class waitable_request;
 class thread_group_class;
@@ -38,12 +39,12 @@ private:
   reporter *rep;
   settings_dialog *settings;
   fluid_widget *fluid;
+  workflow *wf;
 
   std::string name;
   unsigned int results_count = 0;
 
   reader file_reader;
-
 
 public:
   nd_manager() = default;
@@ -73,6 +74,7 @@ public:
   std::pair<object_id, object_id> get_connected_object(link_id id);
   graph *get_network_topology();
   settings_dialog *get_settings();
+  workflow *get_workflow();
   void set_network_topology(graph *topology);
   void set_settings(settings_dialog *settings);
   void delete_link(link_id id);
