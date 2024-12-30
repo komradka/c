@@ -112,6 +112,12 @@ public slots:
                                                     QDir::currentPath(),
                                                     "Project (*.np);;All files (*.*)");
 
+        if (file.isEmpty())
+        {
+            QMessageBox::warning(nullptr, "Canceled", "Creating canceled");
+            return;
+        }
+
         error ret = pm->create_project((project_type)type, get_selected_thread_num(), file.toStdString());
 
         if (!ret.is_ok())
@@ -126,6 +132,12 @@ public slots:
                                                     "Load Project",
                                                     QDir::currentPath(),
                                                     "Project (*.np)");
+
+        if (file.isEmpty())
+        {
+            QMessageBox::warning(nullptr, "Canceled", "Load canceled");
+            return;
+        }
 
         error ret = pm->load_project((project_type)type, get_selected_thread_num(), file.toStdString());
 

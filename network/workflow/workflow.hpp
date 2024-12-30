@@ -15,7 +15,10 @@ public:
     workflow();
     ~workflow();
 
-    void create_action(std::string name, std::string gui_name, std::string description, wf_action_category category);
+    void create_action(std::string name, std::string gui_name, std::string description, wf_action_category category,
+                       types action_return_type, std::vector<types> &args);
 
     std::map<int, wf_action *> &get_actions() { return actions; }
+
+    wf_action *get_action(int id) {return actions.at(id);}
 };

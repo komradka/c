@@ -21,11 +21,12 @@ private:
     int id;
 
 public:
-    wf_action_areaitem(std::string name, int id, QTreeWidget *parent) : QTreeWidgetItem(parent)
+    wf_action_areaitem(std::string name, std::string description, int id, QTreeWidget *parent) : QTreeWidgetItem(parent)
     {
         this->name = name;
         this->id = id;
         parent->addTopLevelItem(this);
         setText(0, QString::fromStdString(name));
+        setToolTip(0, QString::fromStdString(description));
     }
 };

@@ -12,16 +12,7 @@ private:
     std::vector<wf_action_areaitem *> actions;
 
 public:
-    work_area(QWidget *parent) : QTreeWidget(parent)
-    {
-        setHeaderLabel("Work Area");
-        setColumnCount(1);
-        setStyleSheet("QTreeView::item { height: 32px;}");
-        setDragEnabled(true);
-        viewport()->setAcceptDrops(true);
-        showDropIndicator();
-        setDragDropMode(QTreeWidget::InternalMove);
-    }
+    work_area(QWidget *parent);
 
 private:
     void add_item(wf_action *act);

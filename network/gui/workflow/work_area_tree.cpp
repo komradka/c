@@ -13,6 +13,18 @@ void work_area::add_action(QTreeWidgetItem *item, int)
 
 void work_area::add_item(wf_action *act)
 {
-    wf_action_areaitem *item = new wf_action_areaitem(act->gui_name, act->id, this);
+    wf_action_areaitem *item = new wf_action_areaitem(act->gui_name, act->description, act->id, this);
     actions.push_back(item);
+}
+
+work_area::work_area(QWidget *parent) : QTreeWidget(parent)
+{
+    setHeaderLabel("Work Area");
+    setColumnCount(1);
+    setStyleSheet("QTreeWidget { font-size: 14pt;}"
+                  "QTreeWidget::item { height: 32px; border: 1px solid black; color : black;}");
+    setDragEnabled(true);
+    viewport()->setAcceptDrops(true);
+    showDropIndicator();
+    setDragDropMode(QTreeWidget::InternalMove);
 }

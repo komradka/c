@@ -15,4 +15,18 @@ enum class wf_action_category
     COUNT
 };
 
+enum class types
+{
+    Void,
+    String,
+    Float,
+    Int,
+    Object,
+    Object_type,
+    File,
+
+    COUNT
+};
+
+std::string get_name_for_gui(types e);
 std::string get_name_for_gui(wf_action_category e);
