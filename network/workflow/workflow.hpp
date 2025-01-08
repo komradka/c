@@ -16,7 +16,7 @@ public:
     ~workflow();
 
     void create_action(std::string name, std::string gui_name, std::string description, wf_action_category category,
-                       types action_return_type, std::vector<types> &args);
+                       types action_return_type, std::vector<types> &args, wf_action_utility utility);
 
     std::map<int, wf_action *> &get_actions() { return actions; }
 

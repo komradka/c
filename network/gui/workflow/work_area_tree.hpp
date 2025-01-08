@@ -14,6 +14,8 @@ private:
 public:
     work_area(QWidget *parent);
 
+    Qt::DropActions supportedDropActions() const;
+
 private:
     void add_item(wf_action *act);
 

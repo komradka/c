@@ -28,5 +28,13 @@ enum class types
     COUNT
 };
 
+enum class wf_action_utility
+{
+    none,
+    string,
+    file,
+    COUNT
+};
+
 std::string get_name_for_gui(types e);
 std::string get_name_for_gui(wf_action_category e);

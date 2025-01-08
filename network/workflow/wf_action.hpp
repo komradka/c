@@ -18,7 +18,9 @@ public:
     types action_return_type;
     std::vector<types> args;
 
+    wf_action_utility utility;
+
 public:
     wf_action(std::string name, std::string gui, std::string description, wf_action_category category, int id,
-              types action_return_type, std::vector<types> &args);
+              types action_return_type, std::vector<types> &args, wf_action_utility utility);
 };

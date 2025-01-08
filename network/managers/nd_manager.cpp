@@ -31,6 +31,10 @@ nd_manager::~nd_manager()
 {
   m_task_queue->request_exit();
   m_task_threads->join();
+
+  delete wf;
+  delete nd_window;
+  delete settings;
 }
 
 int nd_manager::get_total_threads() const

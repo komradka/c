@@ -11,6 +11,9 @@
 #include <QtWidgets/QGraphicsScene>
 
 #include <string>
+#include "wf_action_treeitem.hpp"
+
+#include <iostream>
 
 #pragma once
 
@@ -19,14 +22,10 @@ class wf_action_areaitem : public QTreeWidgetItem
 private:
     std::string name;
     int id;
+    wf_action_utility utility;
 
 public:
-    wf_action_areaitem(std::string name, std::string description, int id, QTreeWidget *parent) : QTreeWidgetItem(parent)
-    {
-        this->name = name;
-        this->id = id;
-        parent->addTopLevelItem(this);
-        setText(0, QString::fromStdString(name));
-        setToolTip(0, QString::fromStdString(description));
-    }
+    wf_action_areaitem(wf_action *act, QTreeWidget *parent);
+
+    int get_id() { return id; }
 };

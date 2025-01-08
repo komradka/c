@@ -159,6 +159,9 @@ SOURCES       = main.cpp \
                 workflow/wf_action.cpp \
                 workflow/wf_enums.cpp \
                 gui/workflow/wf_action_treeitem.cpp \
-                workflow/workflow.cpp
+                workflow/workflow.cpp \
+                workflow/workflow_basic_action/basic_action.cpp \
+                workflow/workflow_basic_action/basic_action_storage.cpp \
+                gui/workflow/wf_action_areaitem.cpp
             
                 
