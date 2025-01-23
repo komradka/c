@@ -29,9 +29,5 @@ public:
 
     void resizeEvent(QResizeEvent *event) override;
 
-    // private:
-    //     void fill_wf_action()
-    //     {
-
-    //     }
+    work_area *get_work_area() {return area; }
 };

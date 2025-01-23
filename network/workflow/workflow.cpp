@@ -1,4 +1,5 @@
 #include "workflow.hpp"
+#include "../gui/workflow/workflow_dialog.hpp"
 
 #include <iostream>
 workflow::workflow()
@@ -25,4 +26,19 @@ void workflow::create_action(std::string name, std::string gui_name, std::string
     action_count++;
     wf_action *act = new wf_action(name, gui_name, description, category, action_count, action_return_type, args, utility);
     actions[action_count] = act;
+}
+
+error workflow::calculate(workflow_dialog *dialog)
+{
+    work_area *area = dialog->get_work_area();
+
+    wf_action_areaitem *area_item;
+
+    int root_item_count = area->topLevelItemCount();
+
+    for (int i = 0; i < root_item_count; i++)
+    {
+        area_item = dynamic_cast<wf_action_areaitem *>(area->topLevelItem(i));
+        
+    }
 }

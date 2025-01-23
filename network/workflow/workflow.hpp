@@ -2,7 +2,10 @@
 
 #pragma once
 
+#include "../error.hpp"
 #include "wf_action.hpp"
+
+class workflow_dialog;
 
 class workflow
 {
@@ -21,4 +24,6 @@ public:
     std::map<int, wf_action *> &get_actions() { return actions; }
 
     wf_action *get_action(int id) {return actions.at(id);}
+
+    error calculate(workflow_dialog *);
 };

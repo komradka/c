@@ -14,6 +14,10 @@ void work_area::add_action(QTreeWidgetItem *item, int)
 void work_area::add_item(wf_action *act)
 {
     wf_action_areaitem *item = new wf_action_areaitem(act, this);
+
+    action_count++;
+    item->inner_id = action_count;
+
     actions.push_back(item);
 
     switch (act->utility)
@@ -21,18 +25,21 @@ void work_area::add_item(wf_action *act)
     case wf_action_utility::none:
     {
         item->setText(1, "None");
+        item->utility_widget = nullptr;
         break;
     }
     case wf_action_utility::string:
     {
-        QPushButton *line = new QPushButton("Sdad");
+        QLineEdit *line = new QLineEdit();
         setItemWidget(item, 1, line);
+        item->utility_widget = line;
         break;
     }
     case wf_action_utility::file:
     {
         QLineEdit *line = new QLineEdit();
         setItemWidget(item, 1, line);
+        item->utility_widget = line;
         break;
     }
     case wf_action_utility::COUNT:
@@ -53,10 +60,40 @@ work_area::work_area(QWidget *parent) : QTreeWidget(parent)
     setDragEnabled(true);
     viewport()->setAcceptDrops(true);
     showDropIndicator();
-    setDragDropMode(QTreeWidget::DragDrop);
+    setDragDropMode(QTreeWidget::InternalMove);
 }
 
 Qt::DropActions work_area::supportedDropActions() const
 {
-    return Qt::MoveAction;
+    return Qt::MoveAction | Qt::CopyAction;
+}
+
+void work_area::dropEvent(QDropEvent *event)
+{
+    QTreeWidgetItemIterator it(this);
+    while (*it)
+    {
+        wf_action_areaitem *area_item = dynamic_cast<wf_action_areaitem *>(*it);
+        area_item->save_utility();
+        it++;
+    }
+
+    QTreeWidget::dropEvent(event);
+
+    QTreeWidgetItemIterator new_it(this);
+    while (*new_it)
+    {
+        wf_action_areaitem *area_item = dynamic_cast<wf_action_areaitem *>(*new_it);
+        QWidget *utility = area_item->restore_utility();
+
+        if (utility != nullptr)
+            setItemWidget(area_item, 1, utility);
+        else
+            area_item->setText(1, "None");
+        new_it++;
+    }
+}
+
+void work_area::update_widgets()
+{
 }
