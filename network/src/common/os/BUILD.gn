@@ -1,0 +1,13 @@
+import("files.gni")
+
+config("common_os_config") {
+  include_dirs = ["//src/common/os/include"]
+}
+
+source_set("common_os") {
+  sources = common_os_sources
+
+  public_configs = [
+    ":common_os_config"
+  ]
+}

@@ -1,0 +1,3 @@
+unit_manager_sources = [
+  "//src/nd/kernel/unit_manager/include/unit_manager.hpp",
+]

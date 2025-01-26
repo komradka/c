@@ -1,0 +1,20 @@
+import("files.gni")
+
+config("objects_data_config") {
+  include_dirs = ["include"]
+}
+
+source_set("objects_data") {
+  sources = objects_data_sources
+
+  deps = [
+    "//src/common/base:common_base",
+    "//src/common/utils:common_utils",
+  ]
+
+  include_dirs = ["src"]
+
+  public_configs = [
+    ":objects_data_config"
+  ]
+}

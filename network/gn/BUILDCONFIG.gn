@@ -1,0 +1,6 @@
+declare_args() {
+  qmake_path = "qmake"
+  is_debug = false
+}
+
+set_default_toolchain("//gn/toolchain:gcc")

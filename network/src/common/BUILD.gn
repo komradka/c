@@ -1,0 +1,9 @@
+source_set("common") {
+  public_deps = [
+    "//src/common/base:common_base",
+    "//src/common/os:common_os",
+    "//src/common/parallel:common_parallel",
+    "//src/common/utils:common_utils",
+    "//src/common/math:common_math",
+  ]
+}

@@ -1,0 +1,23 @@
+import("//gn/thirdparty/qt.gni")
+
+config("default_config") {
+  cflags = []
+  if (is_debug) {
+    cflags += ["-g"]
+  }
+
+  libs = ["pthread"]
+}
+
+config("qt_config") {
+  cflags = ["-D_REENTRANT", "-fPIC", "-DQT_NO_DEBUG", "-DQT_WIDGETS_LIB", "-DQT_GUI_LIB", "-DQT_CORE_LIB"]
+  include_dirs = [
+    "$qt_install_headers",
+  ]
+  libs = [
+    "$qt_install_libs/libQt5PrintSupport.so",
+    "$qt_install_libs/libQt5Widgets.so",
+    "$qt_install_libs/libQt5Gui.so",
+    "$qt_install_libs/libQt5Core.so",
+  ]
+}

@@ -1,0 +1,17 @@
+import("files.gni")
+
+config("unit_manager_config") {
+  include_dirs = ["include"]
+}
+
+source_set("unit_manager") {
+  sources = unit_manager_sources
+
+  deps = [
+    "//src/common/base:common_base"
+  ]
+
+  public_configs = [
+    ":unit_manager_config"
+  ]
+}

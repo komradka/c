@@ -1,0 +1,3 @@
+qt_install_bins = exec_script ("//gn/scripts/exec_cmd.py", [ "--cmd", qmake_path, "-query", "QT_INSTALL_BINS" ], "trim string")
+qt_install_libs = exec_script ("//gn/scripts/exec_cmd.py", [ "--cmd", qmake_path, "-query", "QT_INSTALL_LIBS" ], "trim string")
+qt_install_headers = exec_script ("//gn/scripts/exec_cmd.py", [ "--cmd", qmake_path, "-query", "QT_INSTALL_HEADERS" ], "trim string")

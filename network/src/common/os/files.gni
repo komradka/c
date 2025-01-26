@@ -1,0 +1,4 @@
+common_os_sources = [
+  "//src/common/os/include/network_statistic.hpp",
+  "//src/common/os/include/system_analyzer.hpp",
+]

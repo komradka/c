@@ -1,0 +1,29 @@
+import("//gn/tools.gni")
+
+import("files.gni")
+
+config("workflow_config") {
+  include_dirs = ["//src/workflow/include"]
+}
+
+source_set("workflow") {
+  sources = workflow_sources
+  deps = [
+    "//src/common:common",
+    ":workflow_moc",
+  ]
+
+  include_dirs = ["//src/workflow/src"]
+
+  configs = [
+    "//gn:qt_config"
+  ]
+
+  public_configs = [
+    ":workflow_config"
+  ]
+}
+
+generate_moc("workflow_moc") {
+  sources = workflow_sources
+}

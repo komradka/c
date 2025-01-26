@@ -1,0 +1,21 @@
+toolchain("gcc") {
+  tool("cxx") {
+    command = "g++ {{include_dirs}} {{cflags}} -c {{source}} -o {{output}}"
+    description = "CXX {{output}}"
+    outputs = [
+      "{{source_out_dir}}/{{target_output_name}}.{{source_name_part}}.o",
+    ]
+  }
+  tool("link") {
+    outfile = "{{target_output_name}}{{output_extension}}"
+    rspfile = "$outfile.rsp"
+    command = "g++ {{ldflags}} -o $outfile -Wl,--start-group @$rspfile -Wl,--no-whole-archive {{solibs}} {{libs}} -Wl,--end-group"
+    description = "LINK $outfile"
+    rspfile_content = "{{inputs}}"
+    outputs = [ outfile ]
+  }
+  tool("stamp") {
+    command = "touch {{output}}"
+    description = "STAMP {{output}}"
+  }
+}
