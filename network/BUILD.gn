@@ -1,0 +1,15 @@
+executable("myDesigner") {
+  sources = ["//src/main/main.cpp"]
+  deps = [
+    "//src/app_gui:app_gui",
+    "//src/nd:nd",
+    "//src/common:common",
+    "//src/common_gui:common_gui",
+    "//src/workflow:workflow",
+  ]
+
+ configs = [
+   "//gn:default_config",
+   "//gn:qt_config",
+ ]
+}

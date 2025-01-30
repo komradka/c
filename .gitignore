@@ -1418,6 +1418,7 @@ network/graph
 /forth_sem
 *.stash
 network/Makefile
+network/out
 *.o
 moc*
 /python

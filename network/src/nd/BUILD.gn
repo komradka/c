@@ -1,0 +1,35 @@
+import("//gn/tools.gni")
+
+import("files.gni")
+
+config("nd_config") {
+  include_dirs = ["//src"]
+}
+
+source_set("nd") {
+  sources = nd_sources
+  
+  deps = [
+    "//src/common:common",
+    "//src/common_gui:common_gui",
+    "//src/workflow:workflow",
+    ":nd_moc",
+  ]
+
+  configs = [
+    "//gn:qt_config",
+  ]
+
+  public_deps = [
+    "//src/nd/objects_data:objects_data",
+    "//src/nd/kernel/unit_manager:unit_manager",
+  ]
+
+  public_configs = [
+    ":nd_config"
+  ]
+}
+
+generate_moc("nd_moc") {
+  sources = nd_sources
+}

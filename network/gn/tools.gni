@@ -1,0 +1,32 @@
+import("//gn/thirdparty/qt.gni")
+
+template("generate_moc") {
+ moc_target_name = target_name + "_gen"
+ action_foreach(moc_target_name) {
+  script = "//gn/scripts/gen_files.py"
+
+  exclusions = ["*.cpp", "*.inl"]
+
+  sources = filter_exclude (invoker.sources, exclusions)
+
+  outputs = ["$target_out_dir/${invoker.target_name}/moc_{{source_name_part}}.cpp"]
+
+  moc_args = ["-nw"]
+
+  path_to_outputs = rebase_path(target_gen_dir, root_build_dir) + "/${invoker.target_name}/moc_{{source_name_part}}.cpp"
+
+  args = [ "--rule", "$qt_install_bins/moc", "{{source}}",
+           "-o", "$path_to_outputs", "--output", "$path_to_outputs"] + moc_args
+
+ }
+
+ moc_config_name = target_name + "_config"
+ config(moc_config_name) {
+   include_dirs =  [ "${target_gen_dir}/${target_name}" ]
+ }
+
+ group(target_name) {
+   public_deps = [":$moc_target_name"]
+   public_configs = [":$moc_config_name"]
+ }
+}

@@ -1,0 +1,30 @@
+import("//gn/tools.gni")
+
+import("files.gni")
+
+config("app_gui_config") {
+  include_dirs = ["//src/app_gui/include"]
+}
+
+source_set("app_gui") {
+  sources = app_gui_sources
+  deps = [
+    "//src/common:common",
+    "//src/common_gui:common_gui",
+    "//src/workflow:workflow",
+    "//src/nd:nd",
+    ":app_gui_moc"
+  ]
+
+  include_dirs = ["//src/app_gui/src"]
+
+  public_configs = [
+    ":app_gui_config"
+  ]
+
+  configs = ["//gn:qt_config"]
+}
+
+generate_moc("app_gui_moc") {
+  sources = app_gui_sources
+}

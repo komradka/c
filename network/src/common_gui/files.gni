@@ -1,0 +1,12 @@
+common_gui_sources = [
+  "//src/common_gui/src/number_textEditer.cpp",
+  "//src/common_gui/src/enum_widget.cpp",
+  "//src/common_gui/src/check_list_widget.cpp",
+  "//src/common_gui/src/tree_dialog_by_enum.cpp",
+  "//src/common_gui/src/plot/qcustomplot.cpp",
+  "//src/common_gui/include/enum_widget.hpp",
+  "//src/common_gui/include/check_list_widget.hpp",
+  "//src/common_gui/include/number_textEditer.hpp",
+  "//src/common_gui/include/tree_dialog_by_enum.hpp",
+  "//src/common_gui/include/plot/qcustomplot.h",
+]

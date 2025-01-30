@@ -1,0 +1,15 @@
+import("files.gni")
+
+config("common_utils_config") {
+  include_dirs = ["//src/common/utils/include"]
+}
+
+source_set("common_utils") {
+  sources = common_utils_sources
+
+  include_dirs = ["//src/common/utils/src"]
+
+  public_configs = [
+    ":common_utils_config"
+  ]
+}

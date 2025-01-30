@@ -1,0 +1,27 @@
+import("//gn/tools.gni")
+
+import("files.gni")
+
+config("common_gui_config") {
+  include_dirs = ["//src/common_gui/include"]
+}
+
+source_set("common_gui") {
+  sources = common_gui_sources
+  deps = [
+    "//src/common/utils:common_utils",
+    ":common_gui_moc"
+  ]
+
+  include_dirs = ["//src/common_gui/src"]
+
+  configs = ["//gn:qt_config"]
+
+  public_configs = [
+    ":common_gui_config"
+  ]
+}
+
+generate_moc("common_gui_moc") {
+  sources = common_gui_sources
+}

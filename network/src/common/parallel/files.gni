@@ -1,0 +1,6 @@
+common_parallel_sources = [
+  "//src/common/parallel/src/thread_info.cpp",
+  "//src/common/parallel/include/thread_info.h",
+  "//src/common/parallel/include/pthread_utils.h",
+  "//src/common/parallel/include/thread_shared_ptr.h",
+]
