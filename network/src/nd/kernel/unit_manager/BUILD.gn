@@ -4,7 +4,7 @@ config("unit_manager_config") {
   include_dirs = ["include"]
 }
 
-source_set("unit_manager") {
+component("unit_manager") {
   sources = unit_manager_sources
 
   deps = [
