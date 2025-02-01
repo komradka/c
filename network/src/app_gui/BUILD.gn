@@ -6,7 +6,7 @@ config("app_gui_config") {
   include_dirs = ["//src/app_gui/include"]
 }
 
-source_set("app_gui") {
+component("app_gui") {
   sources = app_gui_sources
   deps = [
     "//src/common:common",

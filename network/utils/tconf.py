@@ -6,7 +6,7 @@ def make_args_gn (build_dir):
     path = f'out/{build_dir}/args.gn'
 
     args_gn = open (path, "w")
-    args_gn.write ('qmake = "qmake"\n')
+    args_gn.write ('qmake_path = "qmake"\n')
 
     is_debug = "true" if build_dir == "debug" else "false"
     args_gn.write (f'is_debug = {is_debug}\n')
