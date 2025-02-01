@@ -4,7 +4,7 @@ config("common_math_config") {
   include_dirs = ["//src/common/math/include"]
 }
 
-component("common_math") {
+source_set("common_math") {
   sources = common_math_sources
 
   include_dirs = ["//src/common/math/src"]

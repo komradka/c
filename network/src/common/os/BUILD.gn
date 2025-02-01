@@ -4,7 +4,7 @@ config("common_os_config") {
   include_dirs = ["//src/common/os/include"]
 }
 
-component("common_os") {
+source_set("common_os") {
   sources = common_os_sources
 
   public_configs = [

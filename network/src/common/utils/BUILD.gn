@@ -4,7 +4,7 @@ config("common_utils_config") {
   include_dirs = ["//src/common/utils/include"]
 }
 
-component("common_utils") {
+source_set("common_utils") {
   sources = common_utils_sources
 
   include_dirs = ["//src/common/utils/src"]

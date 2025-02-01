@@ -4,28 +4,3 @@ declare_args() {
 }
 
 set_default_toolchain("//gn/toolchain:gcc")
-
-template ("component") {
-  source_set (target_name) {
-    configs = ["//gn:default_config"]
-
-    if (defined (invoker.sources)) {
-      sources = invoker.sources
-    }
-    if (defined (invoker.include_dirs)) {
-      include_dirs = invoker.include_dirs
-    }
-    if (defined (invoker.public_deps)) {
-      public_deps = invoker.public_deps
-    }
-    if (defined (invoker.public_configs)) {
-      public_configs = invoker.public_configs
-    }
-    if (defined (invoker.deps)) {
-      deps = invoker.deps
-    }
-    if (defined (invoker.configs)) {
-      configs += invoker.configs
-    }
-  }
-}

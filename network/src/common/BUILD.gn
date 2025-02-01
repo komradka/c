@@ -1,4 +1,4 @@
-component("common") {
+source_set("common") {
   public_deps = [
     "//src/common/base:common_base",
     "//src/common/os:common_os",

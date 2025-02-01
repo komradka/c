@@ -4,7 +4,7 @@ config("common_parallel_config") {
   include_dirs = ["//src/common/parallel/include"]
 }
 
-component("common_parallel") {
+source_set("common_parallel") {
   sources = common_parallel_sources
 
   deps = [

@@ -6,7 +6,7 @@ config("workflow_config") {
   include_dirs = ["//src/workflow/include"]
 }
 
-component("workflow") {
+source_set("workflow") {
   sources = workflow_sources
   deps = [
     "//src/common:common",

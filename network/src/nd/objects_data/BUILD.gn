@@ -4,7 +4,7 @@ config("objects_data_config") {
   include_dirs = ["include"]
 }
 
-component("objects_data") {
+source_set("objects_data") {
   sources = objects_data_sources
 
   deps = [

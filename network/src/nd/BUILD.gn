@@ -6,7 +6,7 @@ config("nd_config") {
   include_dirs = ["//src"]
 }
 
-component("nd") {
+source_set("nd") {
   sources = nd_sources
   
   deps = [
