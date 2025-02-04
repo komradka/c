@@ -1,6 +1,8 @@
 toolchain("gcc") {
   tool("cxx") {
-    command = "g++ -std=c++17 {{include_dirs}} {{cflags}} -c {{source}} -o {{output}}"
+    depfile = "{{output}}.d"
+    command = "g++ -MMD -MF $depfile {{include_dirs}} {{cflags}} -std=c++17 -c {{source}} -o {{output}}"
+    depsformat = "gcc"
     description = "CXX {{output}}"
     outputs = [
       "{{source_out_dir}}/{{target_output_name}}.{{source_name_part}}.o",

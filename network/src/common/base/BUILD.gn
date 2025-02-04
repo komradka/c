@@ -1,13 +1,13 @@
 import("files.gni")
 
 config("common_base_config") {
-  include_dirs = ["//src/common/base/include"]
+  include_dirs = ["include"]
 }
 
 source_set("common_base") {
   sources = common_base_sources
   
-  include_dirs = ["//src/common/base/src"]
+  include_dirs = ["src"]
 
   public_configs = [
     ":common_base_config"

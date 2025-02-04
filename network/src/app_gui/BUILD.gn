@@ -3,7 +3,7 @@ import("//gn/tools.gni")
 import("files.gni")
 
 config("app_gui_config") {
-  include_dirs = ["//src/app_gui/include"]
+  include_dirs = ["include"]
 }
 
 source_set("app_gui") {
@@ -16,7 +16,7 @@ source_set("app_gui") {
     ":app_gui_moc"
   ]
 
-  include_dirs = ["//src/app_gui/src"]
+  include_dirs = ["src"]
 
   public_configs = [
     ":app_gui_config"
