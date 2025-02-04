@@ -3,7 +3,7 @@ import("//gn/tools.gni")
 import("files.gni")
 
 config("common_gui_config") {
-  include_dirs = ["//src/common_gui/include"]
+  include_dirs = ["include"]
 }
 
 source_set("common_gui") {
@@ -13,7 +13,7 @@ source_set("common_gui") {
     ":common_gui_moc"
   ]
 
-  include_dirs = ["//src/common_gui/src"]
+  include_dirs = ["src"]
 
   configs = ["//gn:qt_config"]
 

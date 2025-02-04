@@ -1,7 +1,7 @@
 import("files.gni")
 
 config("common_os_config") {
-  include_dirs = ["//src/common/os/include"]
+  include_dirs = ["include"]
 }
 
 source_set("common_os") {

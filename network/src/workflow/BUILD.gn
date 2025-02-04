@@ -3,7 +3,7 @@ import("//gn/tools.gni")
 import("files.gni")
 
 config("workflow_config") {
-  include_dirs = ["//src/workflow/include"]
+  include_dirs = ["include"]
 }
 
 source_set("workflow") {
@@ -13,7 +13,7 @@ source_set("workflow") {
     ":workflow_moc",
   ]
 
-  include_dirs = ["//src/workflow/src"]
+  include_dirs = ["src"]
 
   configs = [
     "//gn:qt_config"

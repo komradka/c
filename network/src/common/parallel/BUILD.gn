@@ -1,7 +1,7 @@
 import("files.gni")
 
 config("common_parallel_config") {
-  include_dirs = ["//src/common/parallel/include"]
+  include_dirs = ["include"]
 }
 
 source_set("common_parallel") {
@@ -11,7 +11,7 @@ source_set("common_parallel") {
     "//src/common/utils:common_utils",
   ]
 
-  include_dirs = ["//src/common/parallel/src"]
+  include_dirs = ["src"]
 
   public_configs = [
     ":common_parallel_config"

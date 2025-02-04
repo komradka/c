@@ -31,5 +31,6 @@ void abstract_connection::destroy_connection ()
   m_signal->connection_destroyed (this);
   m_slot->connection_destroyed (this);
 
+
   delete this;
 }
