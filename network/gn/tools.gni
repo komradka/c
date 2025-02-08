@@ -15,8 +15,7 @@ template("generate_moc") {
 
   path_to_outputs = rebase_path(target_gen_dir, root_build_dir) + "/${invoker.target_name}/moc_{{source_name_part}}.cpp"
 
-  args = [ "--rule", "$qt_install_bins/moc", "{{source}}",
-           "-o", "$path_to_outputs", "--output", "$path_to_outputs"] + moc_args
+  args = [ "--rule", "$qt_install_bins/moc", "{{source}}", "--output", "$path_to_outputs"] + moc_args
 
  }
 
