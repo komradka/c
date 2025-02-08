@@ -4,7 +4,9 @@ config("common_utils_config") {
   include_dirs = ["include"]
 }
 
-source_set("common_utils") {
+component("common_utils") {
+  _visibility = true
+
   sources = common_utils_sources
 
   include_dirs = ["src"]

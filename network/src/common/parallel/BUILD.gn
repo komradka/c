@@ -4,7 +4,9 @@ config("common_parallel_config") {
   include_dirs = ["include"]
 }
 
-source_set("common_parallel") {
+component("common_parallel") {
+  _visibility = true
+
   sources = common_parallel_sources
 
   deps = [
