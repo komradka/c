@@ -62,13 +62,13 @@ public:
         name_label->setText(QString::fromStdString(sett.name));
 
         make_project_button = new QPushButton(this);
-        QPixmap make_pixmap("src/project_window/resourse/make_project_icon.png");
+        QPixmap make_pixmap("resources/make_project_icon.png");
         QIcon make_ButtonIcon(make_pixmap);
         make_project_button->setIcon(make_ButtonIcon);
         make_project_button->setIconSize(QSize(30, 30));
 
         load_project_button = new QPushButton(this);
-        QPixmap load_pixmap("src/project_window/resourse/open.jpg");
+        QPixmap load_pixmap("resources/open.jpg");
         QIcon load_ButtonIcon(load_pixmap);
         load_project_button->setIcon(load_ButtonIcon);
         load_project_button->setIconSize(QSize(40, 40));
@@ -90,11 +90,11 @@ public:
         project_icon_label = new QLabel(this);
         if (sett.type == project_type::network)
         {
-            project_icon = QPixmap("project_window/resourse/network.png");
+            project_icon = QPixmap("resources/network.png");
         }
         else
         {
-            project_icon = QPixmap("project_window/resourse/sim.png");
+            project_icon = QPixmap("resources/sim.png");
         }
         project_icon_label->hide();
     }
