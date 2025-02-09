@@ -31,6 +31,8 @@ private:
     workflow_dialog *wf;
 
 public:
+    friend class nd_manager;
+
     QSize minimumSizeHint() const
     {
         return QSize(600, 100);

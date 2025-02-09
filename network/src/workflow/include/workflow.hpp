@@ -1,11 +1,14 @@
 #include <map>
+#include <string>
 
 #pragma once
 
 #include "error.hpp"
 #include "wf_action.hpp"
+#include "signal.hpp"
 
 class workflow_dialog;
+class reporter;
 
 class workflow
 {
@@ -25,5 +28,11 @@ public:
 
     wf_action *get_action(int id) {return actions.at(id);}
 
-    error calculate(workflow_dialog *);
+    std::string get_info(workflow_dialog *);
+
+    error calculate(reporter *, workflow_dialog *);
+
+    error action_holder(wf_action_areaitem *);
+
+    error check_args(wf_action_areaitem *);
 };

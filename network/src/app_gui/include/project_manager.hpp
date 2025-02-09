@@ -1,7 +1,6 @@
 #include "nd/iface/nd_manager.h"
 #include "nd/iface/sim_manager.hpp"
 #include "error.hpp"
-#include "slot.hpp"
 
 #include <string>
 

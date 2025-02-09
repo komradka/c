@@ -29,5 +29,11 @@ public:
 
     void resizeEvent(QResizeEvent *event) override;
 
-    work_area *get_work_area() {return area; }
+    work_area *get_work_area() { return area; }
+
+    // Signals
+    Signal<> start_calculation_signal;
+
+public:
+    Q_SLOT void start_holder();
 };

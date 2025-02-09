@@ -1,5 +1,6 @@
 #include "workflow.hpp"
 #include "workflow_dialog.hpp"
+#include "../../nd/iface/reporter.hpp"
 
 #include <iostream>
 workflow::workflow()
@@ -28,8 +29,20 @@ void workflow::create_action(std::string name, std::string gui_name, std::string
     actions[action_count] = act;
 }
 
-error workflow::calculate(workflow_dialog *dialog)
+std::string workflow::get_info(workflow_dialog *dialog)
 {
+    std::string info;
+    info += "Workflow:\n";
+    work_area *area = dialog->get_work_area();
+    info += "Action Count: " + std::to_string(area->topLevelItemCount()) + "\n";
+
+    return info;
+}
+
+error workflow::calculate(reporter *rep, workflow_dialog *dialog)
+{
+    rep->print_message("Starting workflow calculation");
+    rep->print_message(get_info(dialog));
     work_area *area = dialog->get_work_area();
 
     wf_action_areaitem *area_item;
@@ -39,6 +52,14 @@ error workflow::calculate(workflow_dialog *dialog)
     for (int i = 0; i < root_item_count; i++)
     {
         area_item = dynamic_cast<wf_action_areaitem *>(area->topLevelItem(i));
-        
+        error err = action_holder(area_item);
+        if (!err.is_ok())
+        {
+            rep->print_error("Cannot perform action " + std::to_string(i + 1) + ": " + actions.at(area_item->get_id())->gui_name);
+            rep->print_error(err);
+            break;
+        }
     }
+
+    return error(OK);
 }

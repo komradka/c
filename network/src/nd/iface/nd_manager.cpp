@@ -25,6 +25,8 @@ nd_manager::nd_manager(std::string name)
   m_events_queue = std::make_unique<events_queue>();
   m_waker = std::make_unique<waker>(*this);
   QObject::connect(m_events_queue.get(), &events_queue::received_event, m_waker.get(), &waker::wake_up, Qt::QueuedConnection);
+  m_slots.connect_to(nd_window->wf->start_calculation_signal, [&]()
+                     { wf->calculate(rep, nd_window->wf); });
 }
 
 nd_manager::~nd_manager()

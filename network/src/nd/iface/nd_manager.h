@@ -4,6 +4,7 @@
 #include "nd/gui/nd_window.hpp"
 #include "topology.hpp"
 #include "signal.hpp"
+#include "slot.hpp"
 #include "nd/gui/manager_gui/settings_dialog.hpp"
 #include "nd/gui/fluid_widget.hpp"
 #include "nd/reader/reader.hpp"
@@ -87,4 +88,8 @@ public:
 
   // Signals
   Signal<> project_closed;
+  
+
+  // Slots
+  Slots m_slots;
 };
