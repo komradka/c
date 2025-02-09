@@ -33,6 +33,8 @@ public:
         data[phys_q_type::water_molar_rate] = solution->get_wrat(link_num);
         if (solution->use_temperature)
             data[phys_q_type::temperature] = solution->get_temperature(link_num);
+        else
+            data[phys_q_type::temperature] = get_special_value();
     }
 
     double &operator[](phys_q_type q)
@@ -40,4 +42,3 @@ public:
         return data[q];
     }
 };
-

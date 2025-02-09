@@ -49,6 +49,7 @@ error nd_solver::run (const thread_info &thr_info)
     /////////////////////////////////
     //      & Write results       //
     ////////////////////////////////
+    
     error ret = write_results(thr_info);
 
     if (!ret.is_ok())

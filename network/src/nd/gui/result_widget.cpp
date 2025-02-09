@@ -43,7 +43,10 @@ void result_widget::reprint_table()
 
                 double value = object_results.at(v->get_id())[q];
 
-                table->setItem(i, j, new QTableWidgetItem(QString::number(value)));
+                if (!is_special_value(value))
+                    table->setItem(i, j, new QTableWidgetItem(QString::number(value)));
+                else
+                    table->setItem(i, j, new QTableWidgetItem("NaN"));
             }
         }
     }
