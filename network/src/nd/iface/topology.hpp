@@ -406,6 +406,16 @@ public:
         return dynamic_cast<pipe_data *>(data);
     }
 
+    joint_data *get_joint_data(object_id joint)
+    {
+        if (get_type(joint) != network_objects::joint)
+            return nullptr;
+
+        auto data = get_object_data(joint);
+
+        return dynamic_cast<joint_data *>(data);
+    }
+
 public:
     std::vector<link_id> &get_inlet_links(object_id obj)
     {

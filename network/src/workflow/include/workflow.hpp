@@ -9,6 +9,7 @@
 
 class workflow_dialog;
 class reporter;
+class wf_action_areaitem;
 
 class workflow
 {
@@ -32,7 +33,7 @@ public:
 
     error calculate(reporter *, workflow_dialog *);
 
-    error action_holder(wf_action_areaitem *);
+    // error action_holder(wf_action_areaitem *);
 
-    error check_args(wf_action_areaitem *);
+    // error check_args(wf_action_areaitem *);
 };

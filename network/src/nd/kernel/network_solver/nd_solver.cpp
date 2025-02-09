@@ -142,6 +142,8 @@ error nd_solver::construct_main_equation(const thread_info &thr_info)
             }
             case network_objects::joint:
             {
+                joint_data *data = network_topology->get_joint_data(obj);
+
                 std::vector<unsigned int> links;
                 for (unsigned int i = 0; i < in_links.size(); i++)
                 {
@@ -156,7 +158,7 @@ error nd_solver::construct_main_equation(const thread_info &thr_info)
 
                 for (unsigned int i = 1; i < links.size(); i++)
                 {
-                    RETURN_IF_FAIL(equations->set_pressure_equation({first_link, links[i]}, new nd_equality_pressure_equation(first_link, links[i], nullptr)));
+                    RETURN_IF_FAIL(equations->set_pressure_equation({first_link, links[i]}, new nd_equality_pressure_equation(first_link, links[i], data)));
                 }
 
                 RETURN_IF_FAIL(equations->set_rate_equation(links, new nd_joint_rate_equation(in_links.size(), out_links.size(), links)));
