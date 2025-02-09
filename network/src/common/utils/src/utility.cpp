@@ -29,3 +29,13 @@ std::string get_name(bool e)
 {
     return e ? "True" : "False";
 }
+
+double get_special_value()
+{
+    return std::nan("1");
+}
+
+bool is_special_value(double x)
+{
+    return std::isnan(x);
+}

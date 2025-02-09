@@ -1,6 +1,7 @@
 #include <string>
 #include <type_traits>
 #include <optional>
+#include <cmath>
 
 #pragma once
 
@@ -83,3 +84,7 @@ counting_range_t<Int> range (Int begin, Int end)
 {
   return {begin, end};
 }
+
+double get_special_value();
+
+bool is_special_value(double x);
