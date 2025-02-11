@@ -19,7 +19,7 @@ public:
 
     jacobian_row *make_row(unsigned int pos)
     {
-        unsigned int var_count = solution->get_main_vars_count();
+        unsigned int var_count = solution->get_variables_count();
 
         jacobian_row *row = new jacobian_row(pos, var_count);
 

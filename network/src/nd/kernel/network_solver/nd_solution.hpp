@@ -51,6 +51,11 @@ public:
         return link_variables_count * link_continuous_numeration.size();
     }
 
+    unsigned int get_variables_count()
+    {
+        return link_variables_count;
+    }
+
 private:
     int get_pressure_pos()
     {
