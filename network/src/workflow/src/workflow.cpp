@@ -52,13 +52,13 @@ error workflow::calculate(reporter *rep, workflow_dialog *dialog)
     for (int i = 0; i < root_item_count; i++)
     {
         area_item = dynamic_cast<wf_action_areaitem *>(area->topLevelItem(i));
-        // error err = action_holder(area_item);
-        // if (!err.is_ok())
-        // {
-        //     rep->print_error("Cannot perform action " + std::to_string(i + 1) + ": " + actions.at(area_item->get_id())->gui_name);
-        //     rep->print_error(err);
-        //     break;
-        // }
+        error err = action_holder(area_item);
+        if (!err.is_ok())
+        {
+            rep->print_error("Cannot perform action " + std::to_string(i + 1) + ": " + actions.at(area_item->get_id())->gui_name);
+            rep->print_error(err);
+            break;
+        }
     }
 
     return error(OK);

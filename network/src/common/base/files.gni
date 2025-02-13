@@ -1,7 +1,7 @@
 common_base_sources = [
-  "//src/common/base/src/signal.cpp",
   "//src/common/base/include/error.hpp",
-  "//src/common/base/include/table.hpp",
-  "//src/common/base/include/slot.hpp",
   "//src/common/base/include/signal.hpp",
+  "//src/common/base/include/slot.hpp",
+  "//src/common/base/include/table.hpp",
+  "//src/common/base/src/signal.cpp",
 ]

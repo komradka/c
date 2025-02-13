@@ -1,4 +1,4 @@
 common_math_sources = [
-  "//src/common/math/src/derivative.cpp",
   "//src/common/math/include/math_func.hpp",
+  "//src/common/math/src/derivative.cpp",
 ]
