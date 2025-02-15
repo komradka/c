@@ -6,6 +6,8 @@ nd_main_window::nd_main_window(std::string name)
 {
     setWindowTitle(QString::fromStdString(name));
 
+    d_fluid = new fluid_dialog(this);
+
     statusbar = new QStatusBar(this);
 
     statistic = new network_statistic;
@@ -43,9 +45,15 @@ void nd_main_window::open_settings_dialog()
     pm->show_settings();
 }
 
-void nd_main_window::make_fluid()
+void nd_main_window::open_fluid_dialog()
 {
-    window->make_fluid(pm->create_fluid());
+    d_fluid->show();
+}
+
+void nd_main_window::make_fluid(std::string name)
+{
+    pvt_manager *new_pvt = pm->create_fluid(name);
+    window->make_fluid(new_pvt->make_fluid_widget(), name);
 }
 
 error nd_main_window::save_project()
@@ -92,6 +100,11 @@ void nd_main_window::set_workflow()
 void nd_main_window::open_workflow()
 {
     wf->show();
+}
+
+void nd_main_window::set_fluid(int id)
+{
+    pm->set_fluid(id);
 }
 
 #include "moc_nd_window.cpp"

@@ -70,14 +70,14 @@ public:
       return conn;
     }
 
-    void Emit(Args&&... args)
+    void Emit(Args... args)
     {
       for (auto *conn = m_first_connection; conn; conn = conn->m_next_signal)
         static_cast<connection<func_t> *> (conn)->m_func (std::forward<Args>(args)...);
     }
 
 
-    void operator()(Args&& ... args)
+    void operator()(Args... args)
     {
       Emit (std::forward<Args>(args)...);
     }

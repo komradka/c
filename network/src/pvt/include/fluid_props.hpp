@@ -1,5 +1,5 @@
 #include "calculators/water_calculator.hpp"
-#include "nd/gui/fluid_widget.hpp"
+#include "fluid_widget.hpp"
 #include "fluid_cache.hpp"
 
 #pragma once

@@ -1,7 +1,7 @@
 #include <string>
 
 #include "water_props.hpp"
-#include "../internal_constant.hpp"
+#include "../../nd/kernel/internal_constant.hpp"
 
 #pragma once
 

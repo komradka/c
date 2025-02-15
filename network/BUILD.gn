@@ -6,6 +6,7 @@ executable("myDesigner") {
     "//src/common:common",
     "//src/common_gui:common_gui",
     "//src/workflow:workflow",
+    "//src/pvt:pvt",
   ]
 
  configs = [

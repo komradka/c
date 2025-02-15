@@ -19,6 +19,7 @@ class project_manager
 private:
     nd_manager *nd_project = nullptr;
     sim_manager *sim_project = nullptr;
+    std::vector<pvt_manager *> pvt_projects;
     bool is_project_exist = false;
 
     std::string project_directory;
@@ -35,11 +36,15 @@ public:
             delete nd_project;
         if (sim_project)
             delete sim_project;
+
+        for (pvt_manager *pvt : pvt_projects)
+            delete pvt;
     }
 
 private:
     error create_nd_project(int thread_num);
     error create_sim_project(int thread_num);
+    error create_pvt_project(project_type_t source, std::string name);
 
     error load_nd_project(int thread_num);
     error load_sim_project(int thread_num);

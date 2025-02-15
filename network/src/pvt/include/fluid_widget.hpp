@@ -2,10 +2,10 @@
 #include <vector>
 #include <map>
 
-#include "nd/kernel/fluid/water_props_desc.hpp"
-#include "tree_dialog_by_enum.hpp"
+#include "water_props_desc.hpp"
+#include "../../common_gui/include/tree_dialog_by_enum.hpp"
 #include "fluid_experiment_dialog.hpp"
-#include "fluid_graph/fluid_graph.hpp"
+#include "fluid_graph.hpp"
 
 #pragma once
 

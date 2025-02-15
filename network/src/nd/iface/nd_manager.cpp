@@ -204,10 +204,10 @@ void nd_manager::show_settings()
   settings->show();
 }
 
-fluid_widget *nd_manager::create_fluid()
+pvt_manager *nd_manager::create_fluid(std::string name)
 {
-  fluid = new fluid_widget;
-  return fluid;
+  create_fluid_signal.Emit(name);
+  return network_PVT.back();
 }
 
 void nd_manager::save_project(std::string res_name)
@@ -255,4 +255,9 @@ void nd_manager::load_project(result_info &res)
   {
     network_topology->update_active_objects();
   }
+}
+
+void nd_manager::set_fluid(int id)
+{
+  fluid = network_PVT[id]->get_widget();
 }

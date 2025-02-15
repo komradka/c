@@ -5,6 +5,7 @@
 #include "nd/gui/graph_area.hpp"
 #include "nd/gui/manager_gui/save_dialog.hpp"
 #include "nd/gui/manager_gui/load_dialog.hpp"
+#include "nd/gui/manager_gui/fluid/fluid_dialog.hpp"
 #include "workflow_dialog.hpp"
 
 class nd_manager;
@@ -27,6 +28,7 @@ private:
     nd_manager *pm = nullptr;
     save_dialog *d_save;
     load_dialog *d_load;
+    fluid_dialog *d_fluid;
 
     workflow_dialog *wf;
 
@@ -81,12 +83,16 @@ public:
 
     void load_project(std::vector<result_info> &results);
 
+    void make_fluid(std::string name);
+
+    void set_fluid(int id);
+
 public: // actions
     Q_SLOT error save_project();
 
     Q_SLOT void open_settings_dialog();
 
-    Q_SLOT void make_fluid();
+    Q_SLOT void open_fluid_dialog();
 
     Q_SLOT void save_project_click();
 
@@ -103,7 +109,7 @@ private:
         action = tool_bar->addAction("&Settings", this, SLOT(open_settings_dialog()));
         action->setShortcut(QString("Ctrl+0"));
 
-        action = tool_bar->addAction("&Make fluid", this, SLOT(make_fluid()));
+        action = tool_bar->addAction("&PVT", this, SLOT(open_fluid_dialog()));
         action->setShortcut(QString("Ctrl+1"));
 
         action = tool_bar->addAction("&Workflow", this, SLOT(open_workflow()));

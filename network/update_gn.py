@@ -14,6 +14,7 @@ modules = [
     ['objects_data', './src/nd/objects_data/', ['./src/nd/objects_data/']],
     ['unit_manager', './src/nd/kernel/unit_manager/', ['./src/nd/kernel/unit_manager/']],
     ['nd', './src/nd/', [ './src/nd/'], ['./src/nd/kernel/unit_manager/', './src/nd/objects_data/']],
+    ['pvt', './src/pvt/', ['./src/pvt/']],
 ]
 
 def write_list_to_file (file, module, list):

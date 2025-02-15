@@ -1,4 +1,4 @@
-#include "nd/kernel/fluid/fluid_props.hpp"
+#include "fluid_props.hpp"
 
 #pragma once
 

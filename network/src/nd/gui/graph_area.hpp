@@ -4,7 +4,7 @@
 #include "nd/iface/topology.hpp"
 #include "nd/writer/writer.hpp"
 #include "result_widget.hpp"
-#include "fluid_widget.hpp"
+#include "pvt/include/fluid_widget.hpp"
 
 #include "enum_widget.hpp"
 #include "pipe_project/pipe_project.hpp"
@@ -52,6 +52,7 @@ public:
     QVBoxLayout *button_layout;
     QTabWidget *tabs;
     int tabs_cout = 2;
+    int fluid_project_count = 0;
     result_widget *results_view;
     pipe_project *pipes = nullptr;
 
@@ -86,9 +87,10 @@ public:
         results_view->reprint_table();
     }
 
-    void make_fluid(fluid_widget *fluid)
+    void make_fluid(fluid_widget *fluid, std::string name)
     {
-        tabs->insertTab(tabs_cout, fluid, "Water Props");
+        fluid_project_count++;
+        tabs->insertTab(tabs_cout, fluid, QString::fromStdString(name));
         tabs_cout++;
     }
 
@@ -131,7 +133,7 @@ public: // objects
 public: // link
     Q_SLOT void change_selection_items();
 
-    Q_SLOT void try_start_calculation ();
+    Q_SLOT void try_start_calculation();
 
     Q_SLOT void add_link_pushed();
 

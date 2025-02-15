@@ -35,6 +35,9 @@ error project_manager::create_nd_project(int thread_num)
                          delete nd_project;
                          nd_project = nullptr; });
 
+    m_slots.connect_to(nd_project->create_fluid_signal, [&](std::string name)
+                       { create_pvt_project(project_type_t::network_designer, name); });
+
     return error(OK);
 }
 
@@ -79,6 +82,9 @@ error project_manager::load_nd_project(int thread_num)
     m_slots.connect_to(nd_project->project_closed, [&]()
                        { is_project_exist = false; });
 
+    m_slots.connect_to(nd_project->create_fluid_signal, [&](std::string name)
+                       { create_pvt_project(project_type_t::network_designer, name); });
+
     return error(OK);
 }
 
@@ -86,4 +92,28 @@ error project_manager::load_sim_project(int thread_num)
 {
     (void)thread_num;
     return error("Simulator in progress!");
+}
+
+error project_manager::create_pvt_project(project_type_t source, std::string name)
+{
+    pvt_manager *new_fluid = new pvt_manager(name);
+
+    switch (source)
+    {
+    case project_type_t::network_designer:
+    {
+        nd_project->network_PVT.push_back(new_fluid);
+    }
+    case project_type_t::main:
+    case project_type_t::pipe_designer:
+    case project_type_t::pvt_designer:
+    case project_type_t::simulator:
+    case project_type_t::none:
+    case project_type_t::COUNT:
+        break;
+    }
+
+    pvt_projects.push_back(new_fluid);
+
+    return error(OK);
 }

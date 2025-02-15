@@ -1,6 +1,6 @@
-#include "water_calculator.hpp"
-#include "../water_props.hpp"
-#include "../../internal_constant.hpp"
+#include "calculators/water_calculator.hpp"
+#include "water_props.hpp"
+#include "../../../nd/kernel/internal_constant.hpp"
 #include <math.h>
 
 #include <iostream>

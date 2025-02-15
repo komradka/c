@@ -1,5 +1,5 @@
 #include "fluid_graph.hpp"
-#include "../../kernel/fluid/experiment/fluid_experiment.hpp"
+#include "calculators/fluid_experiment.hpp"
 
 #include "moc_fluid_graph.cpp"
 

@@ -6,9 +6,10 @@
 #include "signal.hpp"
 #include "slot.hpp"
 #include "nd/gui/manager_gui/settings_dialog.hpp"
-#include "nd/gui/fluid_widget.hpp"
+#include "pvt/include/fluid_widget.hpp"
 #include "nd/reader/reader.hpp"
 #include "workflow.hpp"
+#include "common/base/include/projects.hpp"
 
 class waitable_request;
 class thread_group_class;
@@ -19,6 +20,7 @@ class waker;
 class message_t;
 
 class manager;
+class project_manager;
 
 #pragma once
 
@@ -39,7 +41,12 @@ private:
   graph *network_topology = nullptr;
   reporter *rep;
   settings_dialog *settings;
+
+
+  std::vector<pvt_manager *> network_PVT;
   fluid_widget *fluid;
+  
+  
   workflow *wf;
 
   std::string name;
@@ -48,6 +55,8 @@ private:
   reader file_reader;
 
 public:
+  friend class project_manager;
+
   nd_manager() = default;
   nd_manager(std::string name);
   ~nd_manager();
@@ -65,7 +74,8 @@ public:
   void process_print_log(message_t to_print);
 
   void create_topology();
-  fluid_widget *create_fluid();
+  pvt_manager *create_fluid(std::string name);
+  void set_fluid(int id);
 
   void show_settings();
   error create_network_object(const std::string type, std::string data_file = "", vertex **v = nullptr);
@@ -88,6 +98,7 @@ public:
 
   // Signals
   Signal<> project_closed;
+  Signal<std::string> create_fluid_signal;
   
 
   // Slots

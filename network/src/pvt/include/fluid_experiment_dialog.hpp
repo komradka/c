@@ -8,8 +8,8 @@
 #include <QtWidgets/QtWidgets>
 #include <QtGui/QtGui>
 
-#include "number_textEditer.hpp"
-#include "enum_widget.hpp"
+#include "../../common_gui/include/number_textEditer.hpp"
+#include "../../common_gui/include/enum_widget.hpp"
 
 #pragma once
 

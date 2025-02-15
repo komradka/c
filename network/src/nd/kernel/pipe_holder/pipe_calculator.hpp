@@ -1,7 +1,7 @@
 #include "pipe_data.hpp"
 #include "nd/kernel/internal_constant.hpp"
 #include "pipe_params.hpp"
-#include "nd/kernel/fluid/fluid_props.hpp"
+#include "pvt/include/fluid_props.hpp"
 #include <vector>
 
 #pragma once

@@ -1,0 +1,33 @@
+import("//gn/tools.gni")
+
+import("files.gni")
+
+config("pvt_config") {
+  include_dirs = ["include"]
+}
+
+component("pvt") {
+  _visibility = true
+
+  sources = pvt_sources
+  deps = [
+    "//src/common:common",
+    "//src/common_gui:common_gui",
+    "//src/workflow:workflow",
+    ":pvt_moc",
+  ]
+
+  include_dirs = ["src"]
+
+  configs = [
+    "//gn:qt_config"
+  ]
+
+  public_configs = [
+    ":pvt_config"
+  ]
+}
+
+generate_moc("pvt_moc") {
+  sources = pvt_sources
+}

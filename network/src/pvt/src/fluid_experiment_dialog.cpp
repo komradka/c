@@ -1,5 +1,5 @@
 #include "fluid_experiment_dialog.hpp"
-#include "../kernel/fluid/experiment/fluid_experiment.hpp"
+#include "calculators/fluid_experiment.hpp"
 
 #include <iostream>
 
