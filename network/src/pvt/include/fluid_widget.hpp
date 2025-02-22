@@ -3,7 +3,7 @@
 #include <map>
 
 #include "water_props_desc.hpp"
-#include "../../common_gui/include/tree_dialog_by_enum.hpp"
+#include "tree_dialog_by_enum.hpp"
 #include "fluid_experiment_dialog.hpp"
 #include "fluid_graph.hpp"
 

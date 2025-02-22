@@ -1,4 +1,4 @@
 common_utils_sources = [
-  "//src/common/utils/include/utility.hpp",
   "//src/common/utils/src/utility.cpp",
+  "//src/common/utils/include/utility.hpp",
 ]

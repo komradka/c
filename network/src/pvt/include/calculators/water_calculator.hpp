@@ -1,6 +1,6 @@
 #include "error.hpp"
-#include "../element_status.hpp"
-#include "../thermal_props.hpp"
+#include "element_status.hpp"
+#include "thermal_props.hpp"
 
 #pragma once
 

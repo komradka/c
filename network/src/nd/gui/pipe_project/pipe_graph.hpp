@@ -9,7 +9,7 @@
 #include <QtGui/QtGui>
 #include "plot/qcustomplot.h"
 #include "check_list_widget.hpp"
-#include "../../kernel/pipe_holder/pipe_calculator.hpp"
+#include "nd/kernel/pipe_holder/pipe_calculator.hpp"
 
 
 #pragma once

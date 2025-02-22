@@ -1,5 +1,5 @@
 #include "jacobian_row.hpp"
-#include "../main_equations.hpp"
+#include "nd/kernel/network_solver/main_equations.hpp"
 #include <memory>
 
 #pragma once
