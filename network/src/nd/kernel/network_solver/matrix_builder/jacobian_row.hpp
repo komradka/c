@@ -10,7 +10,7 @@ struct jacobian_row
     static constexpr unsigned int temp_pos = 2;
 
 public:
-    unsigned int size = 0;
+    int size = 0;
     std::vector<row_element> row;
 
     unsigned int pos;

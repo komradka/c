@@ -15,6 +15,11 @@ private:
 public:
   thread_shared_ptr () = default;
 
+  thread_shared_ptr (const thread_info &thr_info)
+  {
+    m_thr_info = &thr_info;
+  }
+
   template<typename ...Args>
   thread_shared_ptr (const thread_info &thr_info, Args&& ...args)
   {
@@ -98,6 +103,11 @@ private:
 
 public:
   thread_shared_ptr () = default;
+
+  thread_shared_ptr (const thread_info &thr_info)
+  {
+    m_thr_info = &thr_info;
+  }
 
   thread_shared_ptr (const thread_info &thr_info, size_t n)
   {

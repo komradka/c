@@ -74,6 +74,12 @@ public:
 
     void set_workflow();
 
+    void copy_results (const std::map<object_id, phys_q> &object_res)
+    {
+        window->copy_results(object_res);
+        window->enable_calc_button();
+    }
+
     void closeEvent(QCloseEvent *event);
 
     graph_area *get_gui_manager()

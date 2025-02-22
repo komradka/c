@@ -54,4 +54,9 @@ public:
     {
         return equations[pos];
     }
+
+      int get_count () const
+    {
+      return isize (equations);
+    }
 };
