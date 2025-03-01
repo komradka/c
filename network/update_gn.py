@@ -54,7 +54,7 @@ def check_modules ():
         ignore_dirs = module[3] if len (module) > 3 else []
         for source in module[2]:
             files += get_all_files (source, ignore_dirs, ['.gn', '.gni'])
-        write_list_to_file (module[1] + 'files.gni', module[0], files)
+        write_list_to_file (module[1] + 'files.gni', module[0], sorted (files))
 
 def main ():
     check_modules ()

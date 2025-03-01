@@ -1,5 +1,5 @@
 #include "pipe_data.hpp"
-#include "nd/kernel/internal_constant.hpp"
+#include "internal_constant.hpp"
 #include "pipe_params.hpp"
 #include "pvt/include/fluid_props.hpp"
 #include <vector>

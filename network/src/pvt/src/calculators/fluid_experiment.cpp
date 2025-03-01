@@ -1,5 +1,5 @@
 #include "calculators/fluid_experiment.hpp"
-#include "../../../nd/kernel/internal_constant.hpp"
+#include "internal_constant.hpp"
 
 void fluid_experiment::fill_element_status(double volume_rate_sc,
                                            double pressure,

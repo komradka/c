@@ -7,6 +7,8 @@
 #include "equations/nd_equality_rate_equation.hpp"
 #include "equations/nd_joint_rate_equation.hpp"
 
+#include "thread_shared_ptr.h"
+
 error nd_solver::run (const thread_info &thr_info)
 {
     bool visualize_initial_approximation = settings->get_param<solver_settings::visualize_initial_approximation>();
@@ -43,7 +45,8 @@ error nd_solver::run (const thread_info &thr_info)
         if (thr_info.is_main_thread ())
           equations->print_eq();
 
-        // jacobian_builder = new matrix_builder(equations, solution);
+
+       newton (thr_info);
     }
 
     /////////////////////////////////
@@ -178,6 +181,76 @@ error nd_solver::construct_main_equation(const thread_info &thr_info)
 
     thr_info.barrier ();
     return error(OK);
+}
+
+error nd_solver::newton (const thread_info &thr_info)
+{
+  thread_shared_ptr<double[]> A (thr_info);
+  thread_shared_ptr<size_t[]> I (thr_info);
+
+  build_msr_matrix (A.get (), I.get (), thr_info);
+
+  return error (OK);
+}
+
+error nd_solver::build_msr_matrix (double *A, size_t *I, const thread_info &thr_info)
+{
+  if (thr_info.is_main_thread ())
+    jacobian_builder = new matrix_builder (equations, solution);
+  thr_info.barrier ();
+
+  size_t rows_count = equations->get_count ();
+
+  size_t matrix_size = 0;
+  thread_shared_ptr<std::unique_ptr<jacobian_row>[]> rows (thr_info, rows_count);
+  for (size_t row_num : uniform_range_begin_end (rows_count, thr_info))
+    {
+      rows[row_num].reset (jacobian_builder->make_row (row_num));
+      matrix_size += rows[row_num]->size;
+    }
+  thr_info.reduce_sum (&matrix_size, 1);
+
+  if (thr_info.is_main_thread ())
+    {
+      A = new double [matrix_size];
+      I = new size_t [matrix_size + rows_count];
+    }
+  thr_info.barrier ();
+
+  if (thr_info.is_main_thread ())
+    {
+      size_t index = 0;
+      size_t prev_size = 0;
+      for (size_t row_num : range (0ul, rows_count))
+        {
+          std::unique_ptr<jacobian_row> &row = rows[row_num];
+          for (const row_element &non_zero_value : row->row)
+            {
+              A[index] = non_zero_value.value;
+              I[index + rows_count] = non_zero_value.pos;
+              index++;
+            }
+          I[row_num] = row->size + prev_size;
+          prev_size = I[row_num];
+        }
+    }
+  thr_info.barrier ();
+
+  if (thr_info.is_main_thread ())
+    {
+      FILE *fp = fopen ("msr_debug_log.txt", "w");
+      fprintf (fp, "size = %lu\n", rows_count);
+      fprintf (fp, "A:\n");
+      for (size_t i = 0; i < matrix_size; i++)
+        fprintf (fp, "%lf ", A[i]);
+      fprintf (fp, "\nI:\n");
+      for (size_t i = 0; i < matrix_size + rows_count; i++)
+        fprintf (fp, "%lu ", I[i]);
+      fprintf (fp, "\n");
+      fclose (fp);
+    }
+
+  return error(OK);
 }
 
 void nd_solver::print_equations()

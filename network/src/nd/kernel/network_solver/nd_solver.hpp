@@ -45,6 +45,8 @@ public:
 
 private:
     error construct_main_equation(const thread_info &thr_info);
+    error newton (const thread_info &thr_info);
+    error build_msr_matrix (double *A, size_t *I, const thread_info &thr_info);
 
     error write_results(const thread_info &thr_info);
     error write_results_on_links(const thread_info &thr_info);

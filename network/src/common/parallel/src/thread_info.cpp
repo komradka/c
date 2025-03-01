@@ -47,59 +47,6 @@ void thread_info::barrier () const
   mutex.unlock ();
 }
 
-void thread_info::reduce_sum (double *a, size_t len) const
-{
-  static mutex_t mutex;
-  static cond_var_t cond_in, cond_out;
-  static int in = 0, out = 0;
-  static double *res = nullptr;
-
-  mutex.lock ();
-
-  if (!res)
-    {
-      res = a;
-    }
-  else
-    {
-      for (size_t i = 0; i < len; i++)
-        res[i] += a[i];
-    }
-
-  in++;
-  if (in >= m_threads_total)
-    {
-      out = 0;
-      cond_in.wake_all ();
-    }
-  else
-    {
-      while (in < m_threads_total)
-        cond_in.wait (&mutex);
-    }
-
-  if (res != a)
-    {
-      for (size_t i = 0; i < len; i++)
-        a[i] = res[i];
-    }
-
-  out++;
-  if (out >= m_threads_total)
-    {
-      in = 0;
-      res = nullptr;
-      cond_out.wake_all ();
-    }
-  else
-    {
-      while (out < m_threads_total)
-        cond_out.wait (&mutex);
-    }
-
-  mutex.unlock ();
-}
-
 void thread_info::reduce_max (double *a) const
 {
   static mutex_t mutex;

@@ -15,6 +15,7 @@ component("app_gui") {
     "//src/common_gui:common_gui",
     "//src/workflow:workflow",
     "//src/nd:nd",
+    "//src/pvt:pvt",
     ":app_gui_moc"
   ]
 
