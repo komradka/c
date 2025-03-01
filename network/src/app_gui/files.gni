@@ -1,8 +1,8 @@
 app_gui_sources = [
-  "//src/app_gui/src/project_button.cpp",
-  "//src/app_gui/src/project_manager.cpp",
-  "//src/app_gui/src/project_main_window.cpp",
   "//src/app_gui/include/project_button.hpp",
   "//src/app_gui/include/project_main_window.hpp",
   "//src/app_gui/include/project_manager.hpp",
+  "//src/app_gui/src/project_button.cpp",
+  "//src/app_gui/src/project_main_window.cpp",
+  "//src/app_gui/src/project_manager.cpp",
 ]
