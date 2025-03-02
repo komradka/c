@@ -83,6 +83,6 @@ void project_stream::print(std::string msg, int type)
     }
     else
     {
-        fprintf(fp, msg.c_str());
+        fprintf(fp, "%s\n", msg.c_str());
     }
 }

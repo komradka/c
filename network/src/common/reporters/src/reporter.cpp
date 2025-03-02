@@ -62,21 +62,7 @@ simple_reporter::simple_reporter(std::function<bool(message_type type, message_s
     stream->open(out_widget);
 }
 
-std::string formating(const char *format, va_list va)
-{
-    va_list va_for_length;
-    va_copy(va_for_length, va);
-    int length = vsnprintf(nullptr, 0, format, va_for_length);
-    va_end(va_for_length);
-
-    std::string result;
-    result.assign(length, '\0');
-    vsprintf(&result[0], format, va);
-
-    return result;
-}
-
-void simple_reporter::print(message_type type, message_source source, message_category category, const char *format, ...)
+void simple_reporter::print(message_type type, message_source source, message_category category, std::string msg)
 {
     if (!check(type, source, category))
     {
@@ -88,13 +74,5 @@ void simple_reporter::print(message_type type, message_source source, message_ca
         return;
     }
 
-    va_list va;
-    va_start(va, format);
-
-    std::string msg = formating(format, va);
-    va_end(va);
-
-    std::string res_msg = get_name(type) + get_name(source) + msg;
-
-    stream->print(res_msg, (int)type);
+    stream->print(msg, (int)type);
 }

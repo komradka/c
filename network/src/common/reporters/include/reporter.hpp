@@ -63,5 +63,5 @@ public:
         delete stream;
     }
 
-    void print(message_type type, message_source source, message_category category, const char *format, ...);
+    void print(message_type type, message_source source, message_category category, std::string msg);
 };
