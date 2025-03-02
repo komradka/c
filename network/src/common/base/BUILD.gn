@@ -10,10 +10,6 @@ component("common_base") {
   _visibility = true
 
   sources = common_base_sources
-  
-  deps = [
-    "//src/common_gui:common_gui",
-  ]
 
   include_dirs = ["src"]
 

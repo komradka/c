@@ -12,6 +12,7 @@ component("common_gui") {
   sources = common_gui_sources
   deps = [
     "//src/common/utils:common_utils",
+    "//src/common/base:common_base",
     ":common_gui_moc"
   ]
 

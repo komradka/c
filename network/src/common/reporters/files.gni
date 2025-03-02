@@ -1,4 +1,6 @@
 reporters_sources = [
+  "//src/common/reporters/include/project_stream.hpp",
   "//src/common/reporters/include/reporter.hpp",
+  "//src/common/reporters/src/project_stream.cpp",
   "//src/common/reporters/src/reporter.cpp",
 ]

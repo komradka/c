@@ -1,6 +1,7 @@
 #include <QtWidgets/QtWidgets>
 #include <iostream>
 #include <string>
+#include "slot.hpp"
 
 #pragma once
 
@@ -19,4 +20,6 @@ public:
     void print_message(std::string message);
     void print_warning(std::string message);
     void print_error(std::string message);
+
+    Slots m_slot;
 };
