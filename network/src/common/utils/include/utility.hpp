@@ -88,3 +88,9 @@ counting_range_t<Int> range (Int begin, Int end)
 double get_special_value();
 
 bool is_special_value(double x);
+
+template<typename T>
+T *nullptr_cast()
+{
+  return static_cast<T *>(nullptr);
+}

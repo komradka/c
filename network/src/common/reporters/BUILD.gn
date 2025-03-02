@@ -2,22 +2,23 @@ import("//gn/tools.gni")
 
 import("files.gni")
 
-config("common_base_config") {
+config("reporters_config") {
   include_dirs = ["include"]
 }
 
-component("common_base") {
+component("reporters") {
   _visibility = true
 
-  sources = common_base_sources
-  
+  sources = reporters_sources
+
   deps = [
+    "//src/common/base:common_base",
     "//src/common_gui:common_gui",
   ]
 
   include_dirs = ["src"]
 
   public_configs = [
-    ":common_base_config"
+    ":reporters_config"
   ]
 }

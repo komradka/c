@@ -7,6 +7,7 @@ modules = [
     ['common_base', './src/common/base/', ['./src/common/base/']],
     ['common_utils', './src/common/utils/', ['./src/common/utils/']],
     ['common_math', './src/common/math/', ['./src/common/math/']],
+    ['reporters', './src/common/reporters/', ['./src/common/reporters/']],
     ['common_os', './src/common/os/', ['./src/common/os/']],
     ['common_parallel', './src/common/parallel/', ['./src/common/parallel/']],
     ['app_gui', './src/app_gui/', ['./src/app_gui']],

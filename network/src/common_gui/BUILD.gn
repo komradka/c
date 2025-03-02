@@ -17,10 +17,9 @@ component("common_gui") {
 
   include_dirs = ["src"]
 
-  configs = ["//gn:qt_config"]
-
   public_configs = [
-    ":common_gui_config"
+    ":common_gui_config",
+    "//gn:qt_config"
   ]
 }
 

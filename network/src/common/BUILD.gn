@@ -7,5 +7,6 @@ component("common") {
     "//src/common/parallel:common_parallel",
     "//src/common/utils:common_utils",
     "//src/common/math:common_math",
+    "//src/common/reporters:reporters",
   ]
 }
