@@ -1423,3 +1423,9 @@ network/out
 moc*
 /python
 /seven_sem
+eight_sem/data.hpp
+eight_sem/error.hpp
+eight_sem/main.cpp
+eight_sem/Makefile
+eight_sem/reader.cpp
+eight_sem/reader.hpp
