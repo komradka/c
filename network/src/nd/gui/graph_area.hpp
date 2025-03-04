@@ -36,7 +36,7 @@ private:
     QMenu *add_object_menu;
     objects_tree *objects_list;
 
-    reporter *rep;
+    report_system *rep;
 
     std::map<object_id, it *> items;
     std::map<link_id, link_item *> links;
@@ -59,12 +59,17 @@ public:
 public:
     friend class writer;
 
-    graph_area(reporter *rep, QWidget *parent, QObject *manager);
+    graph_area(QWidget *parent, QObject *manager);
     ~graph_area();
 
     void set_manager(nd_manager *pm)
     {
         this->pm = pm;
+    }
+
+    void set_reporter(report_system *rep)
+    {
+        this->rep = rep;
     }
 
     void disable_calc_button()

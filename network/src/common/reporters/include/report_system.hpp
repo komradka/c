@@ -1,5 +1,7 @@
 #include "reporter.hpp"
 
+#pragma once
+
 class report_system
 {
 private:

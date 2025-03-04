@@ -31,10 +31,8 @@ it *joint_creator(vertex *v, QWidget *gui_manager)
     return item;
 }
 
-graph_area::graph_area (reporter *rep, QWidget *parent, QObject *manager) : QWidget(parent)
+graph_area::graph_area (QWidget *parent, QObject *manager) : QWidget(parent)
 {
-    this->rep = rep;
-
     tabs = new QTabWidget(this);
     scene = new Scene(this);
     gv = new QGraphicsView(this);

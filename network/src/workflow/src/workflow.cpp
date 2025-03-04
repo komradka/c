@@ -1,6 +1,5 @@
 #include "workflow.hpp"
 #include "workflow_dialog.hpp"
-#include "../../nd/iface/reporter.hpp"
 
 #include <iostream>
 workflow::workflow()
@@ -39,10 +38,10 @@ std::string workflow::get_info(workflow_dialog *dialog)
     return info;
 }
 
-error workflow::calculate(reporter *rep, workflow_dialog *dialog)
+error workflow::calculate(report_system *rep, workflow_dialog *dialog)
 {
-    rep->print_message("Starting workflow calculation");
-    rep->print_message(get_info(dialog));
+    rep->print(message_type::MESSAGE, message_source::WF, message_category::ALL, "Starting workflow calculation");
+    rep->print(message_type::MESSAGE, message_source::WF, message_category::ALL, "%s", get_info(dialog));
     work_area *area = dialog->get_work_area();
 
     wf_action_areaitem *area_item;
@@ -55,8 +54,9 @@ error workflow::calculate(reporter *rep, workflow_dialog *dialog)
         error err = action_holder(area_item);
         if (!err.is_ok())
         {
-            rep->print_error("Cannot perform action " + std::to_string(i + 1) + ": " + actions.at(area_item->get_id())->gui_name);
-            rep->print_error(err);
+            rep->print(message_type::ERR, message_source::WF, message_category::ALL, "Cannot perform action %d: %s",
+                       i + 1, actions.at(area_item->get_id())->gui_name.c_str());
+            rep->print(message_type::ERR, message_source::WF, message_category::ALL, "%s", err.description_cstr());
             break;
         }
     }

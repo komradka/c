@@ -27,7 +27,7 @@ void task::run (const thread_info &thr_info)
 {
   if (thr_info.is_main_thread ())
     {
-      m_reporter->print (MESSAGE, TOP_SECTION, "Started: Calculation \"%s\".", get_task_name ());
+      m_reporter->print (message_type::MESSAGE, TOP_SECTION, "Started: Calculation \"%s\".", get_task_name ());
     }
   thr_info.barrier ();
 
@@ -37,13 +37,13 @@ void task::run (const thread_info &thr_info)
     {
       if (err.is_ok ())
         {
-          m_reporter->print (MESSAGE, TOP_SECTION, "Finished: Calculation \"%s\".", get_task_name ());
+          m_reporter->print (message_type::MESSAGE, TOP_SECTION, "Finished: Calculation \"%s\".", get_task_name ());
 
           std::unique_ptr<task_done_event> event (new task_done_event (m_manager, this));
           m_manager.get_events_queue ()->push (std::move (event));
         }
       else
-        m_reporter->print (ERROR, TOP_SECTION, "Stopped: Calculation \"%s\".\nError: %s.", get_task_name (), err.description_cstr ());
+        m_reporter->print (message_type::ERR, TOP_SECTION, "Stopped: Calculation \"%s\".\nError: %s.", get_task_name (), err.description_cstr ());
     }
 }
 

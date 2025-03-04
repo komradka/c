@@ -6,9 +6,9 @@
 #include "error.hpp"
 #include "wf_action.hpp"
 #include "signal.hpp"
+#include "report_system.hpp"
 
 class workflow_dialog;
-class reporter;
 class wf_action_areaitem;
 
 class workflow
@@ -31,7 +31,7 @@ public:
 
     std::string get_info(workflow_dialog *);
 
-    error calculate(reporter *, workflow_dialog *);
+    error calculate(report_system *, workflow_dialog *);
 
     error action_holder(wf_action_areaitem *);
 

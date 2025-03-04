@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 #include <utility>
+#include <string>
 
 #include <QtWidgets/QtWidgets>
 
@@ -10,11 +11,13 @@
 #include "sink_data.hpp"
 #include "pipe_data.hpp"
 #include "joint_data.hpp"
-#include "reporter.hpp"
+#include "common/reporters/include/report_system.hpp"
 #include "error.hpp"
 #include "nd/kernel/check_network.hpp"
 
 #pragma once
+
+using namespace std;
 
 using object_id = int;
 using link_id = int;
@@ -145,7 +148,7 @@ public:
     }
 
 private:
-    reporter *rep;
+    report_system *rep;
 
     int vertex_count = 0;
     int links_count = 0;
@@ -165,7 +168,7 @@ private: // dates
 public:
     graph () = default;
 
-    graph(reporter *rep)
+    graph(report_system *rep)
     {
         this->rep = rep;
     }
@@ -324,7 +327,8 @@ public:
             return error("Unknown object");
         }
 
-        rep->print_message(get_name_for_gui(obj) + ": " + v->get_data()->get_name() + " - Successfully created");
+        rep->print(message_type::MESSAGE, message_source::ND, message_category::ALL, "%s: %s - Successfully created",
+                   get_name_for_gui(obj).c_str(), v->get_data()->get_name().c_str());
 
         if (v_ret)
             *v_ret = v;
@@ -346,7 +350,9 @@ public:
         link *l = create_link(obj1.value(), obj2.value());
         (void)l;
 
-        rep->print_message("Link between " + first + " and " + second + " - Successfully created");
+        rep->print(message_type::MESSAGE, message_source::ND, message_category::ALL, "Link between %s and %s - Successfully created",
+                   first.c_str(), second.c_str());
+
         return error(OK);
     }
 

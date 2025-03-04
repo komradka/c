@@ -63,7 +63,7 @@ error initial_approximation_builder::simple_rate_initial_approximation(const thr
             solution->set_wrat(link_num, sum_rate);
         }
 
-        m_rep->print (MESSAGE, RUN_SECTION, "Simple Rate initial approximation successfully constructed");
+        m_rep->print (message_type::MESSAGE, RUN_SECTION, "Simple Rate initial approximation successfully constructed");
       }
 
     thr_info.barrier ();

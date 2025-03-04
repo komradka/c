@@ -12,6 +12,7 @@ component("workflow") {
   sources = workflow_sources
   deps = [
     "//src/common:common",
+    "//src/common_gui:common_gui",
     ":workflow_moc",
   ]
 

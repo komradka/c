@@ -15,7 +15,7 @@
 
 using namespace std;
 
-class reporter : public QTextEdit
+class nd_report_widget : public QTextEdit
 {
     Q_OBJECT
 private:

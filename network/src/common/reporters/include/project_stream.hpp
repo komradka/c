@@ -2,6 +2,8 @@
 #include "error.hpp"
 #include "signal.hpp"
 
+#pragma once
+
 enum class file_mode
 {
     read,

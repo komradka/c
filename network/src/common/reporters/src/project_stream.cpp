@@ -50,12 +50,14 @@ error project_stream::open(report_widget *out_widget)
     if (out_widget == nullptr)
         return error("Cannot find text widget");
 
-    out_widget->m_slot.connect_to(print_message_to_widget, [&](std::string str)
+    out_widget->m_slot.connect_to(print_message_to_widget, [out_widget](std::string str)
                                   { out_widget->print_message(str); });
-    out_widget->m_slot.connect_to(print_warning_to_widget, [&](std::string str)
+    out_widget->m_slot.connect_to(print_warning_to_widget, [out_widget](std::string str)
                                   { out_widget->print_warning(str); });
-    out_widget->m_slot.connect_to(print_error_to_widget, [&](std::string str)
+    out_widget->m_slot.connect_to(print_error_to_widget, [out_widget](std::string str)
                                   { out_widget->print_error(str); });
+
+    print_to_widget = true;
 
     return error(OK);
 }

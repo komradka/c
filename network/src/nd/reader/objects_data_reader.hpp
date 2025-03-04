@@ -14,7 +14,7 @@
 class data_reader
 {
 private:
-    reporter *rep;
+    report_system *rep;
     network_objects type;
     std::map<std::string, std::function<error(const std::vector<std::string> &, const int, object_data *)>> source_keywords;
     std::map<std::string, std::function<error(const std::vector<std::string> &, const int, object_data *)>> sink_keywords;
@@ -22,7 +22,7 @@ private:
     std::map<std::string, std::function<error(const std::vector<std::string> &, const int, object_data *)>> pipe_keywords;
     // std::map<std::string, std::function<error(const std::vector<std::string> &, const int, sink_data &data)>> sink_keywords;
 public:
-    data_reader(reporter *r, network_objects type)
+    data_reader(report_system *r, network_objects type)
     {
         rep = r;
         this->type = type;

@@ -1,7 +1,8 @@
 #include <string>
 #include <iostream>
 
-#include "nd/iface/reporter.hpp"
+#include "common_gui/include/report_widget.hpp"
+#include "common/os/include/network_statistic.hpp"
 #include "nd/gui/graph_area.hpp"
 #include "nd/gui/manager_gui/save_dialog.hpp"
 #include "nd/gui/manager_gui/load_dialog.hpp"
@@ -19,7 +20,7 @@ class nd_main_window : public QMainWindow
 private:
     QStatusBar *statusbar;
     QSplitter *splitter;
-    reporter *rep;
+    report_widget *wrep;
     network_statistic *statistic;
     graph_area *window = nullptr;
     QMenuBar *tool_bar = nullptr;
@@ -31,6 +32,8 @@ private:
     fluid_dialog *d_fluid;
 
     workflow_dialog *wf;
+
+    report_system *rep;
 
 public:
     friend class nd_manager;
@@ -50,7 +53,7 @@ public:
     {
         if (object == statusbar && event->type() == QEvent::Resize)
         {
-            rep->setGeometry(0, 0, statusbar->width(), statusbar->height());
+            wrep->setGeometry(0, 0, statusbar->width(), statusbar->height());
         }
         return false;
     }
@@ -61,9 +64,15 @@ public:
         splitter->setGeometry(0, 0, width(), height());
     }
 
-    reporter *get_reporter()
+    report_widget *get_wrep()
     {
-        return rep;
+        return wrep;
+    }
+
+    void set_reporter(report_system *rep)
+    {
+        this->rep = rep;
+        window->set_reporter(rep);
     }
 
     void set_pm(nd_manager *pm)

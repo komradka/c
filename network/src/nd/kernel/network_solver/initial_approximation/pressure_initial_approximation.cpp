@@ -57,7 +57,7 @@ error initial_approximation_builder::simple_pressure_initial_approximation(const
             solution->set_pressure(link_num, average_pressure);
         }
 
-        m_rep->print (MESSAGE, RUN_SECTION, "Simple Pressure initial approximation successfully constructed");
+        m_rep->print (message_type::MESSAGE, RUN_SECTION, "Simple Pressure initial approximation successfully constructed");
       }
     thr_info.barrier ();
     return error(OK);

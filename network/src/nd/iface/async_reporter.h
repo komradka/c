@@ -4,6 +4,7 @@
 #include <cstdarg>
 
 #include "events.h"
+#include "report_enum.hpp"
 
 #pragma once
 
@@ -20,22 +21,9 @@ enum class msg_sections
 #define RUN_SECTION msg_sections::task
 #define TOP_SECTION msg_sections::service
 
-enum class msg_types
-{
-  message,
-  error,
-  warning,
-
-  EMPTY,
-};
-
-#define MESSAGE msg_types::message
-#define ERROR msg_types::error
-#define WARNING msg_types::warning
-
 struct message_t
 {
-  msg_types type = msg_types::EMPTY;
+  message_type type = message_type::MESSAGE;
   msg_sections section = msg_sections::UNDEFINED;
 
   std::string message = "";
@@ -63,7 +51,7 @@ public:
   ~async_reporter_t () = default;
 
   void add_prefixes (message_t &msg) const;
-  void print (msg_types type, msg_sections section, const char *format, ...);
+  void print (message_type type, msg_sections section, const char *format, ...);
 
 private:
   void print_message (message_t message);

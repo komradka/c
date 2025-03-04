@@ -18,7 +18,8 @@ nd_manager::nd_manager(std::string name)
   nd_window->set_pm(this);
   nd_window->set_workflow();
   nd_window->show();
-  rep = nd_window->get_reporter();
+  create_reporter(nd_window->get_wrep());
+  nd_window->set_reporter(rep);
   create_topology();
   settings = new settings_dialog();
 
@@ -27,6 +28,8 @@ nd_manager::nd_manager(std::string name)
   QObject::connect(m_events_queue.get(), &events_queue::received_event, m_waker.get(), &waker::wake_up, Qt::QueuedConnection);
   m_slots.connect_to(nd_window->wf->start_calculation_signal, [&]()
                      { wf->calculate(rep, nd_window->wf); });
+
+  rep->print (message_type::MESSAGE, message_source::ND, message_category::ALL, "Project %s created", name.c_str ());
 }
 
 nd_manager::~nd_manager()
@@ -69,7 +72,7 @@ bool nd_manager::add_task(task *f)
   error err = f->verify_before_run();
   if (!err.is_ok())
   {
-    reporter->print(ERROR, TOP_SECTION, "Calulation \"%s\" cannot be started.\nError: %s", f->get_task_name(), err.description_cstr());
+    reporter->print(message_type::ERR, TOP_SECTION, "Calulation \"%s\" cannot be started.\nError: %s", f->get_task_name(), err.description_cstr());
     return false;
   }
 
@@ -91,16 +94,14 @@ void nd_manager::process_print_log(message_t to_print)
 {
   switch (to_print.type)
   {
-  case msg_types::error:
-    rep->print_error(to_print.message);
+  case message_type::ERR:
+    rep->print(message_type::ERR, message_source::ND, message_category::LOG, to_print.message.c_str ());
     break;
-  case msg_types::message:
-    rep->print_message(to_print.message);
+  case message_type::MESSAGE:
+    rep->print(message_type::MESSAGE, message_source::ND, message_category::LOG, to_print.message.c_str ());
     break;
-  case msg_types::warning:
-    rep->print_warning(to_print.message);
-    break;
-  case msg_types::EMPTY:
+  case message_type::WARNING:
+    rep->print(message_type::WARNING, message_source::ND, message_category::LOG, to_print.message.c_str ());
     break;
   }
 }
@@ -115,7 +116,7 @@ error nd_manager::create_network_object(const std::string type, std::string data
   error ret = network_topology->make_object(type, data_file, v);
   if (!ret.is_ok())
   {
-    rep->print_error(string(ret) + " in file " + data_file);
+    rep->print(message_type::ERR, message_source::ND, message_category::LOG, "%s in file %s", ret.description_cstr(), data_file.c_str());
     return ret;
   }
 
@@ -126,7 +127,8 @@ error nd_manager::add_link(object_id f, object_id s, link **l)
 {
   *l = network_topology->create_link(f, s);
 
-  rep->print_message("Link between " + network_topology->get_object_name(f) + " and " + network_topology->get_object_name(s) + " successfully created");
+  rep->print(message_type::MESSAGE, message_source::ND, message_category::LOG,
+             "Link between %s and %s successfully created", network_topology->get_object_name(f).c_str (), network_topology->get_object_name(s).c_str ());
 
   return error(OK);
 }
@@ -142,7 +144,7 @@ object_id nd_manager::get_object_by_name(std::string name)
 
   if (!obj)
   {
-    rep->print_error("Cannot find object " + name);
+    rep->print(message_type::ERR, message_source::ND, message_category::LOG, "Cannot find object %s", name.c_str());
     return {};
   }
 
@@ -183,7 +185,8 @@ void nd_manager::delete_link(link_id id)
 {
   std::pair<object_id, object_id> connected_objs = network_topology->get_connected_object(id);
 
-  rep->print_message("Link between " + network_topology->get_object_name(connected_objs.first) + " and " + network_topology->get_object_name(connected_objs.second) + " deleted");
+  rep->print(message_type::MESSAGE, message_source::ND, message_category::LOG,
+             "Link between %s and %s successfully deleted", network_topology->get_object_name(connected_objs.first).c_str (), network_topology->get_object_name(connected_objs.second).c_str ());
 
   network_topology->delete_link(id);
 }
@@ -191,7 +194,8 @@ void nd_manager::delete_link(link_id id)
 void nd_manager::delete_object(object_id id, std::vector<object_id> *connected_objects, std::vector<link_id> *object_links)
 {
   std::string name = network_topology->get_object_name(id);
-  rep->print_message("Object " + name + " deleted");
+
+  rep->print(message_type::MESSAGE, message_source::ND, message_category::LOG, "Object %s deleted", name.c_str());
 
   *object_links = network_topology->get_object_links(id);
   *connected_objects = network_topology->get_neighbors(id);
@@ -212,19 +216,19 @@ pvt_manager *nd_manager::create_fluid(std::string name)
 
 void nd_manager::save_project(std::string res_name)
 {
-  rep->print_message("Saving...");
+  rep->print(message_type::MESSAGE, message_source::ND, message_category::LOG, "Saving...");
 
   writer *w = new writer(name, rep, network_topology, nd_window->get_gui_manager(), settings);
 
   error ret = w->write_network_to_file(results_count, QString::fromStdString(res_name));
   if (!ret.is_ok())
   {
-    rep->print_error(ret);
+    rep->print(message_type::ERR, message_source::ND, message_category::LOG, "%s", ret.description_cstr());
     delete w;
     return;
   }
 
-  rep->print_message("Project saved");
+  rep->print(message_type::MESSAGE, message_source::ND, message_category::LOG, "Project saved");
   results_count++;
   delete w;
 
@@ -243,13 +247,13 @@ void nd_manager::load_project_handler()
 void nd_manager::load_project(result_info &res)
 {
   auto project_name = QString::fromStdString(res.res_name);
-  rep->print_message("Loading - " + res.res_name);
+  rep->print(message_type::MESSAGE, message_source::ND, message_category::LOG, "Saving %s", res.res_name.c_str());
 
   error ret = file_reader.read_data(res, nd_window->get_gui_manager(), settings);
 
   if (!ret.is_ok())
   {
-    rep->print_error(ret);
+    rep->print(message_type::ERR, message_source::ND, message_category::LOG, "%s", ret.description_cstr());
   }
   else
   {
@@ -260,4 +264,12 @@ void nd_manager::load_project(result_info &res)
 void nd_manager::set_fluid(int id)
 {
   fluid = network_PVT[id]->get_widget();
+}
+
+void nd_manager::create_reporter(report_widget *wrep)
+{
+  rep = new report_system();
+
+  rep->add_reporter([](message_type type, message_source source, message_category category) { return true; },
+                    wrep);
 }

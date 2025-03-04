@@ -39,9 +39,9 @@ private:
 
   nd_main_window *nd_window;
   graph *network_topology = nullptr;
-  reporter *rep;
   settings_dialog *settings;
 
+  report_system *rep;
 
   std::vector<pvt_manager *> network_PVT;
   fluid_widget *fluid;
@@ -95,6 +95,8 @@ public:
   unsigned int get_results_count() { return results_count; }
   void load_project_handler();
   void load_project(result_info &res);
+
+  void create_reporter(report_widget *wrep);
 
   // Signals
   Signal<> project_closed;

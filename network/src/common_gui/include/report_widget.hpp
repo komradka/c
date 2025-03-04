@@ -10,9 +10,9 @@ class report_widget : public QTextEdit
     Q_OBJECT
 
 private:
-    const QColor msg_color = QColor(Qt::blue);
-    const QColor err_color = QColor(Qt::red);
-    const QColor war_color = QColor(Qt::yellow);
+    QColor msg_color = QColor(Qt::blue);
+    QColor err_color = QColor(Qt::red);
+    QColor war_color = QColor(Qt::yellow);
 
 public:
     report_widget(QWidget *parent);

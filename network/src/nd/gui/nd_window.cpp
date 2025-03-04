@@ -11,9 +11,9 @@ nd_main_window::nd_main_window(std::string name)
     statusbar = new QStatusBar(this);
 
     statistic = new network_statistic;
-    rep = new reporter(statistic, 1, statusbar);
-    rep->setMinimumHeight(100);
-    window = new graph_area(rep, this, this);
+    wrep = new report_widget(statusbar);
+    wrep->setMinimumHeight(100);
+    window = new graph_area(this, this);
     tool_bar = new QMenuBar(this);
     tool_bar->setMaximumHeight(17);
     tool_bar->setMinimumHeight(17);
@@ -29,9 +29,7 @@ nd_main_window::nd_main_window(std::string name)
 
     statusbar->installEventFilter(this);
 
-    add_action();
-
-    rep->print_message("Project " + name + " created");
+    add_action(); 
 }
 
 void nd_main_window::closeEvent(QCloseEvent *event)

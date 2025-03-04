@@ -54,7 +54,6 @@ nd_sources = [
   "//src/nd/iface/manager.hpp",
   "//src/nd/iface/nd_manager.cpp",
   "//src/nd/iface/nd_manager.h",
-  "//src/nd/iface/reporter.cpp",
   "//src/nd/iface/reporter.hpp",
   "//src/nd/iface/sim_manager.hpp",
   "//src/nd/iface/topology.cpp",

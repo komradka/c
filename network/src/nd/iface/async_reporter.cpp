@@ -46,7 +46,7 @@ void async_reporter_t::add_prefixes (message_t &msg) const
     }
 }
 
-void async_reporter_t::print (msg_types type, msg_sections section, const char *format, ...)
+void async_reporter_t::print (message_type type, msg_sections section, const char *format, ...)
 {
   va_list va;
   va_start (va, format);

@@ -4,7 +4,7 @@
 #include <algorithm>
 
 #include "error.hpp"
-#include "nd/iface/reporter.hpp"
+#include "common/reporters/include/report_system.hpp"
 
 using namespace std;
 
@@ -33,10 +33,10 @@ private:
     graph *topology = nullptr;
     graph_area *storage = nullptr;
     settings_dialog *settings = nullptr;
-    reporter *rep;
+    report_system *rep;
 
 public:
-    writer(string project_name, reporter *r, graph *topology, graph_area *window, settings_dialog *settings)
+    writer(string project_name, report_system *r, graph *topology, graph_area *window, settings_dialog *settings)
     {
         rep = r;
 

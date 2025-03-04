@@ -32,7 +32,7 @@ private:
     load_dialog *d_load = nullptr;
     create_project_dialog *project_dialog = nullptr;
     settings_dialog *d_setting = nullptr;
-    reporter *rep;
+//    reporter *rep;
     nd_solver *solver;
 
     reader file_reader;
@@ -84,15 +84,15 @@ public:
         main_window = new MWindow(this);
         status_bar = new QStatusBar(main_window);
         statistic = new network_statistic;
-        rep = new reporter(statistic, IS_DEBUG, main_window);
-        window = new graph_area(rep, main_window, this);
+//        rep = new reporter(statistic, IS_DEBUG, main_window);
+//        window = new graph_area(rep, main_window, this);
         tool_bar = new QMenuBar(main_window);
 
         main_window->setMenuBar(tool_bar);
         main_window->setCentralWidget(window);
         main_window->setStatusBar(status_bar);
 
-        rep->setMinimumHeight(100);
+//        rep->setMinimumHeight(100);
         tool_bar->setMaximumHeight(17);
         tool_bar->setMinimumHeight(17);
 
@@ -122,20 +122,20 @@ public:
 
     void print_log (message_t to_print)
     {
-      switch (to_print.type)
-        {
-        case msg_types::error:
-          rep->print_error (to_print.message);
-          break;
-        case msg_types::message:
-          rep->print_message (to_print.message);
-          break;
-        case msg_types::warning:
-          rep->print_warning (to_print.message);
-          break;
-        case msg_types::EMPTY:
-          break;
-        }
+//      switch (to_print.type)
+//        {
+//        case msg_types::error:
+//          rep->print_error (to_print.message);
+//          break;
+//        case msg_types::message:
+//          rep->print_message (to_print.message);
+//          break;
+//        case msg_types::warning:
+//          rep->print_warning (to_print.message);
+//          break;
+//        case msg_types::EMPTY:
+//          break;
+//        }
     }
 
     bool eventFilter(QObject *object, QEvent *event)
@@ -147,7 +147,7 @@ public:
         if (object == status_bar && event->type() == QEvent::Resize)
         {
             QRect r = status_bar->geometry();
-            rep->setGeometry(0, r.top(), status_bar->width(), status_bar->height());
+//            rep->setGeometry(0, r.top(), status_bar->width(), status_bar->height());
         }
         return false;
     }
@@ -178,12 +178,12 @@ public:
             delete network_topology;
         make_network();
 
-        rep->print_message("Loading - " + res.res_name);
+//        rep->print_message("Loading - " + res.res_name);
         error ret = file_reader.read_data(res, window, d_setting);
         // 
         if (!ret.is_ok())
         {
-            rep->print_error(ret);
+//            rep->print_error(ret);
         }
         else
         {
@@ -205,7 +205,7 @@ public:
     {
         if (network_topology != nullptr)
         {
-            rep->print_warning("Network already existing");
+//            rep->print_warning("Network already existing");
             return;
         }
 
@@ -216,9 +216,9 @@ public:
         }
         else
         {
-            network_topology = new graph(rep);
+//            network_topology = new graph(rep);
 
-            rep->print_message("Network successfully created");
+//            rep->print_message("Network successfully created");
 
             // window->set_network(network_topology);
             main_window->setWindowTitle(project_name);
@@ -232,9 +232,9 @@ public:
         delete project_dialog;
         project_dialog = nullptr;
 
-        network_topology = new graph(rep);
+//        network_topology = new graph(rep);
 
-        rep->print_message("Network successfully created");
+//        rep->print_message("Network successfully created");
         main_window->setWindowTitle(project_name);
         // window->set_network(network_topology);
         window->update();
@@ -244,17 +244,17 @@ public:
     {
         if (network_topology == nullptr)
         {
-            rep->print_error("Make network topology first");
+//            rep->print_error("Make network topology first");
             return error(OK);
         }
-        rep->print_message("Saving...");
+//        rep->print_message("Saving...");
 
         if (results_count == 0)
         {
             directory = QFileDialog::getExistingDirectory();
             if (directory.isEmpty())
             {
-                rep->print_warning("User canceled");
+//                rep->print_warning("User canceled");
                 return error(-1);
             }
         }
@@ -296,7 +296,7 @@ public:
 
             if (!save_project().is_ok())
             {
-                rep->print_error("Cannot import project. Save existing first.");
+//                rep->print_error("Cannot import project. Save existing first.");
                 return;
             }
         }
@@ -304,7 +304,7 @@ public:
         directory = QFileDialog::getExistingDirectory();
         if (directory.isEmpty())
         {
-            rep->print_warning("User canceled");
+//            rep->print_warning("User canceled");
             return;
         }
 
