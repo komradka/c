@@ -283,6 +283,18 @@ public:
         return v->get_data()->get_name();
     }
 
+    std::string get_out_processed_name(const object_id obj)
+    {
+        vertex *v = get_object(obj);
+        if (!v)
+            return "";
+
+        std::string name = v->get_data()->get_name();
+        std::replace(name.begin(), name.end(), ' ', '_');
+
+        return name;
+    }
+
     std::vector<object_id> get_active_objects_by_type(network_objects type) const
     {
         std::vector<object_id> result;

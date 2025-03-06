@@ -5,6 +5,8 @@
 
 #include "error.hpp"
 #include "common/reporters/include/report_system.hpp"
+#include "nd/nd_io/nd_io_path.hpp"
+#include "nd/nd_io/nd_io_kwords.hpp"
 
 using namespace std;
 
@@ -26,14 +28,26 @@ class graph;
 class writer
 {
 private:
+    nd_io_path paths;
+    nd_kwords kwords;
+
     unsigned int res_num;
-    string dir;
+    std::string res_name;
+    string project_dir;
     string project;
-    ofstream out;
+    std::string result_dir;
+    std::string main_project_file;
+    std::string gui_dir;
+
     graph *topology = nullptr;
     graph_area *storage = nullptr;
     settings_dialog *settings = nullptr;
     report_system *rep;
+
+    ofstream project_out;
+    ofstream settings_out;
+    ofstream gui_out;
+    ofstream pvt_out;
 
 public:
     writer(string project_name, report_system *r, graph *topology, graph_area *window, settings_dialog *settings)
@@ -41,7 +55,7 @@ public:
         rep = r;
 
         auto found = project_name.find_last_of("/\\");
-        dir = project_name.substr(0, found);
+        project_dir = project_name.substr(0, found);
         project = project_name.substr(found + 1);
 
         std::replace(project.begin(), project.end(), ' ', '_');
@@ -52,46 +66,33 @@ public:
 
     ~writer()
     {
-        if (out.is_open())
-            out.close();
+        if (project_out.is_open())
+            project_out.close();
+
+        if (gui_out.is_open())
+            gui_out.close();
+
+        if (settings_out.is_open())
+            settings_out.close();
+
+        if (pvt_out.is_open())
+            pvt_out.close();
     }
 
     error write_network_to_file(unsigned int res_num, QString res_name)
     {
         this->res_num = res_num;
+        this->res_name = res_name.toStdString();
 
-        QDir dir_manager;
-        dir = dir + "/" + project;
-        string main_file = dir + "/project.np";
-        bool exist = std::filesystem::exists(main_file);
+        bool exist = false;
 
-        if (res_num == 0)
-        {
-            if (dir_manager.exists(QString::fromStdString(dir)))
-            {
-                return error("Directory exists", (int)file_errors::exist);
-            }
-            if (dir_manager.mkdir(QString::fromStdString(dir)) == false)
-            {
-                return error("Cannot make directory", (int)file_errors::make_dir);
-            }
-
-            if (exist && res_num == 0)
-                return error("File already exists", (int)file_errors::exist);
-        }
-
-        out.open(main_file, std::ios::app);
-
-        if (!out.is_open())
-        {
-            return error("Cannot open file", (int)file_errors::open);
-        }
+        RETURN_IF_FAIL (prepare(exist));
 
         if (exist)
-            out << endl;
+            project_out << endl;
 
-        out << "RES_NUM " << res_num << endl;
-        out << "RES_NAME " << res_name.toStdString() << endl;
+        project_out << kwords.res_num << " " << res_num << endl;
+        project_out << kwords.res_name << " " << res_name.toStdString() << endl;
 
         RETURN_IF_FAIL(write_gui());
         RETURN_IF_FAIL(write_settings());
@@ -101,7 +102,10 @@ public:
     }
 
 private:
+    error prepare(bool &);
+
     error write_gui();
+    error write_gui_object();
 
     error write_settings();
 
