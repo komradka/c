@@ -14,17 +14,19 @@ error set_linear_eps_iter(const std::vector<std::string> &words, const int line,
 error set_newton_eps_iter(const std::vector<std::string> &words, const int line, std::vector<std::any> &res);
 error set_root_diff_iter(const std::vector<std::string> &words, const int line, std::vector<std::any> &res);
 
-error reader::read_settings(std::string filename, settings_dialog *settings)
+error reader::read_settings(result_info &res, settings_dialog *settings)
 {
+    std::string settings_file = project_dir + "/" + res.settings;
+
     if (file.is_open())
         file.close();
 
-    file.open(filename);
+    file.open(settings_file);
     if (!file.is_open())
     {
-        return error("Unable to open file", filename);
+        return error("Unable to open file", settings_file);
     }
-    file_name = filename;
+    file_name = settings_file;
 
     init_settings_key_words();
 

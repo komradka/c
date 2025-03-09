@@ -6,6 +6,7 @@
 struct result_info
 {
     unsigned int res_num;
+    std::string project_dir;
     std::string res_name;
     std::string gui_dir;
     std::string result_dir;

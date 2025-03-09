@@ -9,6 +9,8 @@ struct nd_io_path
     std::string settings_data_path = "settings.data";
     std::string pvt_dir_path = "PVT";
     std::string pvt_data_path = "PVT/PVT.data";
+
+    std::string gui_data = "GUI.data";
 };
 
 std::string get_datafile_path(std::string object_name);

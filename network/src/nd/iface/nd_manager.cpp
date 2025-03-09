@@ -246,8 +246,8 @@ void nd_manager::load_project_handler()
 
 void nd_manager::load_project(result_info &res)
 {
-  auto project_name = QString::fromStdString(res.res_name);
-  rep->print(message_type::MESSAGE, message_source::ND, message_category::LOG, "Saving %s", res.res_name.c_str());
+  auto project_name = res.res_name;
+  rep->print(message_type::MESSAGE, message_source::ND, message_category::LOG, "Load %s", project_name.c_str());
 
   error ret = file_reader.read_data(res, nd_window->get_gui_manager(), settings);
 

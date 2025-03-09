@@ -10,6 +10,8 @@
 #include "nd/iface/topology.hpp"
 #include "nd/gui/manager_gui/result_info_storage.hpp"
 #include "nd/gui/graph_area.hpp"
+#include "nd/nd_io/nd_io_kwords.hpp"
+#include "nd/nd_io/nd_io_path.hpp"
 
 #ifndef READER
 
@@ -29,11 +31,15 @@ std::string make_error(const std::string &err_message, const int line);
 class reader
 {
 private:
+    nd_io_path paths;
+    nd_kwords kwords;
+
     std::ifstream file;
     std::string file_name;
+    std::string project_dir;
 
     std::map<std::string, std::function<error(const std::vector<std::string> &, const string &filename, const int)>> main_key_words;
-    std::map<std::string, std::function<error(const std::vector<std::string> &, const int, const string &filename, graph_area *)>> topology_key_words;
+    std::map<std::string, std::function<error(const std::vector<std::string> &, const int, const string &, const string &, graph_area *)>> topology_key_words;
     std::map<std::string, std::function<error(const std::vector<std::string> &, result_info &)>> project_key_words;
     std::map<std::string, int> settings_key_words;
     std::map<int, std::function<error(const std::vector<std::string> &, const int, std::vector<std::any> &)>> settings_func;
@@ -49,25 +55,29 @@ public:
 
     error read_data(result_info &res, graph_area *gui_manager, settings_dialog *settings)
     {
-        RETURN_IF_FAIL(read_topology(res.gui_dir + "/GUI.data", gui_manager));
-        RETURN_IF_FAIL(read_settings(res.settings, settings));
+        project_dir = res.project_dir;
+        RETURN_IF_FAIL(read_topology(res, gui_manager));
+        RETURN_IF_FAIL(read_settings(res, settings));
         return error(OK);
     }
 
 private:
-    error read_settings(std::string filename, settings_dialog *settings);
+    error read_settings(result_info &res, settings_dialog *settings);
 
-    error read_topology(std::string filename, graph_area *gui_manager)
+    error read_topology(result_info &res, graph_area *gui_manager)
     {
+        std::string gui_file = project_dir + "/" + res.gui_dir + "/" + paths.gui_data;
+
         if (file.is_open())
             file.close();
 
-        file.open(filename);
+        file.open(gui_file);
         if (!file.is_open())
         {
-            return error("Unable to open file", filename);
+            cout << gui_file << endl;
+            return error("Unable to open file", gui_file);
         }
-        file_name = filename;
+        file_name = gui_file;
 
         init_topology_key_words();
 
@@ -106,6 +116,7 @@ public:
 
         std::string line;
         result_info buf;
+        buf.project_dir = dirname;
         while (std::getline(file, line))
         {
             if (line.empty())
