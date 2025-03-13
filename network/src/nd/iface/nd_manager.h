@@ -44,7 +44,7 @@ private:
   report_system *rep;
 
   std::vector<pvt_manager *> network_PVT;
-  fluid_widget *fluid;
+  fluid_widget *fluid = nullptr;
   
   workflow *wf;
 
