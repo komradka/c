@@ -1,4 +1,5 @@
 #include "water_props.hpp"
+#include "element_status.hpp"
 
 #pragma once
 
@@ -36,6 +37,8 @@ struct fluid_cache
 
         density = es->density;
         viscosity = es->viscosity;
+
+        enthalpy = es->enthalpy;
     }
 
     condition cond;
@@ -48,4 +51,6 @@ struct fluid_cache
 
     double volume_rate_rc;
     double volume_rate_sc;
+
+    double enthalpy;
 };

@@ -9,19 +9,19 @@ experiment_dialog::experiment_dialog(QWidget *parent) : QDialog(parent)
     setFixedSize(300, 186);
     setWindowTitle("Experiment");
 
-    QLabel *rate_label = new QLabel("Water Volume Rate SC", this);
+    QLabel *rate_label = new QLabel("Water Volume Rate SC, sm3/day", this);
     rate_label->setGeometry(1, 0, width() / 2, 30);
     rate_line = new double_textEdit(this);
     rate_line->setGeometry(width() / 2 + 1, 0, width() / 2, 30);
     rate_label->setBuddy(rate_line);
 
-    QLabel *pressure_label = new QLabel("Pressure", this);
+    QLabel *pressure_label = new QLabel("Pressure, bar", this);
     pressure_label->setGeometry(1, 31, width() / 2, 30);
     pressure_line = new double_textEdit(this);
     pressure_line->setGeometry(width() / 2 + 1, 31, width() / 2, 30);
     pressure_label->setBuddy(pressure_line);
 
-    QLabel *temp_label = new QLabel("Temperature", this);
+    QLabel *temp_label = new QLabel("Temperature, C", this);
     temp_label->setGeometry(1, 62, width() / 2, 30);
     temperature_line = new double_textEdit(this);
     temperature_line->setGeometry(width() / 2 + 1, 62, width() / 2, 30);
@@ -49,6 +49,7 @@ experiment_dialog::experiment_dialog(QWidget *parent) : QDialog(parent)
 
 void experiment_dialog::start_experiment()
 {
+    printf("SDAD\n");
     result_line->clear();
     auto rate = rate_line->get_num();
     auto pressure = pressure_line->get_num();

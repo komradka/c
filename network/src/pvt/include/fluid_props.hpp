@@ -4,11 +4,15 @@
 
 #pragma once
 
+#define D_RATE 0.
+
 class fluid_experiment;
 
 class fluid_props
 {
 private:
+    bool is_filled = false;
+
     water_calculator *w_calc;
     fluid_widget *fw;
     thermal_props *t_props;
@@ -21,6 +25,20 @@ private:
 
 public:
     friend class fluid_experiment;
+
+    fluid_props ()
+    {
+        t_props = new thermal_props;
+
+        es_sc = new element_status();
+        es_rc = new element_status();
+        w_calc = new water_calculator(es_sc, es_rc, t_props);
+
+        sc_cache.clear();
+        rc_cache.clear();
+        sc_cache.cond = condition::sc;
+        rc_cache.cond = condition::rc;
+    }
 
     fluid_props(fluid_widget *fw)
     {
@@ -39,6 +57,8 @@ public:
 
         fill_element_status_by_props(es_rc);
         fill_element_status_by_props(es_rc);
+
+        is_filled = true;
     }
 
     ~fluid_props()
@@ -73,18 +93,24 @@ public:
     }
 
 private:
-    error compute_all_props(condition cond)
+    error compute_all_props(double pressure, double temperature, double volume_rate_sc, condition cond)
     {
+        if(!is_filled)
+            abort();
+
+        es_rc->pressure = pressure;
+        es_rc->temperature = temperature;
+        es_rc->volume_rate_sc = volume_rate_sc;
+
         if (cond == condition::sc)
         {
             return error(OK);
         }
         else
         {
-            RETURN_IF_FAIL(w_calc->compute_mass_rate());
-            RETURN_IF_FAIL(w_calc->compute_volume_rate());
-            RETURN_IF_FAIL(w_calc->compute_water_density_and_viscosity(fw->get_param<water_props::density_correlation>(),
-                                                                       fw->get_param<water_props::viscosity_correlation>()));
+            RETURN_IF_FAIL(w_calc->run_flash(fw->get_param<water_props::density_correlation>(),
+                                             fw->get_param<water_props::viscosity_correlation>(),
+                                             fw->get_param<water_props::enthalpy_correlation>()));
         }
 
         get_cache(cond).init_by_element_status(get_element_status(cond), cond);
@@ -94,11 +120,7 @@ private:
 public:
     error compute_density(double pressure, double temperature, double &density)
     {
-        es_rc->pressure = pressure;
-        es_rc->temperature = temperature;
-
-        RETURN_IF_FAIL(w_calc->compute_water_density_and_viscosity(fw->get_param<water_props::density_correlation>(),
-                                                                   fw->get_param<water_props::viscosity_correlation>()));
+        RETURN_IF_FAIL (compute_all_props (pressure, temperature, D_RATE, condition::rc));
 
         density = es_rc->density;
 
@@ -113,11 +135,7 @@ public:
 
     error compute_viscosity(double pressure, double temperature, double &viscosity)
     {
-        es_rc->pressure = pressure;
-        es_rc->temperature = temperature;
-
-        RETURN_IF_FAIL(w_calc->compute_water_density_and_viscosity(fw->get_param<water_props::density_correlation>(),
-                                                                   fw->get_param<water_props::viscosity_correlation>()));
+        RETURN_IF_FAIL (compute_all_props (pressure, temperature, D_RATE, condition::rc));
 
         viscosity = es_rc->viscosity;
 
@@ -126,10 +144,7 @@ public:
 
     error compute_enthalpy(double temperature, double pressure, double &enthalpy)
     {
-        es_rc->temperature = temperature;
-        es_rc->pressure = pressure;
-
-        RETURN_IF_FAIL(w_calc->compute_enthalpy());
+        RETURN_IF_FAIL (compute_all_props (pressure, temperature, D_RATE, condition::rc));
 
         enthalpy = es_rc->enthalpy;
 
@@ -144,5 +159,22 @@ public:
     double get_water_conductivity()
     {   
         return t_props->water_conductivity;
+    }
+
+public:
+    void copy_from(fluid_props *rhs)
+    {
+        fw = new fluid_widget();
+        fw->copy_from(rhs->get_widget());
+
+        fill_element_status_by_props(es_rc);
+        fill_element_status_by_props(es_sc);
+
+        is_filled = true;
+    }
+
+    fluid_widget *get_widget()
+    {
+        return fw;
     }
 };

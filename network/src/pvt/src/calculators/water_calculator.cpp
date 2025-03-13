@@ -5,6 +5,18 @@
 
 #include <iostream>
 
+error water_calculator::run_flash(density_correlation rho_corr,
+                                  viscosity_correlation v_corr,
+                                  enthalpy_correlation h_corr)
+{
+    RETURN_IF_FAIL (compute_water_density_and_viscosity (rho_corr, v_corr));
+    RETURN_IF_FAIL (compute_mass_rate());
+    RETURN_IF_FAIL (compute_volume_rate());
+    RETURN_IF_FAIL (compute_enthalpy(h_corr));
+
+    return error(OK);
+}
+
 error water_calculator::compute_water_density()
 {
     RETURN_IF_FAIL(compute_1_B());
@@ -54,6 +66,9 @@ error water_calculator::compute_water_density_and_viscosity(density_correlation 
     case density_correlation::ROWE_CHOU:
         RETURN_IF_FAIL(compute_water_density_by_ROWE_CHOU());
         break;
+    case density_correlation::EOS:
+        RETURN_IF_FAIL(compute_water_density_by_EOS());
+        break;
     case density_correlation::COUNT:
         break;
     }
@@ -88,10 +103,6 @@ error water_calculator::compute_mass_rate()
 
 error water_calculator::compute_volume_rate()
 {
-    RETURN_IF_FAIL(compute_mass_rate());
-
-    RETURN_IF_FAIL(compute_water_density());
-
     es_rc->volume_rate_rc = es_rc->mass_rate / es_rc->density;
 
     return error(OK);
@@ -179,11 +190,54 @@ error water_calculator::compute_water_density_by_ROWE_CHOU()
     return error(OK);
 }
 
-error water_calculator::compute_enthalpy()
+error water_calculator::compute_enthalpy(enthalpy_correlation h_corr)
+{
+    switch(h_corr)
+    {
+        case enthalpy_correlation::BO_correlation:
+            RETURN_IF_FAIL (compute_enthalpy_by_corr());
+            break;
+        case enthalpy_correlation::EOS:
+            RETURN_IF_FAIL (compute_enthalpy_by_EOS ());
+            break;
+        case enthalpy_correlation::COUNT:
+            break;
+    }
+    return error (OK);
+}
+
+error water_calculator::compute_enthalpy_by_corr()
 {
     double specific_density = es_rc->density_sc / constant::water_density_sc;
 
     es_rc->enthalpy = t_props->water_heat_capacity * (es_rc->temperature - 255.37) + (8.786214e-5 / specific_density) * es_rc->pressure;
 
     return error(OK);
+}
+error water_calculator::compute_enthalpy_by_EOS() // IAPWS-IF97
+{
+    double T = es_rc->temperature;    // K
+    double P = es_rc->pressure * 0.1; // MPa
+    double pi = P / t_props->IAPWS_P_star;
+    double tau = t_props->IAPWS_T_star / T;
+
+    double dg = 0.;
+
+    for (unsigned i = 0; i < t_props->IAPWS_n1.size(); i++)
+    {
+        dg += t_props->IAPWS_n1[i] * pow(7.1 - pi, t_props->IAPWS_I1[i]) * t_props->IAPWS_J1[i] * pow(tau - 1.222, t_props->IAPWS_J1[i] - 1);
+    }
+
+    double h = t_props->IAPWS_R * T * tau * dg;
+
+    es_rc->enthalpy = h;
+
+    return error(OK);
+}
+
+error water_calculator::compute_water_density_by_EOS()
+{
+    es_rc->density = get_special_value();
+
+    return error("Not Supported");
 }

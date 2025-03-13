@@ -79,3 +79,12 @@ struct water_props_desc<water_props::viscosity_correlation>
     static constexpr auto name = "water_viscosity_correlation";
     static constexpr auto name_for_gui = "Water Viscosity Correlation";
 };
+
+template <>
+struct water_props_desc<water_props::enthalpy_correlation>
+{
+    using data_type_t = enthalpy_correlation;
+    static constexpr auto default_type = enthalpy_correlation::BO_correlation;
+    static constexpr auto name = "enthalpy_correlation";
+    static constexpr auto name_for_gui = "Enthalpy Calculator";
+};

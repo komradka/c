@@ -46,7 +46,6 @@ private:
   std::vector<pvt_manager *> network_PVT;
   fluid_widget *fluid;
   
-  
   workflow *wf;
 
   std::string name;
@@ -86,6 +85,7 @@ public:
   graph *get_network_topology();
   settings_dialog *get_settings();
   workflow *get_workflow();
+  fluid_props *get_fluid();
   void set_network_topology(graph *topology);
   void set_settings(settings_dialog *settings);
   void delete_link(link_id id);

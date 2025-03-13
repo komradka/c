@@ -24,6 +24,8 @@ std::string get_name_for_gui(density_correlation e)
         return "None";
     case density_correlation::ROWE_CHOU:
         return "ROWE-CHOU method";
+    case density_correlation::EOS:
+        return "By EOS";
     case density_correlation::COUNT:
         return "";
     }
@@ -42,9 +44,26 @@ std::string get_name_for_gui(water_calculated_props e)
         return "Mass Rate";
     case water_calculated_props::volume_rate_rc:
         return "Volume Rate RC";
+    case water_calculated_props::enthalpy:
+        return "Enthalpy";
 
     case water_calculated_props::COUNT:
         return "";
+    }
+    return "";
+}
+
+std::string get_name_for_gui(enthalpy_correlation e)
+{
+    switch (e)
+    {
+        case enthalpy_correlation::BO_correlation:
+            return "Correlation";
+        case enthalpy_correlation::EOS:
+            return "By EOS";
+
+        case enthalpy_correlation::COUNT:
+            return "";
     }
     return "";
 }

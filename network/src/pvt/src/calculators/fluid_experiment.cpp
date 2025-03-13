@@ -13,7 +13,8 @@ void fluid_experiment::fill_element_status(double volume_rate_sc,
 
 error fluid_experiment::start_experiment(double &result)
 {
-    fluid->compute_all_props(condition::rc);
+    auto es = fluid->get_element_status(condition::rc);
+    RETURN_IF_FAIL(fluid->compute_all_props(es->pressure, es->temperature, es->volume_rate_sc, condition::rc));
 
     fluid_cache cache = fluid->get_cache(condition::rc);
 
@@ -30,6 +31,9 @@ error fluid_experiment::start_experiment(double &result)
         break;
     case water_calculated_props::volume_rate_rc:
         result = cache.volume_rate_rc;
+        break;
+    case water_calculated_props::enthalpy:
+        result = cache.enthalpy;
         break;
     case water_calculated_props::COUNT:
         break;

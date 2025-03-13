@@ -15,16 +15,16 @@ const char *CALCULATE_task::get_task_name () const
   return "Calculate";
 }
 
-nd_manager *CALCULATE_task::create_comanager (nd_manager &manager) const
+nd_temporary_storage *CALCULATE_task::create_comanager (nd_manager &manager) const
 {
-  nd_manager *comanager = new nd_manager;
+  nd_temporary_storage *comanager = new nd_temporary_storage;
 
   graph *topology = manager.get_network_topology ();
   if (topology)
     {
       graph *cotopology = new graph;
       cotopology->copy_from (topology);
-      comanager->set_network_topology (cotopology);
+      comanager->topology = cotopology;
     }
 
   settings_dialog *settings = manager.get_settings ();
@@ -32,15 +32,26 @@ nd_manager *CALCULATE_task::create_comanager (nd_manager &manager) const
     {
       settings_dialog *cosettings = new settings_dialog ();
       cosettings->copy_from (settings);
-      comanager->set_settings (cosettings);
+      comanager->sett = cosettings;
     }
+
+  fluid_props *fluid = manager.get_fluid();
+  if (fluid)
+  {
+    fluid_props *cofluid =  new fluid_props();
+    cofluid->copy_from(fluid);
+    comanager->fluid = fluid;
+  }
 
   return comanager;
 }
 
 error CALCULATE_task::verify_before_run () const
 {
-  graph *topology = m_comanager->get_network_topology ();
+  if (!m_comanager->fluid)
+      return error ("Choose fluid for network");
+
+  graph *topology = m_comanager->topology;
   if (!topology)
     return error ("Make network topology first.");
 
@@ -53,7 +64,7 @@ error CALCULATE_task::verify_before_run () const
 
 error CALCULATE_task::multithread_run (const thread_info &thr_info)
 {
-  thread_shared_ptr<nd_solver> solver (thr_info, m_reporter.get (), m_comanager->get_network_topology (), m_comanager->get_settings ());
+  thread_shared_ptr<nd_solver> solver (thr_info, m_reporter.get (), m_comanager->topology, m_comanager->sett, m_comanager->fluid);
   error err = solver->run (thr_info);
 
   if (!err.is_ok ())

@@ -13,6 +13,7 @@ enum class water_props
 
     viscosity_correlation, // enum
     density_correlation,   // enum
+    enthalpy_correlation, // enum
 
     COUNT
 };
@@ -30,6 +31,15 @@ enum class density_correlation
 {
     none,
     ROWE_CHOU,
+    EOS,
+
+    COUNT
+};
+
+enum class enthalpy_correlation
+{
+    BO_correlation,
+    EOS,
 
     COUNT
 };
@@ -44,6 +54,7 @@ enum class condition
 
 std::string get_name_for_gui(viscosity_correlation e);
 std::string get_name_for_gui(density_correlation e);
+std::string get_name_for_gui(enthalpy_correlation e);
 
 enum class water_calculated_props
 {
@@ -52,6 +63,8 @@ enum class water_calculated_props
 
     mass_rate,
     volume_rate_rc,
+
+    enthalpy,
 
     COUNT
 };

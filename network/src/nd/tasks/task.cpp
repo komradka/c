@@ -4,6 +4,16 @@
 #include "nd/iface/async_reporter.h"
 #include "nd/iface/nd_manager.h"
 
+nd_temporary_storage::~nd_temporary_storage()
+{
+    if (topology)
+        delete topology;
+    if (sett)
+        delete sett;
+    if (fluid)
+        delete fluid;
+}
+
 task::task (nd_manager &manager) : m_manager (manager)
 {
 }

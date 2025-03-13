@@ -10,6 +10,18 @@
 class async_reporter_t;
 class thread_info;
 class nd_manager;
+class graph;
+class settings_dialog;
+class fluid_props;
+
+struct nd_temporary_storage
+{
+    graph *topology = nullptr;
+    settings_dialog *sett = nullptr;
+    fluid_props *fluid = nullptr;
+
+    ~nd_temporary_storage();
+};
 
 class task
 {
@@ -23,13 +35,13 @@ public:
   void do_after_finish_in_gui (const std::function<void (nd_manager &manager)> &func);
 
   virtual const char *get_task_name () const = 0;
-  virtual nd_manager *create_comanager (nd_manager &manager) const = 0;
+  virtual nd_temporary_storage *create_comanager (nd_manager &manager) const = 0;
   virtual error verify_before_run () const;
   virtual error multithread_run (const thread_info &thr_info) = 0;
 
 protected:
   std::unique_ptr<async_reporter_t> m_reporter;
-  std::unique_ptr<nd_manager> m_comanager;
+  std::unique_ptr<nd_temporary_storage> m_comanager;
   std::vector<std::function<void (nd_manager &manager)>> m_do_after_finish_in_gui;
 
 private:

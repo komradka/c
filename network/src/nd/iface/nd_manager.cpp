@@ -273,3 +273,12 @@ void nd_manager::create_reporter(report_widget *wrep)
   rep->add_reporter([](message_type type, message_source source, message_category category) { return true; },
                     wrep);
 }
+
+fluid_props *nd_manager::get_fluid()
+{
+    fluid_props *fp = nullptr;
+    if (fluid)
+        fp = new fluid_props(fluid);
+
+    return fp;
+}

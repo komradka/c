@@ -6,6 +6,8 @@
 
 enum class density_correlation;
 enum class viscosity_correlation;
+enum class enthalpy_correlation;
+
 
 class water_calculator
 {
@@ -26,15 +28,21 @@ public:
         delete t_props;
     }
 
+    error run_flash(density_correlation rho_corr,
+                    viscosity_correlation v_corr,
+                    enthalpy_correlation h_corr);
+
+private:
     error compute_water_density_and_viscosity(density_correlation rho_corr,
                                               viscosity_correlation v_corr);
     error compute_mass_rate();
     error compute_volume_rate();
-    error compute_enthalpy();
-
-private:
+    error compute_enthalpy(enthalpy_correlation h_corr);
+    error compute_enthalpy_by_corr();
+    error compute_enthalpy_by_EOS();
     error compute_water_density();
     error compute_water_density_by_ROWE_CHOU();
+    error compute_water_density_by_EOS();
     error compute_water_viscosity();
     error compute_water_viscosity_by_Grabovski();
     error compute_water_viscosity_by_Kestin();

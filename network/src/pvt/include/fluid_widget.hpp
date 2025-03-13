@@ -23,7 +23,8 @@ private:
                                                                                    water_props::viscosibility,
                                                                                    water_props::density,
                                                                                    water_props::density_correlation,
-                                                                                   water_props::viscosity_correlation};
+                                                                                   water_props::viscosity_correlation,
+                                                                                   water_props::enthalpy_correlation};
 
     std::map<water_props, std::any> props;
     tree_dialog_by_enum *td;
@@ -69,6 +70,11 @@ public:
         }
 
         return std::any_cast<data_type_t>(value);
+    }
+
+    void copy_from(fluid_widget *rhs)
+    {
+        props = rhs->props;
     }
 
 public:
