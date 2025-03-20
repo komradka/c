@@ -88,7 +88,7 @@ private:
       }
     m_thr_info->barrier ();
 
-    m_thr_info->bcast<Type> (&m_ptr);
+    m_thr_info->bcast<Type*> (m_ptr, MAIN_THREAD_ID);
     return true;
   }
 };
@@ -177,7 +177,7 @@ private:
       }
     m_thr_info->barrier ();
 
-    m_thr_info->bcast (&m_ptr);
+    m_thr_info->bcast (m_ptr, MAIN_THREAD_ID);
     return true;
   }
 

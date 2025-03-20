@@ -7,11 +7,6 @@ thread_info::thread_info (int thread_id, int threads_total)
 {
 }
 
-bool thread_info::is_main_thread () const
-{
-  return m_thread_id == 0;
-}
-
 void thread_info::barrier () const
 {
   static mutex_t mutex;
@@ -27,10 +22,8 @@ void thread_info::barrier () const
       cond_in.wake_all ();
     }
   else
-    {
-      while (in < m_threads_total)
-        cond_in.wait (&mutex);
-    }
+    while (in < m_threads_total)
+      cond_in.wait (&mutex);
 
   out++;
   if (out >= m_threads_total)
@@ -39,59 +32,38 @@ void thread_info::barrier () const
       cond_out.wake_all ();
     }
   else
-    {
-      while (out < m_threads_total)
-        cond_out.wait (&mutex);
-    }
+    while (out < m_threads_total)
+      cond_out.wait (&mutex);
 
   mutex.unlock ();
 }
 
-void thread_info::reduce_max (double *a) const
+error thread_info::reduce_error (error &err) const
 {
-  static mutex_t mutex;
-  static cond_var_t cond_in, cond_out;
-  static int in = 0, out = 0;
-  static double res = 0;
+  int root = get_threads_total ();
+  if (!err.is_ok ())
+    root = get_thread_id ();
 
-  mutex.lock ();
+  allreduce_min (root);
 
-  if (in == 0)
-    res = *a;
-  else
+  if (root < get_threads_total ())
     {
-      if (res < *a)
-        res = *a;
-    }
+      std::string error_message = err.description ();
+      size_t error_message_length = error_message.length ();
 
-  in++;
-  if (in >= m_threads_total)
-    {
-      out = 0;
-      cond_in.wake_all ();
-    }
-  else
-    {
-      while (in < m_threads_total)
-        cond_in.wait (&mutex);
-    }
+      bcast (error_message_length, root);
 
-  *a = res;
+      if (get_thread_id () != root)
+        error_message.resize (error_message_length);
 
-  out++;
-  if (out >= m_threads_total)
-    {
-      in = 0;
-      res = 0;
-      cond_out.wake_all ();
-    }
-  else
-    {
-      while (out < m_threads_total)
-        cond_out.wait (&mutex);
-    }
+      bcast (error_message.data (), error_message_length, root);
 
-  mutex.unlock ();
+      if (get_thread_id () != root)
+        err = error (error_message);
+
+      barrier ();
+    }
+  return err;
 }
 
 void uniform_range_begin_end (int count, int &begin, int &end, const thread_info &thr_info)
