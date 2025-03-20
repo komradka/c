@@ -89,6 +89,7 @@ nd_sources = [
   "//src/nd/kernel/pipe_holder/pipe_calculator.hpp",
   "//src/nd/kernel/pipe_holder/pipe_params.cpp",
   "//src/nd/kernel/pipe_holder/pipe_params.hpp",
+  "//src/nd/nd_io/nd_io_kwords.hpp",
   "//src/nd/nd_io/nd_io_path.cpp",
   "//src/nd/nd_io/nd_io_path.hpp",
   "//src/nd/queue/thread_class.cpp",

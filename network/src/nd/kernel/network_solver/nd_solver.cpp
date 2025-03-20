@@ -208,7 +208,7 @@ error nd_solver::build_msr_matrix (double *A, size_t *I, const thread_info &thr_
       rows[row_num].reset (jacobian_builder->make_row (row_num));
       matrix_size += rows[row_num]->size;
     }
-  thr_info.reduce_sum (&matrix_size, 1);
+  thr_info.allreduce_sum (matrix_size);
 
   if (thr_info.is_main_thread ())
     {
