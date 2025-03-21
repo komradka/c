@@ -10,6 +10,7 @@ component("common_parallel") {
   sources = common_parallel_sources
 
   deps = [
+    "//src/common/base:common_base",
     "//src/common/utils:common_utils",
   ]
 
