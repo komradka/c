@@ -487,6 +487,11 @@ public:
         return false;
     }
 
+    bool is_active (object_id obj)
+    {
+        return get_object(obj)->get_data()->is_active();
+    }
+
     int get_boundary_condition_count_on_object(object_id obj)
     {
         int res = 0;

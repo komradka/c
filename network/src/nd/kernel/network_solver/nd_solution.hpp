@@ -1,6 +1,7 @@
 #include "nd/iface/topology.hpp"
 #include "nd/iface/async_reporter.h"
 #include "nd/gui/manager_gui/settings_dialog.hpp"
+#include "nd/kernel/graph_operation.hpp"
 
 #include <iostream>
 #include <map>
@@ -14,6 +15,7 @@ class nd_solution
 private:
     async_reporter_t *m_rep;
     graph *network_topology;
+    graph_component *component;
     settings_dialog *settings;
 
     std::map<link_id, unsigned int> link_continuous_numeration;
@@ -30,7 +32,7 @@ public:
     bool use_temperature = false;
 
 public:
-    nd_solution(async_reporter_t *rep, graph *_network_topology, settings_dialog *_settings);
+    nd_solution(async_reporter_t *rep, graph *_network_topology, graph_component *_component, settings_dialog *_settings);
 
     unsigned int get_link_num(link_id);
 

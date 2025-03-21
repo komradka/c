@@ -43,6 +43,12 @@ private:
             painter->drawRect(-30, -30, 60, 60);
         }
 
+        if (!v->get_data()->is_active())
+        {
+            painter->setPen(Qt::red);
+            painter->drawRect(-30, -30, 60, 60);
+        }
+
         QRectF el = QRectF(-30, -30, 60, 60);
         QImage image("resources/joint.png", "png");
 

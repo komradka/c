@@ -6,62 +6,105 @@
 #include "equations/nd_equality_pressure_equation.hpp"
 #include "equations/nd_equality_rate_equation.hpp"
 #include "equations/nd_joint_rate_equation.hpp"
+#include "common/base/include/format.hpp"
 
 #include "thread_shared_ptr.h"
+
+enum solver_error
+{
+    NON = 0,
+    GLOBAL_ERR = 1,
+    TEMP_ERR = 2,
+    COMP_ERR
+};
 
 error nd_solver::run (const thread_info &thr_info)
 {
     bool visualize_initial_approximation = settings->get_param<solver_settings::visualize_initial_approximation>();
 
-    //////////////////////////
-    //      0  Prepare      //
-    //////////////////////////
-
-    if (thr_info.is_main_thread ())
-      solution = new nd_solution(m_rep, network_topology, settings);
-    thr_info.barrier ();
-
-    /////////////////////////////////////
-    //      1 Initial Approximation    //
-    /////////////////////////////////////
-
-    if (thr_info.is_main_thread ())
-      initial_approximation = new initial_approximation_builder(m_rep, network_topology, settings, solution);
-    thr_info.barrier ();
-
-    initial_approximation->construct_initial_approximation(thr_info);
-
-    if (!visualize_initial_approximation)
+    if (thr_info.is_main_thread())
     {
-        //////////////////////////////////////
-        //      1 Construct equations       //
-        //////////////////////////////////////
-
-        error ret = construct_main_equation(thr_info);
-
-        if (!ret.is_ok())
-          return ret;
-
-        if (thr_info.is_main_thread ())
-          equations->print_eq();
-
-
-       newton (thr_info);
+        data = new nd_data(network_topology);
     }
 
-    /////////////////////////////////
-    //      & Write results       //
-    ////////////////////////////////
-    
-    error ret = write_results(thr_info);
+    error calculation_error = error(OK);
 
-    if (!ret.is_ok())
-      return ret;
+    for (int comp_it = 0; comp_it < data->get_component_count(); comp_it++)
+    {
+        graph_component *component = data->get_component(comp_it);
+        //////////////////////////
+        //      0  Prepare      //
+        //////////////////////////
+
+        if (thr_info.is_main_thread())
+        {
+            print_calculation_information(comp_it);
+            calculation_error = verify_component(component);
+            // TODO modification
+
+        }
+
+        if (!calculation_error.is_ok())
+        {
+            continue;
+        }
+
+        if (thr_info.is_main_thread ())
+            solution = new nd_solution(m_rep, network_topology, component, settings);
+        thr_info.barrier ();
+
+        /////////////////////////////////////
+        //      1 Initial Approximation    //
+        /////////////////////////////////////
+
+        if (thr_info.is_main_thread ())
+            initial_approximation = new initial_approximation_builder(m_rep, network_topology, component, settings, solution);
+        thr_info.barrier ();
+
+        initial_approximation->construct_initial_approximation(thr_info);
+
+        if (!visualize_initial_approximation)
+        {
+            //////////////////////////////////////
+            //      2 Construct equations       //
+            //////////////////////////////////////
+
+            error ret = construct_main_equation(component, thr_info);
+
+            if (!ret.is_ok())
+                return ret;
+
+            if (thr_info.is_main_thread ())
+                equations->print_eq();
+
+
+            newton (thr_info);
+        }
+
+        /////////////////////////////////
+        //      3 Write results        //
+        /////////////////////////////////
+
+        error ret = write_results(thr_info);
+
+        if (!ret.is_ok())
+            return ret;
+
+
+        /////////////////////////////////
+        //      4 After Calculation    //
+        /////////////////////////////////
+        if (thr_info.is_main_thread())
+        {
+//            clear_after_calculation();
+            m_rep->print(message_type::MESSAGE, RUN_SECTION, "Component %d Successfully Calculated", comp_it);
+        }
+    }
 
     return error(OK);
 }
 
-error nd_solver::construct_main_equation(const thread_info &thr_info)
+error nd_solver::construct_main_equation(graph_component *component, const thread_info &thr_info)
 {
     if (thr_info.is_main_thread ())
       {
@@ -70,7 +113,7 @@ error nd_solver::construct_main_equation(const thread_info &thr_info)
 
         equations = new main_equations(solution);
 
-        std::vector<object_id> active_objects = network_topology->get_active_objects();
+        std::set<object_id> active_objects = component->get_active_object();
 
         // cout << active_objects.size() << endl;
 
@@ -346,4 +389,58 @@ error nd_solver::write_results_on_object(const thread_info &thr_info)
 const std::map<object_id, phys_q> &nd_solver::get_object_results()
 {
     return results->object_results;
+}
+
+void nd_solver::clear_after_calculation()
+{
+    delete solution;
+    delete initial_approximation;
+    delete results;
+    delete equations;
+    delete jacobian_builder;
+}
+
+error nd_solver::verify_component(graph_component *comp)
+{
+    if (settings->get_param<solver_settings::use_temperature_equation> ())
+    {
+        return error ("Temperature option not supported", solver_error::COMP_ERR);
+    }
+
+    std::vector<object_id> boundary_objects = comp->get_active_boundary_object();
+
+    unsigned boundary_condition_count = 0;
+    for (object_id obj : boundary_objects)
+    {
+        boundary_condition_count += network_topology->get_boundary_condition_count_on_object(obj);
+    }
+
+    if (boundary_objects.size() != boundary_condition_count)
+    {
+        std::string err_msg = fmt::formating("Cannot calculate component. Boundary object count must be equal to Boundary condition count.\n"
+                                             "Boundary object count %u\n"
+                                             "Boundary condition count %u", boundary_objects.size(), boundary_condition_count);
+        return error(err_msg); 
+    }
+
+    if (comp->get_active_object_by_type(network_objects::sink).size() < 1 ||
+        comp->get_active_object_by_type(network_objects::source).size() < 1)
+    {
+        return error("Cannot calculate component without any source or sink");
+    }
+
+    return error(OK);
+}
+
+void nd_solver::print_calculation_information(int comp_it)
+{
+    std::string msg = "\n";
+    msg += "==========================CALCULATION===============================\n";
+    msg += fmt::formating("Start of calculation %d component\n", comp_it);
+
+    graph_component *comp = data->get_component(comp_it);
+    msg += fmt::formating("Object Count - %d\n", comp->get_object_count());
+    msg += fmt::formating("Active Object Count - %d\n", comp->get_active_object_count());
+
+    m_rep->print(message_type::MESSAGE, RUN_SECTION, msg.c_str());
 }

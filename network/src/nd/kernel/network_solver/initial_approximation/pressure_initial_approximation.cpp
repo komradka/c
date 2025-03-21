@@ -9,7 +9,7 @@ error initial_approximation_builder::simple_pressure_initial_approximation(const
         double sum_pressure = 0;
         int pressure_count = 0;
 
-        std::vector<object_id> boundary_objects = network_topology->get_boundary_objects();
+        std::vector<object_id> boundary_objects = component->get_active_boundary_object();
 
         auto calc_pressure = [&](object_data *data)
         {
@@ -49,7 +49,7 @@ error initial_approximation_builder::simple_pressure_initial_approximation(const
 
         double average_pressure = sum_pressure / pressure_count;
 
-        std::vector<link_id> links = network_topology->get_links();
+        std::set<link_id> links = component->get_links();
         for (auto l : links)
         {
             unsigned int link_num = solution->get_link_num(l);

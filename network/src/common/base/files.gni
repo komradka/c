@@ -1,5 +1,6 @@
 common_base_sources = [
   "//src/common/base/include/error.hpp",
+  "//src/common/base/include/format.hpp",
   "//src/common/base/include/projects.hpp",
   "//src/common/base/include/signal.hpp",
   "//src/common/base/include/slot.hpp",

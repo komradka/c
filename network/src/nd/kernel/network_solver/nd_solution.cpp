@@ -1,16 +1,17 @@
 #include "nd_solution.hpp"
 
-nd_solution::nd_solution(async_reporter_t *rep, graph *_network_topology, settings_dialog *_settings)
+nd_solution::nd_solution(async_reporter_t *rep, graph *_network_topology, graph_component *_component, settings_dialog *_settings)
 {
     m_rep = rep;
     network_topology = _network_topology;
+    component = _component;
     settings = _settings;
 
     use_temperature = _settings->get_param<solver_settings::use_temperature_equation>();
 
     link_variables_count = 2 + (use_temperature ? 1 : 0);
 
-    std::vector<link_id> links = network_topology->get_links();
+    std::vector<link_id> links = component->get_links_v();
 
     unsigned int links_count = links.size();
 

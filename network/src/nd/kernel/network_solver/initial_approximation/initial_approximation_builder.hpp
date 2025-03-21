@@ -9,14 +9,16 @@ class initial_approximation_builder
 private:
     async_reporter_t *m_rep;
     graph *network_topology;
+    graph_component *component;
     settings_dialog *settings;
     nd_solution *solution;
 
 public:
-    initial_approximation_builder(async_reporter_t *rep, graph *_network_topology, settings_dialog *_settings, nd_solution *_solution)
+    initial_approximation_builder(async_reporter_t *rep, graph *_network_topology, graph_component *_component, settings_dialog *_settings, nd_solution *_solution)
     {
         m_rep = rep;
         network_topology = _network_topology;
+        component = _component;
         settings = _settings;
         solution = _solution;
     }

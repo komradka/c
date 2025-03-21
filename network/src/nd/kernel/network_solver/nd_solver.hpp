@@ -14,6 +14,7 @@ class nd_solver
 private:
     async_reporter_t *m_rep;
     graph *network_topology;
+    nd_data *data;
     settings_dialog *settings;
     fluid_props *fluid;
     nd_solution *solution;
@@ -47,7 +48,9 @@ public:
     const std::map<object_id, phys_q> &get_object_results();
 
 private:
-    error construct_main_equation(const thread_info &thr_info);
+    error verify_component(graph_component *comp);
+
+    error construct_main_equation(graph_component *component, const thread_info &thr_info);
     error newton (const thread_info &thr_info);
     error build_msr_matrix (double *A, size_t *I, const thread_info &thr_info);
 
@@ -55,5 +58,8 @@ private:
     error write_results_on_links(const thread_info &thr_info);
     error write_results_on_object(const thread_info &thr_info);
 
+    void print_calculation_information(int);
     void print_equations();
+
+    void clear_after_calculation();
 };
