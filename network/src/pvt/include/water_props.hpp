@@ -56,6 +56,10 @@ std::string get_name_for_gui(viscosity_correlation e);
 std::string get_name_for_gui(density_correlation e);
 std::string get_name_for_gui(enthalpy_correlation e);
 
+std::string get_name(viscosity_correlation e);
+std::string get_name(density_correlation e);
+std::string get_name(enthalpy_correlation e);
+
 enum class water_calculated_props
 {
     density,
@@ -70,3 +74,4 @@ enum class water_calculated_props
 };
 
 std::string get_name_for_gui(water_calculated_props e);
+

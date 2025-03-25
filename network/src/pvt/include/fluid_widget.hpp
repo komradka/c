@@ -13,7 +13,7 @@ class fluid_widget : public QWidget
 {
     Q_OBJECT
 
-private:
+public:
     static constexpr unsigned int props_count = (unsigned int)(water_props::COUNT);
 
     static constexpr std::array<water_props, int(water_props::COUNT)> all_props = {water_props::reference_pressure,

@@ -1,4 +1,5 @@
 #include "writer.hpp"
+#include "format.hpp"
 #include "nd/gui/graph_area.hpp"
 #include "nd/gui/manager_gui/settings_dialog.hpp"
 
@@ -65,6 +66,16 @@ error writer::prepare(bool &exist)
     if (!settings_out.is_open())
     {
         return error("Cannot open gui file", (int)file_errors::open);
+    }
+
+    pvt_dir = result_dir + "/" + paths.pvt_dir_path;
+
+    check_and_create_dir (pvt_dir, "PVT directory");
+
+    pvt_out.open(result_dir + "/" + paths.pvt_data_path);
+    if (!pvt_out.is_open())
+    {
+        return error("Cannot open pvt file", (int)file_errors::open);
     }
 
     return error(OK);
@@ -147,10 +158,43 @@ error writer::write_object_data(string data_file, vertex *v)
 
     if (!data_writer.is_open())
     {
-        return error("Cannot create data file", (int)file_errors::open);
+        return error("Cannot create object data file", (int)file_errors::open);
     }
 
     v->get_data()->write_data(data_writer);
+
+    return error(OK);
+}
+
+error writer::write_PVT()
+{
+    std::string pvt_path_rel = res_name + "/" + paths.pvt_dir_path;
+
+    project_out << fmt::formating ("%s %s", kwords.pvt_dir_path.c_str(), pvt_path_rel.c_str()) << endl;
+
+    for (pvt_manager *fluid : (*network_PVT))
+    {
+        std::string fluid_path = pvt_dir + "/" + get_datafile_path(fluid->get_project_name());
+        std::string fluid_path_rel = pvt_path_rel + "/" + get_datafile_path(fluid->get_project_name());
+
+        pvt_out << fmt::formating("%s %s %s", kwords.make_fluid.c_str(), fluid->get_project_name().c_str(), fluid_path_rel.c_str()) << endl;
+
+        ofstream data_writer;
+        data_writer.open(fluid_path);
+        if (!data_writer.is_open())
+        {
+            return error("Cannot create fluid data file", (int)file_errors::open);
+        }
+
+        error ret = fluid->write_fluid(data_writer);
+        data_writer.close();
+        if (!ret.is_ok())
+        {
+            return ret;
+        }
+    }
+
+    pvt_out << fmt::formating("%s %d", kwords.curr_fluid.c_str(), fluid_id) << endl;
 
     return error(OK);
 }

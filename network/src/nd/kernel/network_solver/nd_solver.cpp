@@ -96,7 +96,7 @@ error nd_solver::run (const thread_info &thr_info)
         /////////////////////////////////
         if (thr_info.is_main_thread())
         {
-//            clear_after_calculation();
+            clear_after_calculation();
             m_rep->print(message_type::MESSAGE, RUN_SECTION, "Component %d Successfully Calculated", comp_it);
         }
     }

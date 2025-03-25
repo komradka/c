@@ -218,7 +218,7 @@ void nd_manager::save_project(std::string res_name)
 {
   rep->print(message_type::MESSAGE, message_source::ND, message_category::LOG, "Saving...");
 
-  writer *w = new writer(name, rep, network_topology, nd_window->get_gui_manager(), settings);
+  writer *w = new writer(name, rep, network_topology, nd_window->get_gui_manager(), settings, &network_PVT, fluid_id);
 
   error ret = w->write_network_to_file(results_count, QString::fromStdString(res_name));
   if (!ret.is_ok())
@@ -264,6 +264,7 @@ void nd_manager::load_project(result_info &res)
 void nd_manager::set_fluid(int id)
 {
   fluid = network_PVT[id]->get_widget();
+  fluid_id = id;
 }
 
 void nd_manager::create_reporter(report_widget *wrep)

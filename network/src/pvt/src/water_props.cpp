@@ -67,3 +67,50 @@ std::string get_name_for_gui(enthalpy_correlation e)
     }
     return "";
 }
+
+std::string get_name(viscosity_correlation e)
+{
+    switch (e)
+    {
+    case viscosity_correlation::none:
+        return "NON";
+    case viscosity_correlation::Grabovski:
+        return "GRABOVSKI";
+    case viscosity_correlation::Kestin:
+        return "KESTIN";
+    case viscosity_correlation::COUNT:
+        return "";
+    }
+    return "";
+}
+
+std::string get_name(density_correlation e)
+{
+    switch (e)
+    {
+    case density_correlation::none:
+        return "NON";
+    case density_correlation::ROWE_CHOU:
+        return "RC";
+    case density_correlation::EOS:
+        return "EOS";
+    case density_correlation::COUNT:
+        return "";
+    }
+    return "";
+}
+
+std::string get_name(enthalpy_correlation e)
+{
+    switch (e)
+    {
+        case enthalpy_correlation::BO_correlation:
+            return "BO";
+        case enthalpy_correlation::EOS:
+            return "EOS";
+
+        case enthalpy_correlation::COUNT:
+            return "";
+    }
+    return "";
+}

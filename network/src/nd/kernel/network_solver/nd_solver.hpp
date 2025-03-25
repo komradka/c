@@ -2,6 +2,7 @@
 #include "nd_results.hpp"
 #include "main_equations.hpp"
 #include "matrix_builder/matrix_builder.hpp"
+#include "nd_modification.hpp"
 #include "fluid_props.hpp"
 
 #include "nd/iface/async_reporter.h"
@@ -37,11 +38,11 @@ public:
 
     ~nd_solver()
     {
-        delete solution;
-        delete initial_approximation;
-        delete results;
-        delete equations;
-        delete jacobian_builder;
+//        delete solution;
+//        delete initial_approximation;
+//        delete results;
+//        delete equations;
+//        delete jacobian_builder;
     }
 
     error run (const thread_info &thr_info);

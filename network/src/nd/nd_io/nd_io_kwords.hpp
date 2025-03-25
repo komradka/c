@@ -17,7 +17,13 @@ struct nd_gui_kwords
     std::string make_link = "MAKE_LINK";
 };
 
-struct nd_kwords : public nd_project_kwords, public nd_gui_kwords
+struct nd_pvt_kwords
+{
+    std::string make_fluid = "MAKE_FLUID";
+    std::string curr_fluid = "CURRENT_FLUID";
+};
+
+struct nd_kwords : public nd_project_kwords, public nd_gui_kwords, public nd_pvt_kwords
 {
 
 };

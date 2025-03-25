@@ -7,6 +7,7 @@
 #include "common/reporters/include/report_system.hpp"
 #include "nd/nd_io/nd_io_path.hpp"
 #include "nd/nd_io/nd_io_kwords.hpp"
+#include "pvt/include/pvt_manager.hpp"
 
 using namespace std;
 
@@ -38,10 +39,14 @@ private:
     std::string result_dir;
     std::string main_project_file;
     std::string gui_dir;
+    std::string pvt_dir;
 
     graph *topology = nullptr;
     graph_area *storage = nullptr;
     settings_dialog *settings = nullptr;
+    std::vector<pvt_manager *> *network_PVT = nullptr;
+    int fluid_id;
+
     report_system *rep;
 
     ofstream project_out;
@@ -50,7 +55,8 @@ private:
     ofstream pvt_out;
 
 public:
-    writer(string project_name, report_system *r, graph *topology, graph_area *window, settings_dialog *settings)
+    writer(string project_name, report_system *r, graph *topology, graph_area *window,
+           settings_dialog *settings, std::vector<pvt_manager *> *network_PVT, int fluid_id)
     {
         rep = r;
 
@@ -62,6 +68,8 @@ public:
         storage = window;
         this->settings = settings;
         this->topology = topology;
+        this->network_PVT = network_PVT;
+        this->fluid_id = fluid_id;
     }
 
     ~writer()
@@ -97,6 +105,7 @@ public:
         RETURN_IF_FAIL(write_gui());
         RETURN_IF_FAIL(write_settings());
         RETURN_IF_FAIL(write_results());
+        RETURN_IF_FAIL(write_PVT());
 
         return error(OK);
     }
@@ -110,6 +119,9 @@ private:
     error write_settings();
 
     error write_results();
+
+    error write_PVT();
+    error write_fluid(string data_file, pvt_manager *fluid);
 
     error write_object_data(string data_file, vertex *v);
 };

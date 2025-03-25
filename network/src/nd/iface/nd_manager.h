@@ -6,7 +6,6 @@
 #include "signal.hpp"
 #include "slot.hpp"
 #include "nd/gui/manager_gui/settings_dialog.hpp"
-#include "pvt/include/fluid_widget.hpp"
 #include "nd/reader/reader.hpp"
 #include "workflow.hpp"
 #include "common/base/include/projects.hpp"
@@ -45,6 +44,7 @@ private:
 
   std::vector<pvt_manager *> network_PVT;
   fluid_widget *fluid = nullptr;
+  int fluid_id;
   
   workflow *wf;
 
