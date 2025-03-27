@@ -79,6 +79,8 @@ nd_sources = [
   "//src/nd/kernel/network_solver/matrix_builder/jacobian_row.hpp",
   "//src/nd/kernel/network_solver/matrix_builder/matrix_builder.hpp",
   "//src/nd/kernel/network_solver/matrix_builder/row_element.hpp",
+  "//src/nd/kernel/network_solver/nd_modification.cpp",
+  "//src/nd/kernel/network_solver/nd_modification.hpp",
   "//src/nd/kernel/network_solver/nd_results.hpp",
   "//src/nd/kernel/network_solver/nd_solution.cpp",
   "//src/nd/kernel/network_solver/nd_solution.hpp",

@@ -6,6 +6,14 @@ pvt_manager::pvt_manager(std::string name)
     project_name = name;
 }
 
+pvt_manager::pvt_manager(std::string name, std::string path)
+{
+    std::replace(name.begin(), name.end(), ' ', '_');
+    project_name = name;
+
+    read_pvt (path);
+}
+
 std::string pvt_manager::get_project_name()
 {
     return project_name;

@@ -27,4 +27,13 @@ void fluid_dialog::change_fluid()
     nd_window->set_fluid(list->selected_fluid->id);
 }
 
+void fluid_dialog::export_fluid(std::string name, std::string path)
+{
+    std::replace(name.begin(), name.end(), ' ', '_');
+
+    nd_window->export_fluid(name, path);
+
+    list->add_fluid(list->count(), name);
+}
+
 #include "moc_fluid_dialog.cpp"

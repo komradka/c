@@ -54,6 +54,12 @@ void nd_main_window::make_fluid(std::string name)
     window->make_fluid(new_pvt->make_fluid_widget(), name);
 }
 
+void nd_main_window::export_fluid(std::string name, std::string path)
+{
+    pvt_manager *new_pvt = pm->export_fluid(name, path);
+    window->make_fluid(new_pvt->get_widget(), name);
+}
+
 error nd_main_window::save_project()
 {
     d_save = new save_dialog(pm->get_results_count(), this);

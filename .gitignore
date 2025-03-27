@@ -1429,3 +1429,6 @@ eight_sem/main.cpp
 eight_sem/Makefile
 eight_sem/reader.cpp
 eight_sem/reader.hpp
+network/msr_debug_log.txt
+/eight_sem
+network/msr_debug_log.txt

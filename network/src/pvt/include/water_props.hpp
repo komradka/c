@@ -60,6 +60,10 @@ std::string get_name(viscosity_correlation e);
 std::string get_name(density_correlation e);
 std::string get_name(enthalpy_correlation e);
 
+viscosity_correlation get_viscosity_correlation_by_string (std::string e);
+density_correlation get_density_correlation_by_string (std::string e);
+enthalpy_correlation get_enthalpy_correlation_by_string (std::string e);
+
 enum class water_calculated_props
 {
     density,

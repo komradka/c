@@ -214,6 +214,12 @@ pvt_manager *nd_manager::create_fluid(std::string name)
   return network_PVT.back();
 }
 
+pvt_manager *nd_manager::export_fluid(std::string name, std::string path)
+{
+    export_fluid_signal.Emit(name, path);
+    return network_PVT.back();
+}
+
 void nd_manager::save_project(std::string res_name)
 {
   rep->print(message_type::MESSAGE, message_source::ND, message_category::LOG, "Saving...");
@@ -249,7 +255,7 @@ void nd_manager::load_project(result_info &res)
   auto project_name = res.res_name;
   rep->print(message_type::MESSAGE, message_source::ND, message_category::LOG, "Load %s", project_name.c_str());
 
-  error ret = file_reader.read_data(res, nd_window->get_gui_manager(), settings);
+  error ret = file_reader.read_data(res, nd_window->get_gui_manager(), settings, nd_window->d_fluid);
 
   if (!ret.is_ok())
   {

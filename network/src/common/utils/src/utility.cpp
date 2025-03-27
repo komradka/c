@@ -39,3 +39,8 @@ bool is_special_value(double x)
 {
     return std::isnan(x);
 }
+
+std::string make_error(const std::string &err_message, const int line)
+{
+    return "Wrong file format: " + err_message + ".\n" + "In line - " + std::to_string(line);
+}

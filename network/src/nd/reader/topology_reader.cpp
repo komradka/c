@@ -55,7 +55,7 @@ error make_link_handler(const std::vector<std::string> &words, const int line, c
 error reader::read_topology_string(const std::string str, const int line, graph_area *gui_manager)
 {
     std::vector<std::string> words;
-    split_string(str, words);
+    fmt::split_string(str, words);
 
     if (words.size() < 1)
     {

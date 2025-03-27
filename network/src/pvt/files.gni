@@ -17,5 +17,6 @@ pvt_sources = [
   "//src/pvt/src/fluid_graph.cpp",
   "//src/pvt/src/fluid_widget.cpp",
   "//src/pvt/src/pvt_manager.cpp",
+  "//src/pvt/src/pvt_reader.cpp",
   "//src/pvt/src/water_props.cpp",
 ]

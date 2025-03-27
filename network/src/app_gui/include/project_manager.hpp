@@ -42,10 +42,14 @@ public:
     }
 
 private:
+    void make_nd_connection();
+
+private:
     error create_nd_project(int thread_num);
     error create_sim_project(int thread_num);
     error create_pvt_project(project_type_t source, std::string name);
 
     error load_nd_project(int thread_num);
     error load_sim_project(int thread_num);
+    error load_pvt_project(project_type_t source, std::string name, std::string path);
 };

@@ -8,6 +8,7 @@
 #include "source_data.hpp"
 #include "error.hpp"
 #include "reader.hpp"
+#include "format.hpp"
 
 #pragma once
 
@@ -69,7 +70,7 @@ public: // handlers
             }
 
             std::vector<std::string> words;
-            split_string(line, words);
+            fmt::split_string(line, words);
 
             if (words.size() < 2)
             {
@@ -109,7 +110,7 @@ public: // handlers
         while (std::getline(file, line))
         {
             std::vector<std::string> words;
-            split_string(line, words);
+            fmt::split_string(line, words);
 
             if (words.size() < 2)
             {
@@ -149,7 +150,7 @@ public: // handlers
         while (std::getline(file, line))
         {
             std::vector<std::string> words;
-            split_string(line, words);
+            fmt::split_string(line, words);
 
             if (words.size() < 2)
             {
@@ -189,7 +190,7 @@ public: // handlers
         while (std::getline(file, line))
         {
             std::vector<std::string> words;
-            split_string(line, words);
+            fmt::split_string(line, words);
 
             if (words.size() < 2)
             {

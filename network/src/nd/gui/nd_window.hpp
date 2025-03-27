@@ -99,6 +99,7 @@ public:
     void load_project(std::vector<result_info> &results);
 
     void make_fluid(std::string name);
+    void export_fluid(std::string name, std::string path);
 
     void set_fluid(int id);
 

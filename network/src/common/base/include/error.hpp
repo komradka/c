@@ -91,4 +91,4 @@ public:
         error_code = rhs.error_code;
         return *this;
     }
-};  
+};

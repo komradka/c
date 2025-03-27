@@ -94,3 +94,6 @@ T *nullptr_cast()
 {
   return static_cast<T *>(nullptr);
 }
+
+// file error
+std::string make_error(const std::string &err_message, const int line);

@@ -77,6 +77,12 @@ public:
         props = rhs->props;
     }
 
+    template <water_props Props>
+    void set_param(typename water_props_desc<Props>::data_type_t value, int i)
+    {
+        td->set_widget_param<water_props_desc<Props>>(i, value);
+    }
+
 public:
     Q_SLOT void update_params()
     {

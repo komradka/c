@@ -44,5 +44,7 @@ public:
 
     Q_SLOT void add_fluid();
 
+    Q_SLOT void export_fluid(std::string name, std::string path);
+
     Q_SLOT void change_fluid();
 };

@@ -12,6 +12,8 @@
 #include "nd/gui/graph_area.hpp"
 #include "nd/nd_io/nd_io_kwords.hpp"
 #include "nd/nd_io/nd_io_path.hpp"
+#include "nd/gui/manager_gui/fluid/fluid_dialog.hpp"
+#include "format.hpp"
 
 #ifndef READER
 
@@ -23,10 +25,6 @@ enum class read_mode
     fluid,
     main
 };
-
-void split_string(const std::string &str, std::vector<std::string> &words);
-
-std::string make_error(const std::string &err_message, const int line);
 
 class reader
 {
@@ -43,6 +41,7 @@ private:
     std::map<std::string, std::function<error(const std::vector<std::string> &, result_info &)>> project_key_words;
     std::map<std::string, int> settings_key_words;
     std::map<int, std::function<error(const std::vector<std::string> &, const int, std::vector<std::any> &)>> settings_func;
+    std::map<std::string, std::function<error(const std::vector<std::string> &, const std::string, const int, fluid_dialog *)>> pvt_key_words;
 
 public:
     ~reader()
@@ -53,16 +52,19 @@ public:
         }
     }
 
-    error read_data(result_info &res, graph_area *gui_manager, settings_dialog *settings)
+    error read_data(result_info &res, graph_area *gui_manager, settings_dialog *settings, fluid_dialog *fluids)
     {
         project_dir = res.project_dir;
         RETURN_IF_FAIL(read_topology(res, gui_manager));
         RETURN_IF_FAIL(read_settings(res, settings));
+        RETURN_IF_FAIL(read_pvt(res, fluids));
         return error(OK);
     }
 
 private:
     error read_settings(result_info &res, settings_dialog *settings);
+
+    error read_pvt(result_info &res, fluid_dialog *fluids);
 
     error read_topology(result_info &res, graph_area *gui_manager)
     {
@@ -125,7 +127,7 @@ public:
                 continue;
             }
             std::vector<std::string> words;
-            split_string(line, words);
+            fmt::split_string(line, words);
 
             project_key_words[words[0]](words, buf);
         }
@@ -137,10 +139,12 @@ public:
 private:
     error read_topology_string(const std::string str, const int line, graph_area *gui_manager);
     error read_settings_string(const std::string str, const int line, std::vector<std::any> &readed_settings);
+    error read_pvt_string(const std::string str, const int line, fluid_dialog *fluids);
     void init_topology_key_words();
     void init_project_key_words();
     void init_settings_key_words();
     void init_settings_func();
+    void init_pvt_key_words();
 };
 
 #endif

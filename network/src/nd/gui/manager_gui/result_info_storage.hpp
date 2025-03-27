@@ -11,4 +11,5 @@ struct result_info
     std::string gui_dir;
     std::string result_dir;
     std::string settings;
+    std::string pvt_dir;
 };

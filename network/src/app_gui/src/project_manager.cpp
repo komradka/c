@@ -30,13 +30,7 @@ error project_manager::create_nd_project(int thread_num)
     nd_project->create_kernel_threads(thread_num);
     is_project_exist = true;
 
-    m_slots.connect_to(nd_project->project_closed, [&]()
-                       { is_project_exist = false;
-                         delete nd_project;
-                         nd_project = nullptr; });
-
-    m_slots.connect_to(nd_project->create_fluid_signal, [&](std::string name)
-                       { create_pvt_project(project_type_t::network_designer, name); });
+    make_nd_connection();
 
     return error(OK);
 }
@@ -79,11 +73,7 @@ error project_manager::load_nd_project(int thread_num)
 
     nd_project->load_project_handler();
 
-    m_slots.connect_to(nd_project->project_closed, [&]()
-                       { is_project_exist = false; });
-
-    m_slots.connect_to(nd_project->create_fluid_signal, [&](std::string name)
-                       { create_pvt_project(project_type_t::network_designer, name); });
+    make_nd_connection ();
 
     return error(OK);
 }
@@ -116,4 +106,40 @@ error project_manager::create_pvt_project(project_type_t source, std::string nam
     pvt_projects.push_back(new_fluid);
 
     return error(OK);
+}
+
+error project_manager::load_pvt_project(project_type_t source, std::string name, std::string path)
+{
+    pvt_manager *new_fluid = new pvt_manager(name, path);
+
+    switch (source)
+    {
+    case project_type_t::network_designer:
+    {
+        nd_project->network_PVT.push_back(new_fluid);
+    }
+    case project_type_t::main:
+    case project_type_t::pipe_designer:
+    case project_type_t::pvt_designer:
+    case project_type_t::simulator:
+    case project_type_t::none:
+    case project_type_t::COUNT:
+        break;
+    }
+
+    pvt_projects.push_back(new_fluid);
+
+    return error(OK);
+}
+
+void project_manager::make_nd_connection()
+{
+    m_slots.connect_to(nd_project->project_closed, [&]()
+                       { is_project_exist = false; });
+
+    m_slots.connect_to(nd_project->create_fluid_signal, [&](std::string name)
+                       { create_pvt_project(project_type_t::network_designer, name); });
+
+    m_slots.connect_to(nd_project->export_fluid_signal, [&](std::string name, std::string path)
+                       { load_pvt_project(project_type_t::network_designer, name, path); });
 }

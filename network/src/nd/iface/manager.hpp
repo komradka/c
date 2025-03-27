@@ -179,16 +179,16 @@ public:
         make_network();
 
 //        rep->print_message("Loading - " + res.res_name);
-        error ret = file_reader.read_data(res, window, d_setting);
+//        error ret = file_reader.read_data(res, window, d_setting);
         // 
-        if (!ret.is_ok())
-        {
-//            rep->print_error(ret);
-        }
-        else
-        {
-            network_topology->update_active_objects();
-        }
+//        if (!ret.is_ok())
+//        {
+////            rep->print_error(ret);
+//        }
+//        else
+//        {
+//            network_topology->update_active_objects();
+//        }
     }
 
     Q_SLOT void make_fluid()

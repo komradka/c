@@ -74,6 +74,7 @@ public:
 
   void create_topology();
   pvt_manager *create_fluid(std::string name);
+  pvt_manager *export_fluid(std::string name, std::string path);
   void set_fluid(int id);
 
   void show_settings();
@@ -101,6 +102,7 @@ public:
   // Signals
   Signal<> project_closed;
   Signal<std::string> create_fluid_signal;
+  Signal<std::string, std::string> export_fluid_signal;
   
 
   // Slots

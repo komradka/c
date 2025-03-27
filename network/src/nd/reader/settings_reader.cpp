@@ -101,7 +101,7 @@ void reader::init_settings_func()
 error reader::read_settings_string(const std::string str, const int line, std::vector<std::any> &readed_settings)
 {
     std::vector<std::string> words;
-    split_string(str, words);
+    fmt::split_string(str, words);
 
     if (words.size() < 1)
     {
