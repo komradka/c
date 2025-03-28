@@ -76,5 +76,14 @@ error make_fluid (const std::vector<std::string> &words, const std::string pvt_p
 
 error choose_fluid (const std::vector<std::string> &words, const std::string pvt_path, const int line, fluid_dialog *fluids)
 {
+    if (words.size() != 2)
+        return error(make_error("Wrong number of fields", line), "");
+
+    (void)pvt_path;
+
+    int fluid_id = fmt::string_to_int(words[1]);
+
+    fluids->export_curr_fluid(fluid_id);
+
     return error(OK);
 }

@@ -194,7 +194,12 @@ error writer::write_PVT()
         }
     }
 
-    pvt_out << fmt::formating("%s %d", kwords.curr_fluid.c_str(), fluid_id) << endl;
+    if (network_PVT->size() > 0)
+    {
+        pvt_out << fmt::formating("%s %d", kwords.curr_fluid.c_str(), fluid_id) << endl;
+    }
+
+    pvt_out.close();
 
     return error(OK);
 }

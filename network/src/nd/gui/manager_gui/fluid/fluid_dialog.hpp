@@ -32,6 +32,8 @@ public:
         list->setGeometry(0, 0, 400, 700);
     }
 
+    void export_curr_fluid (int id);
+
 public:
     Q_SLOT void show_menu(const QPoint &pos)
     {

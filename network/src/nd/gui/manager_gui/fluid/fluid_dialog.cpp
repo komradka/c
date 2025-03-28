@@ -36,4 +36,9 @@ void fluid_dialog::export_fluid(std::string name, std::string path)
     list->add_fluid(list->count(), name);
 }
 
+void fluid_dialog::export_curr_fluid (int id)
+{
+    list->on_dbclick_play(list->item(id));
+}
+
 #include "moc_fluid_dialog.cpp"
